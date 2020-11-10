@@ -46,6 +46,8 @@ class MyApp extends StatelessWidget {
 
       ),
       home: SplashScreen(),
+//      ///应用程序的顶级路由表
+//      routes: ,
     );
   }
 }

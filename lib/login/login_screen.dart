@@ -1,4 +1,7 @@
+
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 import 'package:jwt/base/base_widget.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 
@@ -9,25 +12,41 @@ class LoginScreen extends BaseWidget{
     // TODO: implement getState
     return LoginScreenState();
   }
-
 }
 
 class LoginScreenState extends BaseWidgetState<LoginScreen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //设置AppBar不可见
+    setAppBarVisible(false);
+  }
+
   @override
   CustomAppBar getAppBar() {
     // TODO: implement getAppBar
-    return null;
+    EdgeInsets padding = MediaQuery.of(context).padding;
+    double topPadding = padding.top;
+    print(topPadding);
+    return CustomAppBar(
+      child: Container(
+         color: Colors.blue,
+      ),
+    );
   }
 
   @override
   Widget getContentWidget(BuildContext context) {
     // TODO: implement getContentWidget
-    return null;
+    return Text("");
   }
 
   @override
   void onClickErrorWidget() {
     // TODO: implement onClickErrorWidget
   }
+
 
 }

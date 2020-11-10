@@ -13,4 +13,7 @@
 <!--
     这样写可以通过图片铺满整个屏幕，不同屏幕可能会有拉伸
 -->
+    <item> 
+        <bitmap android:src="@drawable/icon_splash_gb"/>
+    </item>
 </layer-list>

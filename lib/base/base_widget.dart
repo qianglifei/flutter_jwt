@@ -20,13 +20,13 @@ abstract class BaseWidgetState <T extends BaseWidget> extends State<T>{
   //错误信息是否显示
   bool _isErrorWidgetShow = false;
   String _errorContentMessage = "网络请求失败，请检查网络";
-  String _errImgPath = "images/ic_error.png";
+  String _errImgPath = "images/icon_error.png";
   //内容控件显示
   bool _isLoadingWidgetShow = false;
   bool _isEmptyWidgetShow = false;
   String _emptyWidgetContent = "暂无数据";
   //自己根据需求变更
-  String _emptyImgPath = "images/ic_empty.png";
+  String _emptyImgPath = "images/icon_empty.png";
   //错误页面和空页面的字体加粗
   FontWeight _fontWeight = FontWeight.w600;
   @override
@@ -247,7 +247,7 @@ abstract class BaseWidgetState <T extends BaseWidget> extends State<T>{
       ),
     );
   }
+
   //导航栏
   CustomAppBar getAppBar();
-
 }
