@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget{
   //布局
   final Widget child;
   //背景颜色
   final Color color;
-  CustomAppBar({@required this.child,this.color = Colors.blueGrey}) : assert(child != null);
+
+  CustomAppBar({@required this.child,
+    this.color = Colors.blueGrey})
+      : assert(child != null);
 
   @override
   State<StatefulWidget> createState() {
@@ -16,7 +21,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget{
   @override
   // TODO: implement preferredSize
   Size get preferredSize{
-    return Size.fromHeight(56.0);
+    return Size.fromHeight(ScreenUtil().setHeight(200));
   }
 
 //  @override

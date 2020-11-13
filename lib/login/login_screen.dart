@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 
@@ -31,9 +32,7 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
     double topPadding = padding.top;
     print(topPadding);
     return CustomAppBar(
-      child: Container(
-         color: Colors.blue,
-      ),
+      child: BaseTitleAppBar()
     );
   }
 
