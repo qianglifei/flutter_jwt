@@ -27,12 +27,11 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
 
   @override
   CustomAppBar getAppBar() {
-    // TODO: implement getAppBar
-    EdgeInsets padding = MediaQuery.of(context).padding;
-    double topPadding = padding.top;
-    print(topPadding);
     return CustomAppBar(
-      child: BaseTitleAppBar()
+      child: Container(
+        color: Colors.blue,
+        child: BaseTitleAppBar(),
+      )
     );
   }
 

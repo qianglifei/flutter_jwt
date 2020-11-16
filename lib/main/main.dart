@@ -30,8 +30,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // 除半透明状态栏
+    if (Theme.of(context).platform == TargetPlatform.android) {
+      // android 平台
+      SystemUiOverlayStyle _style =
+      SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+      SystemChrome.setSystemUIOverlayStyle(_style);
+    }
     return MaterialApp(
       title: 'Flutter Demo',
+      // 设置这一属性即可,去掉 右上角的标签
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
         //

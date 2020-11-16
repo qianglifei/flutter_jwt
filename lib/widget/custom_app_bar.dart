@@ -21,7 +21,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget{
   @override
   // TODO: implement preferredSize
   Size get preferredSize{
-    return Size.fromHeight(ScreenUtil().setHeight(200));
+    return Size.fromHeight(56);
   }
 
 //  @override
@@ -34,7 +34,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.child;
+    EdgeInsets padding = MediaQuery.of(context).padding;
+    return Container(
+      color: Colors.blue,
+      height: 1000,
+      padding: EdgeInsets.fromLTRB(0, padding.top, 0, padding.bottom),
+      child: widget.child,
+    );
 //    EdgeInsets padding = MediaQuery.of(context).padding;
 //    // 计算状态栏的高度
 //    double top = math.max(padding.top,EdgeInsets.zero.top);
