@@ -1,11 +1,12 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 import 'package:jwt/splash/splash_screen.dart';
 
 void main() {
+
   runApp(MyApp());
 
   if(Platform.isAndroid){
@@ -30,6 +31,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    //ScreenUtil.init(constraints, designSize: Size(750, 1334), allowFontScaling: false);
+    //ScreenUtil.init(context, designSize: Size(1080, 1920), allowFontScaling: true);
     // 除半透明状态栏
     if (Theme.of(context).platform == TargetPlatform.android) {
       // android 平台

@@ -82,3 +82,7 @@ flutter:
     - images/icon_bottom_yj_pressed.png
     - images/icon_bottom_wd.png
     - images/icon_bottom_wd_pressed.png
+    - images/button_back.png
+    - images/icon_begin.png
+    - images/icon_menu.png
+    - images/icon_login_background.png

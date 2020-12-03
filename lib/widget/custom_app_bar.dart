@@ -36,11 +36,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
   Widget build(BuildContext context) {
     EdgeInsets padding = MediaQuery.of(context).padding;
     return Container(
-      color: Colors.blue,
+      color: Color.fromRGBO(18, 127, 237,1),
       height: 1000,
       padding: EdgeInsets.fromLTRB(0, padding.top, 0, padding.bottom),
       child: widget.child,
     );
+
 //    EdgeInsets padding = MediaQuery.of(context).padding;
 //    // 计算状态栏的高度
 //    double top = math.max(padding.top,EdgeInsets.zero.top);

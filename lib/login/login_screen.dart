@@ -1,5 +1,6 @@
 
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:jwt/base/base_app_bar.dart';
@@ -29,8 +30,11 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
   CustomAppBar getAppBar() {
     return CustomAppBar(
       child: Container(
-        color: Colors.blue,
-        child: BaseTitleAppBar(),
+        child: BaseTitleAppBar(
+            "欢迎登录",
+            isShowLeftBackIcon: false,
+            isShowRightWidget: false
+        ),
       )
     );
   }
@@ -38,7 +42,16 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
   @override
   Widget getContentWidget(BuildContext context) {
     // TODO: implement getContentWidget
-    return Text("");
+    return Stack(
+      children: <Widget>[
+        Image.asset(
+          "images/icon_login_background.png",
+          width: ScreenUtil.defaultSize.width,
+          height: ScreenUtil().setHeight(336),
+          fit: BoxFit.cover,
+        )
+      ],
+    );
   }
 
   @override

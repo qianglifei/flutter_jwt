@@ -43,7 +43,10 @@ class SplashScreenState extends BaseWidgetState<SplashScreen> {
   Widget getContentWidget(BuildContext context) {
     // TODO: implement getContentWidget
     //默认 width : 1080px , height:1920px , allowFontScaling:false
+    //设置适配尺寸 (填入设计稿中设备的屏幕尺寸) 假如设计稿是按iPhone6的尺寸设计的(iPhone6 750*1334)
     ScreenUtil.init(context);
+    ScreenUtil.init(context,designSize: Size(1080, 1920));
+    ScreenUtil.init(context,designSize: Size(1080, 1920),allowFontScaling: true);
     //假如设计稿是按iPhone6的尺寸设计的(iPhone6 750*1334)
     //ScreenUtil.init(context, designSize: Size(750, 1334));
     //设置字体大小根据系统的“字体大小”辅助选项来进行缩放,默认为false
