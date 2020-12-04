@@ -36,7 +36,16 @@ class _CustomAppBarState extends State<CustomAppBar> {
   Widget build(BuildContext context) {
     EdgeInsets padding = MediaQuery.of(context).padding;
     return Container(
-      color: Color.fromRGBO(18, 127, 237,1),
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color.fromRGBO(52,135,215,1),
+              Color.fromRGBO(18, 127, 237,1),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          )
+      ),
       height: 1000,
       padding: EdgeInsets.fromLTRB(0, padding.top, 0, padding.bottom),
       child: widget.child,

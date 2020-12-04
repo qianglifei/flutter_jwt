@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
@@ -17,13 +18,19 @@ class LoginScreen extends BaseWidget{
 }
 
 class LoginScreenState extends BaseWidgetState<LoginScreen> {
+  bool check = false;
+  //手机号的控制器
+  TextEditingController phoneController = TextEditingController();
+
+  //密码的控制器
+  TextEditingController passController = TextEditingController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     //设置AppBar不可见
-    setAppBarVisible(false);
+    setAppBarVisible(true);
   }
 
   @override
@@ -42,15 +49,163 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
   @override
   Widget getContentWidget(BuildContext context) {
     // TODO: implement getContentWidget
-    return Stack(
-      children: <Widget>[
-        Image.asset(
-          "images/icon_login_background.png",
-          width: ScreenUtil.defaultSize.width,
-          height: ScreenUtil().setHeight(336),
-          fit: BoxFit.cover,
-        )
-      ],
+    return Container(
+      width: ScreenUtil.defaultSize.width,
+      height: ScreenUtil.defaultSize.height,
+      child: Stack(
+        children: <Widget>[
+          Image.asset(
+            "images/icon_login_background.png",
+            width: ScreenUtil.defaultSize.width,
+            height: ScreenUtil().setHeight(336),
+            fit: BoxFit.cover,
+          ),
+          Positioned(
+            top: ScreenUtil().setHeight(231),
+            left: ScreenUtil().setWidth(435),
+            child: Image.asset(
+              "images/icon_login.png",
+              width:  ScreenUtil().setWidth(210),
+              height: ScreenUtil().setHeight(210),
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned(
+              top: ScreenUtil().setHeight(617),
+              left: ScreenUtil().setWidth(96),
+              child: Container(
+                width: ScreenUtil().setWidth(888),
+                height: ScreenUtil().setHeight(144),
+                decoration: new BoxDecoration(
+                  color: Color.fromRGBO(242, 244, 245, 1),
+                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                  borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(72))),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                        padding: EdgeInsets.only(left: ScreenUtil().setWidth(64)),
+                        child: Image.asset(
+                          "images/icon_yhm.png",
+                          width: ScreenUtil().setWidth(64),
+                          height: ScreenUtil().setHeight(64),
+                          fit: BoxFit.fill,
+                        ),
+                    ),
+                    Container(
+                      width: ScreenUtil().setWidth(650),
+                      child: TextField(
+                          autofocus: false,
+                          controller: phoneController,
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.all(10.0),
+                            labelText: '请输入用户名',
+                          )),
+                    )
+                  ],
+                ),
+              )
+          ),
+          Positioned(
+              top: ScreenUtil().setHeight(809),
+              left: ScreenUtil().setWidth(96),
+              child: Container(
+                width: ScreenUtil().setWidth(888),
+                height: ScreenUtil().setHeight(144),
+                decoration: new BoxDecoration(
+                  color: Color.fromRGBO(242, 244, 245, 1),
+                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                  borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(72))),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(left: ScreenUtil().setWidth(64)),
+                      child: Image.asset(
+                        "images/icon_mima.png",
+                        width: ScreenUtil().setWidth(64),
+                        height: ScreenUtil().setHeight(64),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    Container(
+                      width: ScreenUtil().setWidth(650),
+                      child: TextField(
+                          autofocus: false,
+                          controller: passController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.all(10.0),
+                            labelText: '请输入密码',
+                          ), obscureText: true),
+                    )
+                  ],
+                ),
+              )
+          ),
+          Positioned(
+            top: ScreenUtil().setHeight(1001),
+            left: ScreenUtil().setWidth(160),
+              child: Container(
+                width: ScreenUtil().setWidth(888),
+                height: ScreenUtil().setHeight(60),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                        padding: EdgeInsets.only(left: 0),
+                        child: Checkbox(
+                            value: this.check,
+                            activeColor: Colors.green,
+                            onChanged: (bool vars){
+                              setState(() {
+                                this.check = !this.check;
+                              });
+                            }
+                        ),
+                    ),
+                    Padding(
+                        padding: EdgeInsets.only(left: ScreenUtil().setWidth(0),top: 0),
+                        child: Text("记住密码",style: TextStyle(fontSize: ScreenUtil().setSp(48,allowFontScalingSelf: true))),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: ScreenUtil().setWidth(350)),
+                      child: Text("UUID",style: TextStyle(fontSize: ScreenUtil().setSp(48,allowFontScalingSelf: true))),
+                    ),
+                  ],
+                ),
+              )
+          ),
+          Positioned(
+              top: ScreenUtil().setHeight(1273),
+              left: ScreenUtil().setWidth(96),
+              child: new MaterialButton(
+                minWidth: ScreenUtil().setWidth(888),
+                height: ScreenUtil().setHeight(144),
+                color: Colors.blue,
+                textColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(30))
+                ),
+                child: new Text('登录',style: TextStyle(fontSize: ScreenUtil().setSp(56,allowFontScalingSelf: true))),
+                onPressed: () {
+                  // ...
+                },
+              )
+          )
+        ],
+      )
     );
   }
 
@@ -60,4 +215,12 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
   }
 
 
+
+  void _textFieldUserNameChanged(String value) {
+
+  }
+
+  void _textFieldPasswordChanged(String value) {
+
+  }
 }

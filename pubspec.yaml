@@ -86,3 +86,6 @@ flutter:
     - images/icon_begin.png
     - images/icon_menu.png
     - images/icon_login_background.png
+    - images/icon_login.png
+    - images/icon_yhm.png
+    - images/icon_mima.png
