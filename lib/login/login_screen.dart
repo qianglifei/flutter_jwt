@@ -6,7 +6,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
+import 'package:jwt/main/app.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
+import 'package:jwt/widget/progress_dialog.dart';
 
 // ignore: must_be_immutable
 class LoginScreen extends BaseWidget{
@@ -31,6 +33,10 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
     super.initState();
     //设置AppBar不可见
     setAppBarVisible(true);
+    CircularProgressIndicator( value: null,strokeWidth: 10);
+
+    //ProgressDialog(loading: true, child: Text("sdf"));
+
   }
 
   @override
@@ -200,7 +206,14 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
                 ),
                 child: new Text('登录',style: TextStyle(fontSize: ScreenUtil().setSp(56,allowFontScalingSelf: true))),
                 onPressed: () {
-                  // ...
+                  buildShowDialog(context);
+                  Navigator.of(context).pop();
+//                  Navigator.push(
+//                    context,
+//                    new MaterialPageRoute(
+//                      builder: (context) => new App(),
+//                    ),
+//                  );
                 },
               )
           )
@@ -215,7 +228,37 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
   }
 
 
-
+  buildShowDialog(BuildContext context) {
+    return showCupertinoDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return  Center(
+              child: Container(
+                padding:const EdgeInsets.all(20.0),
+                decoration: BoxDecoration(
+                  //黑色背景
+                    color: Colors.black87,
+                    //圆角边框
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: Column(
+                  //控件里面内容主轴负轴剧中显示
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    //主轴高度最小
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      CircularProgressIndicator(),
+                      Padding(
+                        padding: EdgeInsets.only(top: 3),
+                        child: Text(
+                            '加载中...',
+                            style: TextStyle(fontSize:15,color: Colors.white,decoration: TextDecoration.none,)
+                        )
+                      )
+                    ]
+                )));
+        });
+  }
   void _textFieldUserNameChanged(String value) {
 
   }

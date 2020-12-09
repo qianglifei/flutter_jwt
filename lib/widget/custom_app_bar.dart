@@ -40,7 +40,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           gradient: LinearGradient(
             colors: [
               Color.fromRGBO(52,135,215,1),
-              Color.fromRGBO(18, 127, 237,1),
+              Color.fromRGBO(47, 134, 218,1),
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,

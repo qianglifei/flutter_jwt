@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:jwt/main/first_page/homepage_screen.dart';
@@ -16,6 +17,7 @@ class App extends StatefulWidget{
 class AppState extends State<App> {
   //当前选中项的索引
   int _selectedIndex = 0;
+  var lastPopTime;
   final appBarTitles = ["首页","信息核查","队伍管理","我的"];
   var pages = <Widget>[
       HomepageScreen(),
@@ -53,29 +55,32 @@ class AppState extends State<App> {
               onTap: _onItemTapped,
           ),
         ),
-        onWillPop: _onWillPop
+        onWillPop: () async {
+          if (lastPopTime == null || DateTime.now().difference(lastPopTime) > Duration(seconds: 1)) {
+            //两次点击间隔超过1秒则重新计时
+            lastPopTime = DateTime.now();
+            return new Future.value(false);
+          }
+          return new Future.value(true);
+        },
     );
-  }
-
-  Future<bool> _onWillPop() {
-    return showDialog(context: null);
   }
 
   BottomNavigationBarItem buildBottomNavigationWidget(String title,String iconUrl,String activeIconUrl) {
     return BottomNavigationBarItem(
         icon: Image.asset(
             iconUrl,
-            width: 20,
-            height: 20,
+            width: ScreenUtil().setWidth(64),
+            height: ScreenUtil().setHeight(64),
             fit: BoxFit.contain,
         ),
         activeIcon: Image.asset(
            activeIconUrl,
-           width: 20,
-           height: 20,
+           width: ScreenUtil().setWidth(64),
+           height: ScreenUtil().setHeight(64),
           fit: BoxFit.contain,
         ),
-        title: Text(title)
+        title: Text(title,style: TextStyle(fontSize: ScreenUtil().setSp(30,allowFontScalingSelf: true)))
     );
   }
 
