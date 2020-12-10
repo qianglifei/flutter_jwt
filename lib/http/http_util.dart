@@ -3,7 +3,11 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:jwt/config/url_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'base_entity.dart';
+import 'error_entity.dart';
 
 class HttpUtil {
 
@@ -26,18 +30,19 @@ class HttpUtil {
     //BaseOptions、Options、RequestOptions 都可以配置参数，优先级别依次递增，且可以根据优先级别覆盖参数
     options = new BaseOptions(
       //请求基地址,可以包含子路径
-      baseUrl: "http://www.google.com",
+      baseUrl: URLConfig.BASE_URL,
       //连接服务器超时时间，单位是毫秒.
       connectTimeout: 10000,
       //响应流上前后两次接受到数据的间隔，单位为毫秒。
       receiveTimeout: 5000,
+      receiveDataWhenStatusError: false,
       //Http请求头.
       headers: {
         //do something
-        "version": "1.0.0"
+        "version": "1.0.9"
       },
       //请求的Content-Type，默认值是[ContentType.json]. 也可以用ContentType.parse("application/x-www-form-urlencoded")
-//      contentType: ,
+      contentType: Headers.jsonContentType,
       //表示期望以那种格式(方式)接受响应数据。接受三种类型 `json`, `stream`, `plain`, `bytes`. 默认值是 `json`,
       responseType: ResponseType.json,
     );
@@ -93,16 +98,26 @@ class HttpUtil {
   }
 
    /// post请求
-  post(url, {data, options, cancelToken}) async {
-    Response response;
-    try {
-      response = await dio.post(url, queryParameters: data, options: options, cancelToken: cancelToken);
-      print('post success---------${response.data}');
-    } on DioError catch (e) {
-      print('post error---------$e');
-      formatError(e);
-    }
-    return response.data;
+  post(url, {data, options, cancelToken,Function success, Function(ErrorEntity) error}) async {
+      Response response;
+      print(url);
+      try {
+        response = await dio.post(url, data : data, options: options, cancelToken: cancelToken);
+        if (response != null) {
+          BaseEntity entity = BaseEntity.fromJson(response.data);
+          if (entity.code == 1) {
+            success(entity.data);
+          } else if(entity.code == -10){
+            error(ErrorEntity(code: entity.code, message: entity.message));
+          }
+        } else {
+          error(ErrorEntity(code: -1, message: "未知错误"));
+        }
+      } on DioError catch (e) {
+        print('post error---------$e');
+        formatError(e);
+      }
+      return response.data;
   }
 
    /// 下载文件
