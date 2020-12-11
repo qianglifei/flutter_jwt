@@ -2,12 +2,6 @@ import 'package:jwt/generated/json/base/json_convert_content.dart';
 import 'package:jwt/generated/json/base/json_field.dart';
 
 class LoginResponseEntity with JsonConvert<LoginResponseEntity> {
-	int returnCode;
-	String returnMsg;
-	LoginResponseReturnData returnData;
-}
-
-class LoginResponseReturnData with JsonConvert<LoginResponseReturnData> {
 	@JSONField(name: "file_url")
 	String fileUrl;
 	String token;
@@ -34,4 +28,5 @@ class LoginResponseReturnData with JsonConvert<LoginResponseReturnData> {
 	@JSONField(name: "user_zt")
 	String userZt;
 	String version;
+
 }

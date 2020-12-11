@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
+import 'package:jwt/config/url_config.dart';
 import 'package:jwt/entity/login_response_entity.dart';
 import 'package:jwt/http/common_service.dart';
+import 'package:jwt/http/dio_utils.dart';
 import 'package:jwt/main/app.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/progress_dialog.dart';
@@ -202,19 +205,42 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
                 ),
                 child: new Text('登录',style: TextStyle(fontSize: ScreenUtil().setSp(56,allowFontScalingSelf: true))),
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                    return App();
-                  }));
 
-//                  buildShowDialog(context);
-//                  Map<String,dynamic> requestBody = new Map();
-//                  requestBody.addAll({
-//                    "user_name":"1142103000-g2",
-//                    "user_password":"123456",
-//                    "imsi":"1edf2c3125ac5b6c",
-//                    "version":"1.0.9"
-//                  });
-//                 login(requestBody,context);
+                  buildShowDialog(context);
+                  Map<String,dynamic> requestBody = new Map();
+                  requestBody.addAll({
+                    "user_name":"1142103000-g2",
+                    "user_password":"123456",
+                    "imsi":"1edf2c3125ac5b6c",
+                    "version":"1.0.9"
+                  });
+                  DioUtils.instance.postHttp<LoginResponseEntity>(
+                      url: URLConfig.LOGIN ,
+                      method: DioUtils.POST,
+                      parameters:requestBody ,
+                      onSuccess: (data){
+                        //dialog 消息消失
+                        Navigator.of(context).pop();
+
+                        Fluttertoast.showToast(
+                            msg: "登录成功",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0
+                        );
+
+                        print(data.toJson());
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                            return App();
+                        }));
+                      },
+                      onError: (error){
+                        Navigator.of(context).pop();
+                        print("---error");
+                      });
                 },
               )
           )
@@ -223,13 +249,6 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
     );
   }
 
-
-  Future<Null> login(Map requestBody,BuildContext context) async{
-    CommonService().loginRequest((LoginResponseEntity loginResponseEntity){
-        Navigator.of(context).pop();
-      print(loginResponseEntity.returnMsg);
-    }, requestBody);
-  }
   @override
   void onClickErrorWidget() {
     // TODO: implement onClickErrorWidget

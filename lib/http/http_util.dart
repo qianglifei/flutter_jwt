@@ -98,26 +98,18 @@ class HttpUtil {
   }
 
    /// post请求
-  post(url, {data, options, cancelToken,Function success, Function(ErrorEntity) error}) async {
+   Future<dynamic> requestPost(url, {data, options, cancelToken}) async {
       Response response;
       print(url);
       try {
         response = await dio.post(url, data : data, options: options, cancelToken: cancelToken);
-        if (response != null) {
-          BaseEntity entity = BaseEntity.fromJson(response.data);
-          if (entity.code == 1) {
-            success(entity.data);
-          } else if(entity.code == -10){
-            error(ErrorEntity(code: entity.code, message: entity.message));
-          }
-        } else {
-          error(ErrorEntity(code: -1, message: "未知错误"));
-        }
+
+        print('post result ----$response');
       } on DioError catch (e) {
         print('post error---------$e');
         formatError(e);
       }
-      return response.data;
+      return response;
   }
 
    /// 下载文件

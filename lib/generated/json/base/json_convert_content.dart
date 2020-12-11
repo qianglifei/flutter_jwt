@@ -18,9 +18,7 @@ class JsonConvert<T> {
   static _getFromJson<T>(Type type, data, json) {
     switch (type) {
 			case LoginResponseEntity:
-				return loginResponseEntityFromJson(data as LoginResponseEntity, json) as T;
-			case LoginResponseReturnData:
-				return loginResponseReturnDataFromJson(data as LoginResponseReturnData, json) as T;    }
+				return loginResponseEntityFromJson(data as LoginResponseEntity, json) as T;    }
     return data as T;
   }
 
@@ -28,8 +26,6 @@ class JsonConvert<T> {
 		switch (type) {
 			case LoginResponseEntity:
 				return loginResponseEntityToJson(data as LoginResponseEntity);
-			case LoginResponseReturnData:
-				return loginResponseReturnDataToJson(data as LoginResponseReturnData);
 			}
 			return data as T;
 		}
@@ -38,8 +34,6 @@ class JsonConvert<T> {
 		String type = M.toString();
 		if(type == (LoginResponseEntity).toString()){
 			return LoginResponseEntity().fromJson(json);
-		}	else if(type == (LoginResponseReturnData).toString()){
-			return LoginResponseReturnData().fromJson(json);
 		}	
 		return null;
 	}
@@ -48,8 +42,6 @@ class JsonConvert<T> {
 	static M _getListChildType<M>(List<Map> data) {
 		if(List<LoginResponseEntity>() is M){
 			return data.map((e) => LoginResponseEntity().fromJson(e)).toList() as M;
-		}	else if(List<LoginResponseReturnData>() is M){
-			return data.map((e) => LoginResponseReturnData().fromJson(e)).toList() as M;
 		}
 		return null;
 	}

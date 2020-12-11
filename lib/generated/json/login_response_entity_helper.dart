@@ -1,29 +1,6 @@
 import 'package:jwt/entity/login_response_entity.dart';
 
 loginResponseEntityFromJson(LoginResponseEntity data, Map<String, dynamic> json) {
-	if (json['returnCode'] != null) {
-		data.returnCode = json['returnCode']?.toInt();
-	}
-	if (json['returnMsg'] != null) {
-		data.returnMsg = json['returnMsg']?.toString();
-	}
-	if (json['returnData'] != null) {
-		data.returnData = new LoginResponseReturnData().fromJson(json['returnData']);
-	}
-	return data;
-}
-
-Map<String, dynamic> loginResponseEntityToJson(LoginResponseEntity entity) {
-	final Map<String, dynamic> data = new Map<String, dynamic>();
-	data['returnCode'] = entity.returnCode;
-	data['returnMsg'] = entity.returnMsg;
-	if (entity.returnData != null) {
-		data['returnData'] = entity.returnData.toJson();
-	}
-	return data;
-}
-
-loginResponseReturnDataFromJson(LoginResponseReturnData data, Map<String, dynamic> json) {
 	if (json['file_url'] != null) {
 		data.fileUrl = json['file_url']?.toString();
 	}
@@ -69,7 +46,7 @@ loginResponseReturnDataFromJson(LoginResponseReturnData data, Map<String, dynami
 	return data;
 }
 
-Map<String, dynamic> loginResponseReturnDataToJson(LoginResponseReturnData entity) {
+Map<String, dynamic> loginResponseEntityToJson(LoginResponseEntity entity) {
 	final Map<String, dynamic> data = new Map<String, dynamic>();
 	data['file_url'] = entity.fileUrl;
 	data['token'] = entity.token;

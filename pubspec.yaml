@@ -30,7 +30,8 @@ dependencies:
   shared_preferences: ^0.5.12
   dio: ^3.0.9
   cookie_jar: ^1.0.0
-  flutter_native_splash: ^0.1.9
+  fluttertoast: ^7.1.5
+  flutter_splash_screen: ^0.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
