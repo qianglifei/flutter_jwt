@@ -24,6 +24,7 @@ class BaseTitleAppBar extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
