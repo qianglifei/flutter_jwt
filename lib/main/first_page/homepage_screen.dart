@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
+import 'package:jwt/widget/custom_firstpage_checkbox.dart';
 
 // ignore: must_be_immutable
 class HomepageScreen extends BaseWidget{
@@ -74,11 +75,72 @@ class HomepageScreenState extends BaseWidgetState<HomepageScreen> {
                 right : ScreenUtil().setWidth(32),
                 child: _buildImageTextWidget("images/icon_sum_house_count.png", "出租房屋/户")
             ),
-
-
           ],
-        )
+        ),
+        _buildMultilineTextWidget(),
+        CustomCheckBox()
       ],
+    );
+  }
+  Widget _buildMultilineTextWidget(){
+    return Container(
+      width: ScreenUtil().uiSize.width,
+      height: ScreenUtil().setHeight(332),
+      color: Color.fromRGBO(57, 147, 242, 1),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              _multilineTextWidget(),
+              _multilineTextWidget(),
+              _multilineTextWidget(),
+            ],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              _singleLineTextWidget(),
+              _singleLineTextWidget(),
+            ],
+          ),
+        ],
+      )
+    );
+  }
+
+  Widget _multilineTextWidget(){
+    return Container(
+      margin: EdgeInsets.only(top: ScreenUtil().setHeight(32)),
+      height: ScreenUtil().setHeight(167),
+      child: Column(
+        children: <Widget>[
+          Text("646854",style: TextStyle(fontSize: ScreenUtil().setSp(48),color: Color.fromRGBO(255, 255, 255, 1))),
+          Padding(
+              padding: EdgeInsets.only(top: ScreenUtil().setWidth(42)),
+              child: Text("户籍人口",style: TextStyle(fontSize: ScreenUtil().setSp(40),color: Color.fromRGBO(255, 255, 255, 0.7)))
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _singleLineTextWidget(){
+    return Container(
+      margin: EdgeInsets.only(top: ScreenUtil().setHeight(32)),
+      child: Row(
+        children: <Widget>[
+          Text("全职实管员",style: TextStyle(fontSize: ScreenUtil().setSp(40),color: Color.fromRGBO(255, 255, 255, 0.7))),
+          Padding(
+              padding: EdgeInsets.only(left: ScreenUtil().setWidth(32)),
+              child:  Text("646854",style: TextStyle(fontSize: ScreenUtil().setSp(48),color: Color.fromRGBO(255, 255, 255, 1))),
+          ),
+        ],
+      ),
     );
   }
 
@@ -88,6 +150,7 @@ class HomepageScreenState extends BaseWidgetState<HomepageScreen> {
       height: ScreenUtil().setHeight(227),
       child: Stack(
         children: <Widget>[
+
           Positioned(
               child: Image.asset(
                 urlIcon,
@@ -96,11 +159,13 @@ class HomepageScreenState extends BaseWidgetState<HomepageScreen> {
                 fit: BoxFit.cover,
               ),
           ),
+
           Positioned(
               top: ScreenUtil().setHeight(30),
               left: ScreenUtil().setWidth(32),
               child: Text(title,style: TextStyle(fontWeight: FontWeight.w700,fontSize: ScreenUtil().setSp(40),color: Color.fromRGBO(255, 255, 255, 0.7)))
           ),
+
           Positioned(
               top: ScreenUtil().setHeight(118),
               right: ScreenUtil().setWidth(20),
