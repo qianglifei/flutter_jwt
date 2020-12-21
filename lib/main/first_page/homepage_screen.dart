@@ -15,6 +15,14 @@ class HomepageScreen extends BaseWidget{
 }
 
 class HomepageScreenState extends BaseWidgetState<HomepageScreen> {
+  bool _isShowImageTextsWidget = false;
+  bool _isShowTextWidget = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   CustomAppBar getAppBar() {
@@ -78,37 +86,62 @@ class HomepageScreenState extends BaseWidgetState<HomepageScreen> {
           ],
         ),
         _buildMultilineTextWidget(),
-        CustomCheckBox()
+         CustomCheckBox(callBack: (_checkedStatus){
+            if(_checkedStatus){
+              setState(() {
+                _isShowImageTextsWidget = true;
+                _isShowTextWidget = false;
+                print(_isShowImageTextsWidget);
+              });
+            }else{
+              setState(() {
+                _isShowImageTextsWidget = false;
+                _isShowTextWidget = true;
+                print(_isShowImageTextsWidget);
+              });
+            }
+         }),
+        _buildImageTextWidgets(),
+        _buildLineWidget(),
+        //监督核查widget
+        _buildMonitorWidget(),
+        _buildLineWidget(),
+        //公告提醒
+        _buildNoticeWidget(),
+        _buildLineWidget(),
       ],
     );
   }
   Widget _buildMultilineTextWidget(){
-    return Container(
-      width: ScreenUtil().uiSize.width,
-      height: ScreenUtil().setHeight(332),
-      color: Color.fromRGBO(57, 147, 242, 1),
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Offstage(
+      offstage: _isShowTextWidget,
+      child:Container(
+          width: ScreenUtil().uiSize.width,
+          height: ScreenUtil().setHeight(332),
+          color: Color.fromRGBO(57, 147, 242, 1),
+          child: Column(
             children: <Widget>[
-              _multilineTextWidget(),
-              _multilineTextWidget(),
-              _multilineTextWidget(),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  _multilineTextWidget(),
+                  _multilineTextWidget(),
+                  _multilineTextWidget(),
+                ],
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  _singleLineTextWidget(),
+                  _singleLineTextWidget(),
+                ],
+              ),
             ],
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              _singleLineTextWidget(),
-              _singleLineTextWidget(),
-            ],
-          ),
-        ],
+          )
       )
     );
   }
@@ -150,7 +183,6 @@ class HomepageScreenState extends BaseWidgetState<HomepageScreen> {
       height: ScreenUtil().setHeight(227),
       child: Stack(
         children: <Widget>[
-
           Positioned(
               child: Image.asset(
                 urlIcon,
@@ -171,6 +203,7 @@ class HomepageScreenState extends BaseWidgetState<HomepageScreen> {
               right: ScreenUtil().setWidth(20),
               child: Text("806188",style: TextStyle(fontWeight: FontWeight.w700,fontSize: ScreenUtil().setSp(80),color: Color.fromRGBO(255, 255, 255, 0.7)))
           ),
+
         ],
       )
     );
@@ -179,5 +212,113 @@ class HomepageScreenState extends BaseWidgetState<HomepageScreen> {
   @override
   void onClickErrorWidget() {
     // TODO: implement onClickErrorWidget
+  }
+
+  Widget _buildImageTextWidgets() {
+    return Offstage(
+      offstage: _isShowImageTextsWidget,
+      child: Container(
+        height: ScreenUtil().setHeight(292),
+        width: ScreenUtil().uiSize.width,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            _verticalImageText("images/icon_people_check.png","人口核查"),
+            _verticalImageText("images/icon_house_check.png","房屋核查"),
+            _verticalImageText("images/icon_task_manage.png","任务管理"),
+            _verticalImageText("images/icon_intelligence_manage.png","情报管理"),
+            _verticalImageText("images/icon_ajt.png","安居通")
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _verticalImageText(String imageUrl,String textContent) {
+    return Container(
+      height: ScreenUtil().setHeight(196),
+      child: Stack(
+        alignment: AlignmentDirectional.topCenter,
+        overflow: Overflow.visible,
+        children: <Widget>[
+           Image.asset(
+             imageUrl,
+             height: ScreenUtil().setHeight(116),
+             width: ScreenUtil().setWidth(116),
+             fit: BoxFit.contain,
+           ),
+          Positioned(
+              top: ScreenUtil().setHeight(146),
+              child: Text(textContent,style: TextStyle(fontSize: ScreenUtil().setSp(40),color: Color.fromRGBO(34, 34, 34, 1)))
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLineWidget() {
+    return Container(
+      width: ScreenUtil().uiSize.width,
+      height: ScreenUtil().setHeight(24),
+      color: Color.fromRGBO(247,248,250,1),
+    );
+  }
+
+  Widget _buildMonitorWidget() {
+    return Container(
+      width: ScreenUtil().uiSize.width,
+      height: ScreenUtil().setHeight(212),
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+              top: ScreenUtil().setHeight(71),
+              left: ScreenUtil().setWidth(41),
+              child: Image.asset(
+                  "images/icon_info.png",
+                width: ScreenUtil().setWidth(64),
+                height: ScreenUtil().setHeight(70),
+              )
+          ),
+          Positioned(
+              top: ScreenUtil().setHeight(48),
+              left: ScreenUtil().setWidth(176),
+              child: Text("督办提醒",style: TextStyle(fontSize: ScreenUtil().setSp(48),color: Color.fromRGBO(34, 34, 34, 1)))
+          ),
+          Positioned(
+              top: ScreenUtil().setHeight(125),
+              left: ScreenUtil().setWidth(176),
+              child: Text("市局决定于7月8日开展专项整治行动",style: TextStyle(fontSize: ScreenUtil().setSp(40),color: Color.fromRGBO(140,141,142,1)))
+          )
+        ],
+      ),
+    );
+  }
+  ///通知公告控件
+  Widget _buildNoticeWidget() {
+     return Container(
+       width: ScreenUtil().uiSize.width,
+       height: ScreenUtil().setHeight(120),
+       child: Row(
+         crossAxisAlignment: CrossAxisAlignment.center,
+         mainAxisAlignment: MainAxisAlignment.start,
+         mainAxisSize: MainAxisSize.max,
+         children: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(left: ScreenUtil().setWidth(32)),
+                child: Text("公告",style: TextStyle(fontSize: ScreenUtil().setSp(44),color: Color.fromRGBO(215,57,49,1)))
+            ),
+           Padding(
+               padding: EdgeInsets.only(left: ScreenUtil().setWidth(56),right: ScreenUtil().setWidth(38)),
+               child: Text("8月26日，中国人民警察警旗授旗仪式在人民大...",
+                   style: TextStyle(fontSize: ScreenUtil().setSp(40),
+                   color: Color.fromRGBO(140,141,142,1)),
+                   overflow:TextOverflow.ellipsis,
+               )
+           ),
+         ],
+       ),
+     );
   }
 }

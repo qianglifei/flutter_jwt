@@ -2,7 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 
+typedef _CallBack = void Function(bool checkedStatus);
+// ignore: must_be_immutable
 class CustomCheckBox extends StatefulWidget{
+  final _CallBack callBack;
+
+  CustomCheckBox({Key key,this.callBack}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -49,7 +55,10 @@ class CustomCheckBoxState extends State<CustomCheckBox> {
         ),
         onTap: (){
             setState(() {
-                _isChecked = !_isChecked; 
+                _isChecked = !_isChecked;
+                if(widget.callBack != null){
+                    widget.callBack(_isChecked);
+                }
             });
         },
     );

@@ -101,3 +101,9 @@ flutter:
     - images/icon_stretch_background.png
     - images/icon_stretch_down.png
     - images/icon_stretch_up.png
+    - images/icon_ajt.png
+    - images/icon_people_check.png
+    - images/icon_house_check.png
+    - images/icon_task_manage.png
+    - images/icon_intelligence_manage.png
+    - images/icon_info.png
