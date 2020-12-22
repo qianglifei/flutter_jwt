@@ -21,7 +21,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget{
   @override
   // TODO: implement preferredSize
   Size get preferredSize{
-    return Size.fromHeight(ScreenUtil().setHeight(100));
+    return Size.fromHeight(ScreenUtil().setHeight(200));
   }
 
 //  @override
@@ -36,17 +36,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   Widget build(BuildContext context) {
     EdgeInsets padding = MediaQuery.of(context).padding;
     return Container(
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color.fromRGBO(52,135,215,1),
-              Color.fromRGBO(47, 134, 218,1),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          )
-      ),
-      height: 1000,
+      color:Color.fromRGBO(47, 134, 218,1),
       padding: EdgeInsets.fromLTRB(0, padding.top, 0, padding.bottom),
       child: widget.child,
     );

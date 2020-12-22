@@ -16,8 +16,9 @@ class HomepageScreen extends BaseWidget{
 
 class HomepageScreenState extends BaseWidgetState<HomepageScreen> {
   bool _isShowImageTextsWidget = false;
-  bool _isShowTextWidget = false;
-
+  bool _isShowTextWidget = true;
+  //核查流动人口，核查房屋，人员离线抽查，在线实官员，未处理任务，未处理情报
+  String _hcldrk= "",_hcfw = "",_rylxcz="",_zxsgy="",_wclrw="",_wclqb="";
   @override
   void initState() {
     // TODO: implement initState
@@ -41,52 +42,45 @@ class HomepageScreenState extends BaseWidgetState<HomepageScreen> {
   @override
   Widget getContentWidget(BuildContext context) {
     // TODO: implement getContentWidget
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-      Stack(
-          children: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: ScreenUtil().setHeight(387),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [
-                      Color.fromRGBO(52, 135, 215, 1),
-                      Color.fromRGBO(47, 134, 218,1)
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter
-                ),
+    return  new SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Stack(
+            children: <Widget>[
+              Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: ScreenUtil().setHeight(387),
+                  color:Color.fromRGBO(47, 134, 218,1)
               ),
-            ),
-            Positioned(
-              top: ScreenUtil().setHeight(32),
-              left: ScreenUtil().setWidth(32),
-              child: Text("数据概览",style: TextStyle(fontSize: ScreenUtil().setSp(48),color: Color.fromRGBO(255, 255, 255, 0.7)))
-            ),
+              Positioned(
+                  top: ScreenUtil().setHeight(32),
+                  left: ScreenUtil().setWidth(32),
+                  child: Text("数据概览",style: TextStyle(fontSize: ScreenUtil().setSp(48),color: Color.fromRGBO(255, 255, 255, 0.7)))
+              ),
 
-            Positioned(
-                top: ScreenUtil().setHeight(32),
-                right: ScreenUtil().setWidth(32),
-                child: Text("截止 2020-08-01",style: TextStyle(fontSize: ScreenUtil().setSp(36),color: Color.fromRGBO(255, 255, 255, 0.7)))
-            ),
+              Positioned(
+                  top: ScreenUtil().setHeight(32),
+                  right: ScreenUtil().setWidth(32),
+                  child: Text("截止 2020-08-01",style: TextStyle(fontSize: ScreenUtil().setSp(36),color: Color.fromRGBO(255, 255, 255, 0.7)))
+              ),
 
-            Positioned(
-                top: ScreenUtil().setHeight(112),
-                left: ScreenUtil().setWidth(32),
-                child: _buildImageTextWidget("images/icon_sum_people_count.png", "总人口/人")
-            ),
+              Positioned(
+                  top: ScreenUtil().setHeight(112),
+                  left: ScreenUtil().setWidth(32),
+                  child: _buildImageTextWidget("images/icon_sum_people_count.png", "总人口/人")
+              ),
 
-            Positioned(
-                top: ScreenUtil().setHeight(112),
-                right : ScreenUtil().setWidth(32),
-                child: _buildImageTextWidget("images/icon_sum_house_count.png", "出租房屋/户")
-            ),
-          ],
-        ),
-        _buildMultilineTextWidget(),
-         CustomCheckBox(callBack: (_checkedStatus){
+              Positioned(
+                  top: ScreenUtil().setHeight(112),
+                  right : ScreenUtil().setWidth(32),
+                  child: _buildImageTextWidget("images/icon_sum_house_count.png", "出租房屋/户")
+              ),
+            ],
+          ),
+          _buildMultilineTextWidget(),
+          CustomCheckBox(callBack: (_checkedStatus){
             if(_checkedStatus){
               setState(() {
                 _isShowImageTextsWidget = true;
@@ -100,16 +94,19 @@ class HomepageScreenState extends BaseWidgetState<HomepageScreen> {
                 print(_isShowImageTextsWidget);
               });
             }
-         }),
-        _buildImageTextWidgets(),
-        _buildLineWidget(),
-        //监督核查widget
-        _buildMonitorWidget(),
-        _buildLineWidget(),
-        //公告提醒
-        _buildNoticeWidget(),
-        _buildLineWidget(),
-      ],
+          }),
+          _buildImageTextWidgets(),
+          _buildLineWidget(),
+          //监督核查widget
+          _buildMonitorWidget(),
+          _buildLineWidget(),
+          //公告提醒
+          _buildNoticeWidget(),
+          _buildLineWidget(),
+          //本月数据概览
+          _buildDataOverviewWidget(),
+        ],
+      ),
     );
   }
   Widget _buildMultilineTextWidget(){
@@ -152,10 +149,26 @@ class HomepageScreenState extends BaseWidgetState<HomepageScreen> {
       height: ScreenUtil().setHeight(167),
       child: Column(
         children: <Widget>[
-          Text("646854",style: TextStyle(fontSize: ScreenUtil().setSp(48),color: Color.fromRGBO(255, 255, 255, 1))),
+          Text("skadhfs",style: TextStyle(fontSize: ScreenUtil().setSp(48),color: Color.fromRGBO(255, 255, 255, 1))),
           Padding(
               padding: EdgeInsets.only(top: ScreenUtil().setWidth(42)),
-              child: Text("户籍人口",style: TextStyle(fontSize: ScreenUtil().setSp(40),color: Color.fromRGBO(255, 255, 255, 0.7)))
+              child: Text("ajsflks",style: TextStyle(fontSize: ScreenUtil().setSp(40),color: Color.fromRGBO(255, 255, 255, 0.7)))
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _multilineTextsWidget(String content,String title,Color colorContent){
+    return Container(
+      margin: EdgeInsets.only(top: ScreenUtil().setHeight(32)),
+      height: ScreenUtil().setHeight(167),
+      child: Column(
+        children: <Widget>[
+          Text(content,style: TextStyle(fontSize: ScreenUtil().setSp(56),color:colorContent)),
+          Padding(
+              padding: EdgeInsets.only(top: ScreenUtil().setWidth(24)),
+              child: Text(title,style: TextStyle(fontSize: ScreenUtil().setSp(40),color: Color.fromRGBO(100,100,100,1)))
           ),
         ],
       ),
@@ -320,5 +333,67 @@ class HomepageScreenState extends BaseWidgetState<HomepageScreen> {
          ],
        ),
      );
+  }
+
+  /// 本月数据概览
+  Widget _buildDataOverviewWidget() {
+    return Container(
+      width: ScreenUtil().uiSize.width,
+      height: ScreenUtil().setHeight(781),
+      color: Color.fromRGBO(247,248,250,1),
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: ScreenUtil().uiSize.width,
+            height: ScreenUtil().setHeight(90),
+            child: Stack(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(left: ScreenUtil().setWidth(32)),
+                  child:  Text("本月数据概览",style: TextStyle(fontSize: ScreenUtil().setSp(48),color: Color.fromRGBO(34,34,34,1))),
+                ),
+                Positioned(
+                    right: ScreenUtil().setWidth(38),
+                    child: Text("截止 2020-08-01",style: TextStyle(fontSize: ScreenUtil().setSp(36),color: Color.fromRGBO(140,141,142,1))),
+                )
+              ],
+            )
+          ),
+          Container(
+            width: ScreenUtil().uiSize.width,
+            height: ScreenUtil().setHeight(598),
+            color: Colors.white,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                _buildWeightWidget("188","核查流动人口",Color.fromRGBO(58,134,255,1),"188","核查房屋",Color.fromRGBO(144,190,109,1)),
+                _buildWeightWidget("188","人员离线抽查",Color.fromRGBO(249,132,74,1),"188","在线实管员",Color.fromRGBO(240,113,103,1)),
+                _buildWeightWidget("188","未处理任务",Color.fromRGBO(0,175,185,1),"188","未处理情报",Color.fromRGBO(94,96,206,1)),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWeightWidget(String leftContent,String leftTitle,Color leftContentColor,String rightContent,String rightTitle,Color rightContentColor) {
+    return new Expanded(
+        child: new Row(
+          children: <Widget>[
+            new Expanded(
+                child: Container(
+                  child: _multilineTextsWidget(leftContent,leftTitle,leftContentColor),
+                )
+            ),
+            new Expanded(
+                child: Container(
+                  child: _multilineTextsWidget(rightContent,rightTitle,rightContentColor),
+                )
+            ),
+          ],
+        )
+    );
   }
 }

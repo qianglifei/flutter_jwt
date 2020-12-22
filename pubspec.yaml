@@ -107,3 +107,6 @@ flutter:
     - images/icon_task_manage.png
     - images/icon_intelligence_manage.png
     - images/icon_info.png
+    - images/icon_mine_bg.png
+    - images/icon_police.png
+    - images/icon_more.png

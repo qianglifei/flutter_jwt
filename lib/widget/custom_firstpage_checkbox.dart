@@ -44,7 +44,8 @@ class CustomCheckBoxState extends State<CustomCheckBox> {
                     top: ScreenUtil().setWidth(18),
                     left: ScreenUtil().setHeight(110),
                     child:Image.asset(
-                      _isChecked ? "images/icon_stretch_down.png" : "images/icon_stretch_up.png",
+                      _isChecked ?  "images/icon_stretch_up.png"
+                          : "images/icon_stretch_down.png",
                       width: ScreenUtil().setWidth(42),
                       height: ScreenUtil().setHeight(24),
                       fit: BoxFit.fill,
