@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
 import 'package:jwt/config/url_config.dart';
@@ -222,15 +221,15 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
                         //dialog 消息消失
                         Navigator.of(context).pop();
 
-                        Fluttertoast.showToast(
-                            msg: "登录成功",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0
-                        );
+//                        Fluttertoast.showToast(
+//                            msg: "登录成功",
+//                            toastLength: Toast.LENGTH_SHORT,
+//                            gravity: ToastGravity.CENTER,
+//                            timeInSecForIosWeb: 1,
+//                            backgroundColor: Colors.red,
+//                            textColor: Colors.white,
+//                            fontSize: 16.0
+//                        );
 
                         print(data.toJson());
                         Navigator.of(context).push(MaterialPageRoute(builder: (context){

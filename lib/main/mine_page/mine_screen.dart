@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/screenutil.dart';
@@ -147,8 +149,28 @@ class MineScreenState extends BaseWidgetState<MineScreen> {
         ),
       ),
       onTap: (){
-
+        _onBackPressed();
       },
     );
   }
+
+  Future<bool> _onBackPressed() {
+    return showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(
+              title: Text('确定退出程序吗?'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('暂不'),
+                  onPressed: () => Navigator.pop(context, false),
+                ),
+                FlatButton(
+                  child: Text('确定'),
+                  onPressed: () => exit(0),
+                ),
+              ],
+            ));
+  }
+
 }

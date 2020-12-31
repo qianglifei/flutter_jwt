@@ -3,8 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
+import 'package:jwt/main/first_page/people_check_screen.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/custom_firstpage_checkbox.dart';
+
+import 'house_check_screen.dart';
 
 // ignore: must_be_immutable
 class HomepageScreen extends BaseWidget{
@@ -238,37 +241,67 @@ class HomepageScreenState extends BaseWidgetState<HomepageScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            _verticalImageText("images/icon_people_check.png","人口核查"),
-            _verticalImageText("images/icon_house_check.png","房屋核查"),
-            _verticalImageText("images/icon_task_manage.png","任务管理"),
-            _verticalImageText("images/icon_intelligence_manage.png","情报管理"),
-            _verticalImageText("images/icon_ajt.png","安居通")
+            _verticalImageText("images/icon_people_check.png","人口核查","1"),
+            _verticalImageText("images/icon_house_check.png","房屋核查","2"),
+            _verticalImageText("images/icon_task_manage.png","任务管理","3"),
+            _verticalImageText("images/icon_intelligence_manage.png","情报管理","4"),
+            _verticalImageText("images/icon_ajt.png","安居通","5")
           ],
         ),
       ),
     );
   }
 
-  Widget _verticalImageText(String imageUrl,String textContent) {
-    return Container(
-      height: ScreenUtil().setHeight(196),
-      child: Stack(
-        alignment: AlignmentDirectional.topCenter,
-        overflow: Overflow.visible,
-        children: <Widget>[
-           Image.asset(
-             imageUrl,
-             height: ScreenUtil().setHeight(116),
-             width: ScreenUtil().setWidth(116),
-             fit: BoxFit.contain,
-           ),
-          Positioned(
-              top: ScreenUtil().setHeight(146),
-              child: Text(textContent,style: TextStyle(fontSize: ScreenUtil().setSp(40),color: Color.fromRGBO(34, 34, 34, 1)))
-          )
-        ],
+  Widget _verticalImageText(String imageUrl,String textContent,String flag) {
+    return InkWell(
+      child:  Container(
+        height: ScreenUtil().setHeight(196),
+        child: Stack(
+          alignment: AlignmentDirectional.topCenter,
+          overflow: Overflow.visible,
+          children: <Widget>[
+            Image.asset(
+              imageUrl,
+              height: ScreenUtil().setHeight(116),
+              width: ScreenUtil().setWidth(116),
+              fit: BoxFit.contain,
+            ),
+            Positioned(
+                top: ScreenUtil().setHeight(146),
+                child: Text(textContent,style: TextStyle(fontSize: ScreenUtil().setSp(40),color: Color.fromRGBO(34, 34, 34, 1)))
+            )
+          ],
+        ),
       ),
-    );
+      onTap: (){
+        setState(() {
+          switch(flag){
+            case "1":{
+              ///路由跳转
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return new PeopleCheckScreen();
+              }));
+            }break;
+            case "2":{
+              ///路由跳转
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return new HouseCheckScreen();
+              }));
+            }break;
+            case "3":{
+
+            }break;
+            case "4":{
+
+            }break;
+            case "5":{
+
+            }break;
+            default:
+          }
+        });
+      },
+    ) ;
   }
 
   Widget _buildLineWidget() {
