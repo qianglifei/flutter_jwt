@@ -204,7 +204,9 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
                 ),
                 child: new Text('登录',style: TextStyle(fontSize: ScreenUtil().setSp(56,allowFontScalingSelf: true))),
                 onPressed: () {
-
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                    return App();
+                  }));
                   buildShowDialog(context);
                   Map<String,dynamic> requestBody = new Map();
                   requestBody.addAll({
