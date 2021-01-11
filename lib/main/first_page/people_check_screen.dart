@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
+import 'package:jwt/widget/custom_button.dart';
+import 'package:jwt/widget/custom_choose_widget.dart';
 
 // ignore: must_be_immutable
 class PeopleCheckScreen extends BaseWidget{
@@ -40,12 +42,17 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           Padding(
-              padding: EdgeInsets.only(left: ScreenUtil().setWidth(64),top: ScreenUtil().setHeight(64)),
+              padding: EdgeInsets.only(left: ScreenUtil().setWidth(64),top: ScreenUtil().setHeight(44)),
               child: Text("核查区域",style: TextStyle(fontSize: ScreenUtil().setSp(48,allowFontScalingSelf: true),color: Color.fromRGBO(140,141,142,1))),
           ),
           Padding(
-            padding: EdgeInsets.only(top: ScreenUtil().setHeight(64)),
-            child: _buildChooseWidget("派出所"),
+            padding: EdgeInsets.only(top: ScreenUtil().setHeight(44)),
+            child:CustomChooseWidget(
+              "派出所",
+              callBack: (){
+                print("派出所被点击");
+              }
+            ),
           ),
           //横线
           Padding(
@@ -58,15 +65,25 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
           ),
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
-            child: _buildChooseWidget("服务站"),
+            child: CustomChooseWidget(
+                "服务站",
+                callBack: (){
+                  print("服务站被点击");
+                }
+            ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: ScreenUtil().setWidth(64),top: ScreenUtil().setHeight(64)),
+            padding: EdgeInsets.only(left: ScreenUtil().setWidth(64),top: ScreenUtil().setHeight(44)),
             child: Text("个人信息",style: TextStyle(fontSize: ScreenUtil().setSp(48,allowFontScalingSelf: true),color: Color.fromRGBO(140,141,142,1))),
           ),
           Padding(
-            padding: EdgeInsets.only(top: ScreenUtil().setHeight(64)),
-            child: _buildChooseWidget("姓名"),
+            padding: EdgeInsets.only(top: ScreenUtil().setHeight(44)),
+            child: CustomChooseWidget(
+                "姓名",
+                callBack: (){
+                  print("姓名被点击");
+                }
+            ),
           ),
           //横线
           Padding(
@@ -79,11 +96,46 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
           ),
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
-            child: _buildChooseWidget("证件号码"),
+            child: CustomChooseWidget(
+                "证件号码",
+                callBack: (){
+                  print("证件号码");
+                }
+            ),
           ),
           Padding(
             padding: EdgeInsets.only(left:ScreenUtil().setWidth(140),top: ScreenUtil().setHeight(56)),
             child: _buildScanWidget(),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: ScreenUtil().setHeight(300)),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+               CustomButton(
+                   ScreenUtil().setWidth(450),
+                   ScreenUtil().setHeight(120),
+                   Colors.white,
+                   Colors.blue,
+                    "离线暂存",
+                   (){
+                     print("离线暂存");
+                   }
+               ),
+                CustomButton(
+                    ScreenUtil().setWidth(450),
+                    ScreenUtil().setHeight(120),
+                    Colors.blue,
+                    Colors.white,
+                    "线上核查",
+                    (){
+                      print("线上核查");
+                    }
+                ),
+              ],
+            ),
           ),
         ],
       ),

@@ -1,23 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
+typedef _callBack = void Function();
 // ignore: must_be_immutable
 class CustomButton extends StatefulWidget{
   double width;
   double height;
   double radius;
   Color colors;
+  Color textColor;
+  String contentText;
+  final _callBack callBack;
+
+  CustomButton(this.width,this.height, this.colors,this.textColor,this.contentText,this.callBack) :
+  assert(width != null),
+  assert(height != null),
+  assert(colors != null),
+  assert(textColor != null);
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return CustomButtonState(this.width,this.height,this.colors = Colors.white);
+    return CustomButtonState();
   }
 
 }
 
 class CustomButtonState extends State<CustomButton>{
-  CustomButtonState(double width, double height, Color color);
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +34,24 @@ class CustomButtonState extends State<CustomButton>{
     return Container(
       width: widget.width,
       height: widget.height,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color:
+      child: InkWell(
+          child: Container(
+            child: Center(
+              child: Text(widget.contentText,style:TextStyle(fontSize: ScreenUtil().setSp(48),color: widget.textColor)),
+            ),
+            width: widget.width,
+            height: widget.height,
+            decoration: BoxDecoration(
+              color: widget.colors,
+              borderRadius: BorderRadius.all(Radius.circular(widget.height / 2)),
+              border: Border.all(width: 1,color: Color.fromRGBO(52,135,215,1)),
+            ),
+          ),
+          onTap: (){
+            setState(() {
+              widget.callBack();
+            });
+          },
       ),
     );
   }

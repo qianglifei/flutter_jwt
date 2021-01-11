@@ -24,40 +24,46 @@ class BaseTitleAppBar extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-            padding: EdgeInsets.only(left: 12),
-            child: Offstage(
-              offstage: !isShowLeftBackIcon,
-              child:Image.asset(
-                leftIconUrl,
-                width: ScreenUtil().setWidth(28),
-                height: ScreenUtil().setHeight(50),
-                fit: BoxFit.fill,
+    return Container(
+      height: ScreenUtil().setHeight(150),
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(52,135,215,1)
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+              padding: EdgeInsets.only(left: 12),
+              child: Offstage(
+                offstage: !isShowLeftBackIcon,
+                child:Image.asset(
+                  leftIconUrl,
+                  width: ScreenUtil().setWidth(28),
+                  height: ScreenUtil().setHeight(50),
+                  fit: BoxFit.fill,
                 ),
               )
-        ),
-        Text(
-            title,
-            style: TextStyle(fontSize: ScreenUtil().setSp(52,allowFontScalingSelf: true),color: Colors.white)
-        ),
-        Padding(
-          padding: EdgeInsets.only(right: 12),
-          child: Offstage(
-            offstage: !isShowRightWidget,
-            child: Image.asset(
-              rightIconUrl,
-              width: ScreenUtil().setWidth(40),
-              height: ScreenUtil().setHeight(40),
-              fit: BoxFit.cover,
-            ),
-          )
-        ),
-      ],
+          ),
+          Text(
+              title,
+              style: TextStyle(fontSize: ScreenUtil().setSp(52,allowFontScalingSelf: true),color: Colors.white)
+          ),
+          Padding(
+              padding: EdgeInsets.only(right: 12),
+              child: Offstage(
+                offstage: !isShowRightWidget,
+                child: Image.asset(
+                  rightIconUrl,
+                  width: ScreenUtil().setWidth(40),
+                  height: ScreenUtil().setHeight(40),
+                  fit: BoxFit.cover,
+                ),
+              )
+          ),
+        ],
+      ),
     );
   }
 
