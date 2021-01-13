@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
+import 'package:jwt/db/sql_manager.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/custom_button.dart';
 import 'package:jwt/widget/custom_choose_widget.dart';
@@ -50,6 +51,7 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
             child:CustomChooseWidget(
               "派出所",
               callBack: (){
+                SqlManager.copyDbFileToCacheDocument();
                 print("派出所被点击");
               }
             ),
