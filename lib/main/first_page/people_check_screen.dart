@@ -18,6 +18,9 @@ class PeopleCheckScreen extends BaseWidget{
 }
 
 class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
+  List _list = [];
+  String _title = "";
+  Color _color;
   @override
   CustomAppBar getAppBar() {
     // TODO: implement getAppBar
@@ -71,6 +74,84 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                 "服务站",
                 callBack: (){
                   print("服务站被点击");
+                  showModalBottomSheet(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
+                    ),
+                    context: context,
+                    builder: (BuildContext context) {
+                      return new Container(
+                        height: ScreenUtil().setHeight(1200),
+                        width: ScreenUtil().uiSize.width,
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              height: ScreenUtil().setHeight(130),
+                              width: ScreenUtil().uiSize.width,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                    Image.asset(
+                                      "images/icon_close.png",
+                                      width: ScreenUtil().setWidth(91),
+                                      height: ScreenUtil().setHeight(91),
+                                      fit: BoxFit.contain,
+                                    ),
+                                    Text("选择派出所",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
+                                    Text("确认",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: ScreenUtil().setHeight(24),
+                              color: Color.fromRGBO(247,248,250,1),
+                            ),
+                            Expanded(
+                                child: ListView.builder(
+                                  itemCount: 40,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      child: new Container(
+                                          color: Colors.blue,
+                                          padding: const EdgeInsets.all(8.0),
+                                          width: ScreenUtil().uiSize.width,
+                                          height: ScreenUtil().setHeight(144),
+                                          child: Stack(
+                                            children: <Widget>[
+                                              Positioned(
+                                                 child: Text("你的世界我曾今来过")
+                                              ),
+                                              Positioned(
+
+                                                  child: Offstage(
+                                                    offstage: true,
+                                                    child: Image.asset("images/icon_"
+
+                                                    ),
+                                                  )
+                                              ),
+                                            ],
+                                          )
+                                      ),
+                                      onTap: (){
+                                        setState(() {
+                                          _title = _list[index];
+                                        });
+                                      },
+                                    );
+                                  },
+                                  shrinkWrap: true,
+                                ),
+                            ),
+                          ],
+                        )
+                      );
+                    },
+                  ).then((val) {
+                    print(val);
+                  });
                 }
             ),
           ),

@@ -1,6 +1,3 @@
-
-import 'dart:html';
-
 import 'package:jwt/db/base_db_provider.dart';
 import 'package:jwt/entity/user_entity.dart';
 import 'package:sqflite/sqflite.dart';
