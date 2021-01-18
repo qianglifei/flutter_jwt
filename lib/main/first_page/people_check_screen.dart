@@ -21,6 +21,7 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
   List _list = [];
   String _title = "";
   Color _color;
+  bool _isVisible  = true;
   @override
   CustomAppBar getAppBar() {
     // TODO: implement getAppBar
@@ -88,19 +89,30 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                             Container(
                               height: ScreenUtil().setHeight(130),
                               width: ScreenUtil().uiSize.width,
+                              color: Colors.white,
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
-                                    Image.asset(
-                                      "images/icon_close.png",
-                                      width: ScreenUtil().setWidth(91),
-                                      height: ScreenUtil().setHeight(91),
-                                      fit: BoxFit.contain,
+                                    InkWell(
+                                      child: Image.asset(
+                                        "images/icon_close.png",
+                                        width: ScreenUtil().setWidth(91),
+                                        height: ScreenUtil().setHeight(91),
+                                        fit: BoxFit.contain,
+                                      ),
+                                      onTap: (){
+                                          Navigator.pop(context);
+                                      },
                                     ),
                                     Text("选择派出所",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
-                                    Text("确认",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
+                                    InkWell(
+                                       child: Text("确认",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
+                                       onTap: (){
+                                         Navigator.pop(context);
+                                       },
+                                    )
                                 ],
                               ),
                             ),
@@ -114,30 +126,37 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                                   itemBuilder: (BuildContext context, int index) {
                                     return GestureDetector(
                                       child: new Container(
-                                          color: Colors.blue,
+                                          color: Colors.white,
                                           padding: const EdgeInsets.all(8.0),
                                           width: ScreenUtil().uiSize.width,
                                           height: ScreenUtil().setHeight(144),
                                           child: Stack(
                                             children: <Widget>[
                                               Positioned(
-                                                 child: Text("你的世界我曾今来过")
+                                                  top: ScreenUtil().setHeight(56),
+                                                  left: ScreenUtil().setWidth(64),
+                                                  child: Text("你的世界我曾今来过",style: TextStyle(fontSize: ScreenUtil().setSp(44,allowFontScalingSelf: true)))
                                               ),
                                               Positioned(
-
-                                                  child: Offstage(
-                                                    offstage: true,
-                                                    child: Image.asset("images/icon_"
-
-                                                    ),
-                                                  )
+                                                right: ScreenUtil().setWidth(64),
+                                                top: ScreenUtil().setHeight(56),
+                                                child: Offstage(
+                                                  offstage: _isVisible,
+                                                  child: Image.asset("images/icon_select_true.png",
+                                                    width: ScreenUtil().setWidth(48),
+                                                    height: ScreenUtil().setHeight(32),
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                )
                                               ),
                                             ],
                                           )
                                       ),
                                       onTap: (){
                                         setState(() {
-                                          _title = _list[index];
+                                          //_title = _list[index];
+                                          _isVisible = false;
+                                          print(index);
                                         });
                                       },
                                     );
