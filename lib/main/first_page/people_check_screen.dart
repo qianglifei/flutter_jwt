@@ -4,9 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
 import 'package:jwt/db/sql_manager.dart';
+import 'package:jwt/entity/pcs_fwz_entity.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/custom_button.dart';
 import 'package:jwt/widget/custom_choose_widget.dart';
+import 'package:jwt/widget/custom_input_widget.dart';
 
 // ignore: must_be_immutable
 class PeopleCheckScreen extends BaseWidget{
@@ -18,10 +20,19 @@ class PeopleCheckScreen extends BaseWidget{
 }
 
 class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
-  List _list = [];
+  List<PcsFwzEntity> _list = [];
   String _title = "";
   Color _color;
-  bool _isVisible  = true;
+  bool _isVisible  = false;
+  int position = 100000;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    SqlManager.copyDbFileToCacheDocument();
+
+  }
   @override
   CustomAppBar getAppBar() {
     // TODO: implement getAppBar
@@ -55,8 +66,7 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
             child:CustomChooseWidget(
               "派出所",
               callBack: (){
-                SqlManager.copyDbFileToCacheDocument();
-                print("派出所被点击");
+
               }
             ),
           ),
@@ -75,101 +85,108 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                 "服务站",
                 callBack: (){
                   print("服务站被点击");
-                  showModalBottomSheet(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
-                    ),
-                    context: context,
-                    builder: (BuildContext context) {
-                      return new Container(
-                        height: ScreenUtil().setHeight(1200),
-                        width: ScreenUtil().uiSize.width,
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              height: ScreenUtil().setHeight(130),
-                              width: ScreenUtil().uiSize.width,
-                              color: Colors.white,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                    InkWell(
-                                      child: Image.asset(
-                                        "images/icon_close.png",
-                                        width: ScreenUtil().setWidth(91),
-                                        height: ScreenUtil().setHeight(91),
-                                        fit: BoxFit.contain,
-                                      ),
-                                      onTap: (){
-                                          Navigator.pop(context);
-                                      },
-                                    ),
-                                    Text("选择派出所",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
-                                    InkWell(
-                                       child: Text("确认",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
-                                       onTap: (){
-                                         Navigator.pop(context);
-                                       },
-                                    )
-                                ],
-                              ),
-                            ),
-                            Container(
-                              height: ScreenUtil().setHeight(24),
-                              color: Color.fromRGBO(247,248,250,1),
-                            ),
-                            Expanded(
-                                child: ListView.builder(
-                                  itemCount: 40,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return GestureDetector(
-                                      child: new Container(
-                                          color: Colors.white,
-                                          padding: const EdgeInsets.all(8.0),
-                                          width: ScreenUtil().uiSize.width,
-                                          height: ScreenUtil().setHeight(144),
-                                          child: Stack(
-                                            children: <Widget>[
-                                              Positioned(
-                                                  top: ScreenUtil().setHeight(56),
-                                                  left: ScreenUtil().setWidth(64),
-                                                  child: Text("你的世界我曾今来过",style: TextStyle(fontSize: ScreenUtil().setSp(44,allowFontScalingSelf: true)))
+                  SqlManager.queryPCSData().then((list){
+                      _list = list.cast<PcsFwzEntity>();
+                      showModalBottomSheet(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
+                        ),
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StatefulBuilder(
+                            builder: (context,state){ ///这里的state就是setState
+                              return Container(
+                                  height: ScreenUtil().setHeight(1200),
+                                  width: ScreenUtil().uiSize.width,
+                                  child: Column(
+                                    children: <Widget>[
+                                      Container(
+                                        height: ScreenUtil().setHeight(130),
+                                        width: ScreenUtil().uiSize.width,
+                                        color: Colors.white,
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            InkWell(
+                                              child: Image.asset(
+                                                "images/icon_close.png",
+                                                width: ScreenUtil().setWidth(91),
+                                                height: ScreenUtil().setHeight(91),
+                                                fit: BoxFit.contain,
                                               ),
-                                              Positioned(
-                                                right: ScreenUtil().setWidth(64),
-                                                top: ScreenUtil().setHeight(56),
-                                                child: Offstage(
-                                                  offstage: _isVisible,
-                                                  child: Image.asset("images/icon_select_true.png",
-                                                    width: ScreenUtil().setWidth(48),
-                                                    height: ScreenUtil().setHeight(32),
-                                                    fit: BoxFit.contain,
-                                                  ),
-                                                )
-                                              ),
-                                            ],
-                                          )
+                                              onTap: (){
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            Text("选择派出所",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
+                                            InkWell(
+                                              child: Text("确认",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
+                                              onTap: (){
+                                                Navigator.pop(context);
+                                              },
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                      onTap: (){
-                                        setState(() {
-                                          //_title = _list[index];
-                                          _isVisible = false;
-                                          print(index);
-                                        });
-                                      },
-                                    );
-                                  },
-                                  shrinkWrap: true,
-                                ),
-                            ),
-                          ],
-                        )
-                      );
-                    },
-                  ).then((val) {
-                    print(val);
+                                      Container(
+                                        height: ScreenUtil().setHeight(24),
+                                        color: Color.fromRGBO(247,248,250,1),
+                                      ),
+                                      Expanded(
+                                        child: ListView.builder(
+                                          itemCount: 40,
+                                          itemBuilder: (BuildContext context, int index) {
+                                            return GestureDetector(
+                                              child: new Container(
+                                                  color: position == index ? Color.fromRGBO(247,248,250,1) : Colors.white,
+                                                  width: ScreenUtil().uiSize.width,
+                                                  height: ScreenUtil().setHeight(144),
+                                                  child: Stack(
+                                                    children: <Widget>[
+                                                      Positioned(
+                                                          top: ScreenUtil().setHeight(40),
+                                                          left: ScreenUtil().setWidth(64),
+                                                          child: Text(_list[index].key,style: TextStyle(fontSize: ScreenUtil().setSp(44)))
+                                                      ),
+                                                      Positioned(
+                                                          right: ScreenUtil().setWidth(64),
+                                                          top: ScreenUtil().setHeight(45),
+                                                          child: Offstage(
+                                                            offstage: position == index ? false: true,
+                                                            child: Image.asset("images/icon_select_true.png",
+                                                              width: ScreenUtil().setWidth(48),
+                                                              height: ScreenUtil().setHeight(32),
+                                                              fit: BoxFit.contain,
+                                                            ),
+                                                          )
+                                                      ),
+                                                    ],
+                                                  )
+                                              ),
+                                              onTap: (){
+                                                ///为了区分把setState改个名字
+                                                state(() {
+                                                  position = index;
+                                                  _title = _list[position].key;
+                                                  print(position);
+                                                });
+                                              },
+                                            );
+                                          },
+                                          shrinkWrap: true,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                              );
+                            },
+                          );
+                        },
+                      ).then((vas) {
+                        print(vas);
+                      });
                   });
                 }
             ),
@@ -180,13 +197,9 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
           ),
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(44)),
-            child: CustomChooseWidget(
-                "姓名",
-                callBack: (){
-                  print("姓名被点击");
-                }
-            ),
-          ),
+            child: CustomInputWidget(
+              "姓名",hint: "请输入姓名",
+          )),
           //横线
           Padding(
               padding: EdgeInsets.only(left: ScreenUtil().setWidth(40),right: ScreenUtil().setWidth(40)),
@@ -198,12 +211,9 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
           ),
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
-            child: CustomChooseWidget(
-                "证件号码",
-                callBack: (){
-                  print("证件号码");
-                }
-            ),
+            child: CustomInputWidget(
+              "证件号码",hint: "请输入身份证号码",
+              )
           ),
           Padding(
             padding: EdgeInsets.only(left:ScreenUtil().setWidth(140),top: ScreenUtil().setHeight(56)),
