@@ -6,6 +6,7 @@ import 'package:jwt/base/base_widget.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/custom_button.dart';
 import 'package:jwt/widget/custom_choose_widget.dart';
+import 'package:jwt/widget/custom_input_widget.dart';
 
 // ignore: must_be_immutable
 class HouseCheckScreen extends BaseWidget{
@@ -79,12 +80,9 @@ class HouseCheckScreenState extends BaseWidgetState<HouseCheckScreen> {
           ),
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(44)),
-            child: CustomChooseWidget(
-                "房主姓名",
-                callBack: (){
-                  print("姓名被点击");
-                }
-            ),
+            child: CustomInputWidget(
+              "房主姓名",hint: "请输入房主姓名",
+            )
           ),
           //横线
           Padding(
@@ -97,12 +95,24 @@ class HouseCheckScreenState extends BaseWidgetState<HouseCheckScreen> {
           ),
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
-            child: CustomChooseWidget(
-                "证件号码",
-                callBack: (){
-                  print("证件号码");
-                }
-            ),
+            child: CustomInputWidget(
+              "房屋登记表序号",hint: "请输入序号",
+            )
+          ),
+          //横线
+          Padding(
+              padding: EdgeInsets.only(left: ScreenUtil().setWidth(40),right: ScreenUtil().setWidth(40)),
+              child: Container(
+                  width: ScreenUtil().uiSize.width,
+                  height: ScreenUtil().setHeight(3),
+                  color: Color.fromRGBO(247,248,250,1)
+              )
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
+            child:CustomInputWidget(
+              "详细地址",hint: "请输入详细地址",
+            )
           ),
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(300)),
