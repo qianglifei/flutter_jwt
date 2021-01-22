@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:jwt/entity/pcs_fwz_entity.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -10,8 +11,8 @@ class SqlManager{
   static const _VERSION = 1;
   static const _DATABASE_NAME = "你的世界我曾经来过";
   static Database _database;
-
   static List _list = [];
+
   ///初始化数据库
   static init() async{
     var databasePath = await getDatabasesPath();
@@ -46,35 +47,52 @@ class SqlManager{
     var databasesPath = await getDatabasesPath();
     print(databasesPath);
     var path = join(databasesPath,"local_database.db");
-    //delete existing if any
-    await deleteDatabase(path);
-    // Make sure the parent directory exists
-    try{
-      await Directory(dirname(path)).create(recursive: true);
-    }catch(_){}
-
-    var data = await rootBundle.load(join('assets', 'local_database.db'));
-    List<int> bytes =
-    data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    // Write and flush the bytes written
-    await File(path).writeAsBytes(bytes, flush: true);
-
-    //从缓存目录读取db文件里面的数据
-    queryData();
+    // check  if database exists
+    var exists = await databaseExists(path);
+    if(!exists){
+      // Should happen only the first time you launch your application
+      print("Creating new copy from asset");
+      //make sure the parent directory exists
+      try{
+        await Directory(dirname(path)).create(recursive: true);
+      }catch(_){}
+      // copy from assets
+      var data = await rootBundle.load(join('assets', 'local_database.db'));
+      List<int> bytes =
+      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      // Write and flush the bytes written
+      await File(path).writeAsBytes(bytes, flush: true);
+    }else{
+      print("opening existing database");
+    }
+    _database = await openDatabase(path,readOnly: true);
   }
 
-  //从缓存目录读取db文件里面的数据
-  static Future<List> queryData() async {
-    var databasesPath = await getDatabasesPath();
-    var path = join(databasesPath, 'local_database.db');
+  //查询派出所数据
+  static Future<List> queryPCSData() async {
     // open the database
-    var db = await openDatabase(path);
-
-    // Our database as a single table with a single element
-    _list = await db.rawQuery('SELECT * FROM PCSFWZDID_ONLY');
+    _list = await _database.rawQuery('select Distinct pcsbh,pcsmc FROM PCSFWZDID_ONLY');
+    List pcsList = [];
     print('list $_list');
-    await db.close();
-    return _list;
+    _list.forEach((item){
+      print('Map $item');
+      Map map = item;
+      PcsFwzEntity bean = new PcsFwzEntity();
+      map.forEach((key,value){
+        if(key == "PCSMC"){
+          bean.key = value;
+        }else if(key == "PCSBH"){
+          bean.value = value;
+        }
+      });
+      pcsList.add(bean);
+    });
+    return pcsList ?? [];
+  }
+
+  static queryFWZData() async{
+
+    await _database.close();
   }
 
   openJsonFile() async{
