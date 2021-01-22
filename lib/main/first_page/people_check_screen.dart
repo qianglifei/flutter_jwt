@@ -55,6 +55,10 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
               "派出所",
               callBack: (){
                 SqlManager.copyDbFileToCacheDocument();
+                SqlManager.queryData().then((list){
+                  _list = list;
+                  print(_list);
+                });
                 print("派出所被点击");
               }
             ),
@@ -124,12 +128,11 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                                                  child: Text("你的世界我曾今来过")
                                               ),
                                               Positioned(
-
                                                   child: Offstage(
                                                     offstage: true,
-                                                    child: Image.asset("images/icon_"
-
-                                                    ),
+//                                                    child: Image.asset("images/icon_"
+//
+//                                                    ),
                                                   )
                                               ),
                                             ],

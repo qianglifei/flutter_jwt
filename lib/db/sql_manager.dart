@@ -64,7 +64,7 @@ class SqlManager{
   }
 
   //从缓存目录读取db文件里面的数据
-  static queryData() async {
+  static Future<List> queryData() async {
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, 'local_database.db');
     // open the database
@@ -74,6 +74,7 @@ class SqlManager{
     _list = await db.rawQuery('SELECT * FROM PCSFWZDID_ONLY');
     print('list $_list');
     await db.close();
+    return _list;
   }
 
   openJsonFile() async{
