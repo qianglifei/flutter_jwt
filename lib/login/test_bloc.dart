@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 
 part 'test_event.dart';
 part 'test_state.dart';
-///主要写逻辑的页面
+///主要写逻辑的页面,处理逻辑
 ///state 是框架内部定义的，会默认保存上一次同步的MainState对象的值
 class TestBloc extends Bloc<TestEvent, TestState> {
   TestBloc() : super(TestState(selectedIndex :0,isExtended: false));

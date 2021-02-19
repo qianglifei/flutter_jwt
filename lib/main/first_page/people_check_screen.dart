@@ -9,6 +9,7 @@ import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/custom_button.dart';
 import 'package:jwt/widget/custom_choose_widget.dart';
 import 'package:jwt/widget/custom_input_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class PeopleCheckScreen extends BaseWidget{
@@ -25,14 +26,22 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
   Color _color;
   bool _isVisible  = false;
   int position = 100000;
-
+  SharedPreferences prefs;
+  String _pcsbm;
   @override
-  void initState() {
+  initState(){
     // TODO: implement initState
     super.initState();
     SqlManager.copyDbFileToCacheDocument();
-
+    getData();
   }
+
+  Future<void> getData() async {
+    prefs = await SharedPreferences.getInstance();
+    _pcsbm = prefs.getString("pcsbm");
+    print(_pcsbm);
+  }
+
   @override
   CustomAppBar getAppBar() {
     // TODO: implement getAppBar
@@ -66,7 +75,7 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
             child:CustomChooseWidget(
               "派出所",
               callBack: (){
-
+                SqlManager.queryPCSOrFWZData("PCSFWZDID_ONLY", _pcsbm);
               }
             ),
           ),
@@ -89,7 +98,7 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                       _list = list.cast<PcsFwzEntity>();
                       showModalBottomSheet(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30)),
                         ),
                         context: context,
                         builder: (BuildContext context) {

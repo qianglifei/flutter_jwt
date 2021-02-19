@@ -32,7 +32,9 @@ Widget totalPage() {
     children: [
       navigationRailSide(),
       Expanded(child: Center(
-        child: BlocBuilder<TestBloc, TestState>(builder: (context, state) {
+        /// 有三个属性，bloc condition builder
+        child: BlocBuilder<TestBloc, TestState>(
+            builder: (context, state) {
           ///看这看这：刷新组件！
           return Text("selectedIndex:" + state.selectedIndex.toString());
         }),
@@ -103,6 +105,7 @@ Widget navigationRailSide() {
       trailing: bottomWidget,
       selectedIndex: state.selectedIndex,
       onDestinationSelected: (int index) {
+        ///BlocProvider，可以管理全局变量
         ///添加切换tab事件
         BlocProvider.of<TestBloc>(context).add(SwitchTabEvent(selectedIndex: index));
       },

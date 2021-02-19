@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -12,6 +14,7 @@ import 'package:jwt/login/test_view.dart';
 import 'package:jwt/main/app.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class LoginScreen extends BaseWidget{
@@ -30,14 +33,19 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
   //密码的控制器
   TextEditingController passController = TextEditingController();
 
+  SharedPreferences _preferences;
   @override
-  void initState() {
+  initState() {
     // TODO: implement initState
     super.initState();
     //设置AppBar不可见
     setAppBarVisible(false);
+    setData();
   }
 
+  Future<void> setData() async{
+    _preferences  =  await SharedPreferences.getInstance();
+  }
   @override
   CustomAppBar getAppBar() {
     return CustomAppBar(
@@ -206,15 +214,15 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
                 child: new Text('登录',style: TextStyle(fontSize: ScreenUtil().setSp(56,allowFontScalingSelf: true))),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                    return TestPage();
+                    return App();
                   }));
                   buildShowDialog(context);
                   Map<String,dynamic> requestBody = new Map();
                   requestBody.addAll({
-                    "user_name":"1142103000-g2",
+                    "user_name":"1142100000-g1",
                     "user_password":"123456",
-                    "imsi":"1edf2c3125ac5b6c",
-                    "version":"1.0.9"
+                    "imsi":"2a6d138bc0f6282e",
+                    "version":"1.0.7"
                   });
                   DioUtils.instance.postHttp<LoginResponseEntity>(
                       url: URLConfig.LOGIN ,
@@ -233,8 +241,8 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
 //                            textColor: Colors.white,
 //                            fontSize: 16.0
 //                        );
-
                         print(data.toJson());
+                        saveData(data);
                         Navigator.of(context).push(MaterialPageRoute(builder: (context){
                             return App();
                         }));
@@ -288,11 +296,37 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
                 )));
         });
   }
+
   void _textFieldUserNameChanged(String value) {
 
   }
 
   void _textFieldPasswordChanged(String value) {
 
+  }
+
+  /// 存储登录数据到本地
+  void saveData(LoginResponseEntity data) {
+    //用户归属单位
+    _preferences.setString("user_gsdw", data.userGsdw);
+    //用户名
+    _preferences.setString("user_name", data.userName);
+    //用户操作时间
+    _preferences.setString("user_czsj", data.userCjsj);
+    //用户权限 // 用户类型（5分局领导 4分局民警 3派出所领导2派出所民警1服务站）
+    _preferences.setString("usertype", data.userYhlx);
+    if(data.userYhlx == "4" || data.userYhlx == "5"){
+      //分局
+      _preferences.setString("Account_authority", '0');
+    }else{
+      //派出所
+      _preferences.setString("Account_authority", '1');
+    }
+    //派出所编码
+    _preferences.setString("pcsbm", data.userDwbm);
+    //姓名
+    _preferences.setString("user_xm", data.userXm);
+    //把token 保存在本地
+    _preferences.setString("token", data.token);
   }
 }

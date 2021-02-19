@@ -1,22 +1,19 @@
 
 class PcsFwzEntity{
-  String _key;
-  String _value;
+  String key;
+  String value;
 
-  String get key => _key;
+  PcsFwzEntity({this.value,this.key});
 
-  set key(String value) {
-    _key = value;
-  }
-
-  String get value => _value;
-
-  set value(String value) {
-    _value = value;
+  factory PcsFwzEntity.fromJson(Map<String,dynamic> json){
+    return PcsFwzEntity(
+        key : json["PCSBH"],
+        value : json["PCSMC"]
+    );
   }
 
   @override
   String toString() {
-    return 'PcsFwzEntity{_key: $_key, _value: $_value}';
+    return 'PcsFwzEntity{_key: $key, _value: $value}';
   }
 }
