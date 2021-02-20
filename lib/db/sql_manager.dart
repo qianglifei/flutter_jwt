@@ -94,29 +94,32 @@ class SqlManager{
   //查询派出所或服务站数据
   static Future<List> queryPCSOrFWZData(String tableName,String pcsbh) async{
     String sql;
-    String number = pcsbh.substring(0,6).trim();
-    if(tableName == "PCSFWZDID_ONLY"){
-      if (number == "110101" || number == "110103"){
-        sql = "select Distinct pcsbh,pcsmc from " + tableName +
-            " where pcsbh like '110101_______' or pcsbh like '110103_______'";
-      }else {
-        sql = "select Distinct pcsbh,pcsmc from " + tableName +
-            " where pcsbh like '"+ number +"_______'";
-      }
-    }else if(tableName == "TYPT_FWZGFGL_FWZJBXXDJB"){
-      sql = "select distinct * from " + tableName +
-          " where fwzjbxxdjb_fwzbh in " +
-          "(SELECT distinct fwzbh FROM pcsfwzdid_only" +
-          " where pcsbh = '"+ pcsbh +"')";
-    }
-     _listFwz = await _database.rawQuery(sql);
-    print(_listFwz);
     List<PcsFwzEntity> list = [];
-    _listFwz.forEach((element) {
-      PcsFwzEntity pze = PcsFwzEntity.fromJson(element);
-      print(element);
-      list.add(pze);
-    });
+
+    if(pcsbh != null && pcsbh != ""){
+      String number = pcsbh.substring(0,6).trim();
+      if(tableName == "PCSFWZDID_ONLY"){
+        if (number == "110101" || number == "110103"){
+          sql = "select Distinct pcsbh,pcsmc from " + tableName +
+              " where pcsbh like '110101_______' or pcsbh like '110103_______'";
+        }else {
+          sql = "select Distinct pcsbh,pcsmc from " + tableName +
+              " where pcsbh like '"+ number +"_______'";
+        }
+      }else if(tableName == "TYPT_FWZGFGL_FWZJBXXDJB"){
+        sql = "select distinct * from " + tableName +
+            " where fwzjbxxdjb_fwzbh in " +
+            "(SELECT distinct fwzbh FROM pcsfwzdid_only" +
+            " where pcsbh = '"+ pcsbh +"')";
+      }
+      _listFwz = await _database.rawQuery(sql);
+      print(_listFwz);
+      _listFwz.forEach((element) {
+        PcsFwzEntity pze = PcsFwzEntity.fromJson(element);
+        print(element);
+        list.add(pze);
+      });
+    }
     return list ?? [];
   }
 

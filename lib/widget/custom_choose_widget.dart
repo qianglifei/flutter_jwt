@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+
+
+///typedef 给某一种特定的函数类型起一个名字，可以类比class和对象
+///这样理解，自己定义了一种数据类型，不过这种数据类型 是函数类型
+///一个一个的具体实现的函数就相当于按照这种类型实力话对象会有类型检查
+///typedef ValveChanged<T> = void Function(T value)
 typedef _CallBack = void Function();
 // ignore: must_be_immutable
 class CustomChooseWidget extends StatefulWidget{
@@ -8,7 +14,6 @@ class CustomChooseWidget extends StatefulWidget{
   CustomChooseWidget(this._title,{Key key,this.callBack}) : assert( _title != null);
   @override
   State<StatefulWidget> createState() => CustomChooseWidgetState();
-
 }
 
 class CustomChooseWidgetState extends State<CustomChooseWidget> {

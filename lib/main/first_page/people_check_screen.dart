@@ -7,6 +7,7 @@ import 'package:jwt/db/sql_manager.dart';
 import 'package:jwt/entity/pcs_fwz_entity.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/custom_button.dart';
+import 'package:jwt/widget/custom_choose_bottom_sheet.dart';
 import 'package:jwt/widget/custom_choose_widget.dart';
 import 'package:jwt/widget/custom_input_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,7 +28,7 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
   bool _isVisible  = false;
   int position = 100000;
   SharedPreferences prefs;
-  String _pcsbm;
+  String _pcsbm = "";
   @override
   initState(){
     // TODO: implement initState
@@ -38,8 +39,10 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
 
   Future<void> getData() async {
     prefs = await SharedPreferences.getInstance();
-    _pcsbm = prefs.getString("pcsbm");
-    print(_pcsbm);
+    setState(() {
+      _pcsbm = prefs.getString("pcsbm");
+      print(_pcsbm);
+    });
   }
 
   @override
@@ -72,10 +75,12 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
           ),
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(44)),
-            child:CustomChooseWidget(
+            child:CustomChooseBottomSheet(
               "派出所",
+              tableName: "PCSFWZDID_ONLY",
+              pcsbm: _pcsbm,
               callBack: (){
-                SqlManager.queryPCSOrFWZData("PCSFWZDID_ONLY", _pcsbm);
+
               }
             ),
           ),
@@ -90,115 +95,7 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
           ),
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
-            child: CustomChooseWidget(
-                "服务站",
-                callBack: (){
-                  print("服务站被点击");
-                  SqlManager.queryPCSData().then((list){
-                      _list = list.cast<PcsFwzEntity>();
-                      showModalBottomSheet(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30)),
-                        ),
-                        context: context,
-                        builder: (BuildContext context) {
-                          return StatefulBuilder(
-                            builder: (context,state){ ///这里的state就是setState
-                              return Container(
-                                  height: ScreenUtil().setHeight(1200),
-                                  width: ScreenUtil().uiSize.width,
-                                  child: Column(
-                                    children: <Widget>[
-                                      Container(
-                                        height: ScreenUtil().setHeight(130),
-                                        width: ScreenUtil().uiSize.width,
-                                        color: Colors.white,
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            InkWell(
-                                              child: Image.asset(
-                                                "images/icon_close.png",
-                                                width: ScreenUtil().setWidth(91),
-                                                height: ScreenUtil().setHeight(91),
-                                                fit: BoxFit.contain,
-                                              ),
-                                              onTap: (){
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                            Text("选择派出所",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
-                                            InkWell(
-                                              child: Text("确认",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
-                                              onTap: (){
-                                                Navigator.pop(context);
-                                              },
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        height: ScreenUtil().setHeight(24),
-                                        color: Color.fromRGBO(247,248,250,1),
-                                      ),
-                                      Expanded(
-                                        child: ListView.builder(
-                                          itemCount: 40,
-                                          itemBuilder: (BuildContext context, int index) {
-                                            return GestureDetector(
-                                              child: new Container(
-                                                  color: position == index ? Color.fromRGBO(247,248,250,1) : Colors.white,
-                                                  width: ScreenUtil().uiSize.width,
-                                                  height: ScreenUtil().setHeight(144),
-                                                  child: Stack(
-                                                    children: <Widget>[
-                                                      Positioned(
-                                                          top: ScreenUtil().setHeight(40),
-                                                          left: ScreenUtil().setWidth(64),
-                                                          child: Text(_list[index].key,style: TextStyle(fontSize: ScreenUtil().setSp(44)))
-                                                      ),
-                                                      Positioned(
-                                                          right: ScreenUtil().setWidth(64),
-                                                          top: ScreenUtil().setHeight(45),
-                                                          child: Offstage(
-                                                            offstage: position == index ? false: true,
-                                                            child: Image.asset("images/icon_select_true.png",
-                                                              width: ScreenUtil().setWidth(48),
-                                                              height: ScreenUtil().setHeight(32),
-                                                              fit: BoxFit.contain,
-                                                            ),
-                                                          )
-                                                      ),
-                                                    ],
-                                                  )
-                                              ),
-                                              onTap: (){
-                                                ///为了区分把setState改个名字
-                                                state(() {
-                                                  position = index;
-                                                  _title = _list[position].key;
-                                                  print(position);
-                                                });
-                                              },
-                                            );
-                                          },
-                                          shrinkWrap: true,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                              );
-                            },
-                          );
-                        },
-                      ).then((vas) {
-                        print(vas);
-                      });
-                  });
-                }
-            ),
+            child: Text("")
           ),
           Padding(
             padding: EdgeInsets.only(left: ScreenUtil().setWidth(64),top: ScreenUtil().setHeight(44)),
