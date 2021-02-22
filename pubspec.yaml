@@ -34,6 +34,9 @@ dependencies:
   sqflite: ^1.3.0
   flutter_bloc: ^6.1.1 #状态管理框架
   equatable: ^1.2.3 #增强组件相等性判断
+  camera:  0.7.0+2 #相机
+  permission_handler: 3.2.2
+  path_provider: 1.6.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -117,3 +120,4 @@ flutter:
     - images/icon_ocr.png
     - images/icon_close.png
     - images/icon_select_true.png
+    - images/icon_bg_identify_idcard.png

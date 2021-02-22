@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:jwt/db/sql_manager.dart';
 import 'package:jwt/entity/pcs_fwz_entity.dart';
-typedef _CallBack  = void Function();
+typedef _CallBack  = void Function(String key);
 // ignore: must_be_immutable
 class CustomChooseBottomSheet  extends StatefulWidget{
   String _title;
@@ -19,6 +19,7 @@ class CustomChooseBottomSheet  extends StatefulWidget{
 class CustomChooseBottomSheetState extends State<CustomChooseBottomSheet> {
   List<PcsFwzEntity> _list = [];
   String _title = "";
+  String _selectedContent = "请选择";
   int position = 100000;
   @override
   void initState() {
@@ -26,7 +27,6 @@ class CustomChooseBottomSheetState extends State<CustomChooseBottomSheet> {
     super.initState();
     print(widget.tableName);
     print(widget.pcsbm);
-
   }
 
   @override
@@ -40,14 +40,17 @@ class CustomChooseBottomSheetState extends State<CustomChooseBottomSheet> {
         child: Stack(
           children: <Widget>[
             Positioned(
-                top: ScreenUtil().setHeight(47),
+                top: ScreenUtil().setHeight(35),
                 left: ScreenUtil().setWidth(64),
                 child: Text(widget._title,style: TextStyle(fontSize: ScreenUtil().setSp(48),color: Color.fromRGBO(100,100,100,1)))
             ),
             Positioned(
-                top: ScreenUtil().setHeight(47),
+                top: ScreenUtil().setHeight(35),
                 right: ScreenUtil().setWidth(100),
-                child: Text(widget._title,style: TextStyle(fontSize: ScreenUtil().setSp(48),color: Color.fromRGBO(100,100,100,1)))
+                child: Padding(
+                  padding: EdgeInsets.only(left: ScreenUtil().setWidth(120)),
+                  child: Text(_selectedContent ?? "请选择",style: TextStyle(fontSize: ScreenUtil().setSp(48),color: Color.fromRGBO(100,100,100,1)))
+                )
             ),
             Positioned(
                 top: ScreenUtil().setHeight(50),
@@ -105,6 +108,10 @@ class CustomChooseBottomSheetState extends State<CustomChooseBottomSheet> {
                               InkWell(
                                 child: Text("确认",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
                                 onTap: (){
+                                  setState(() {
+                                    // ignore: unnecessary_statements
+                                    _selectedContent;
+                                  });
                                   Navigator.pop(context);
                                 },
                               )
@@ -117,7 +124,7 @@ class CustomChooseBottomSheetState extends State<CustomChooseBottomSheet> {
                         ),
                         Expanded(
                           child: ListView.builder(
-                            itemCount: 40,
+                            itemCount: _list.length,
                             itemBuilder: (BuildContext context, int index) {
                               return GestureDetector(
                                 child: new Container(
@@ -152,6 +159,11 @@ class CustomChooseBottomSheetState extends State<CustomChooseBottomSheet> {
                                     position = index;
                                     _title = _list[position].value;
                                     print(_title);
+                                    print(_list[position].value);
+                                    _selectedContent = _list[position].value;
+                                    if(widget.callBack != null && _list[position].value != null){
+                                       widget.callBack( _list[position].key);
+                                    }
                                   });
                                 },
                               );

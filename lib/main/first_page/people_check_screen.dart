@@ -7,9 +7,11 @@ import 'package:jwt/db/sql_manager.dart';
 import 'package:jwt/entity/pcs_fwz_entity.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/custom_button.dart';
+import 'package:jwt/widget/custom_camera_page.dart';
 import 'package:jwt/widget/custom_choose_bottom_sheet.dart';
 import 'package:jwt/widget/custom_choose_widget.dart';
 import 'package:jwt/widget/custom_input_widget.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
@@ -29,6 +31,9 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
   int position = 100000;
   SharedPreferences prefs;
   String _pcsbm = "";
+  String _pcsbh = "";
+  String _fwzbh = "";
+  String imagePath;
   @override
   initState(){
     // TODO: implement initState
@@ -79,8 +84,11 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
               "派出所",
               tableName: "PCSFWZDID_ONLY",
               pcsbm: _pcsbm,
-              callBack: (){
-
+              callBack: (String key){
+                setState(() {
+                  _pcsbh = key;
+                  print("派出所编号:$_pcsbh");
+                });
               }
             ),
           ),
@@ -95,7 +103,14 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
           ),
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
-            child: Text("")
+            child:CustomChooseBottomSheet(
+                "服务站",
+                tableName: "TYPT_FWZGFGL_FWZJBXXDJB",
+                pcsbm: _pcsbh,
+                callBack: (String key){
+
+                }
+            ),
           ),
           Padding(
             padding: EdgeInsets.only(left: ScreenUtil().setWidth(64),top: ScreenUtil().setHeight(44)),
@@ -183,11 +198,17 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
             Positioned(
                 left: ScreenUtil().setWidth(73),
                 top: ScreenUtil().setHeight(40),
-                child: Image.asset("images/icon_ocr.png",
-                  width: ScreenUtil().setWidth(320),
-                  height: ScreenUtil().setHeight(160),
-                  fit: BoxFit.fill,
-                ),
+                child: InkWell(
+                  child: Image.asset("images/icon_ocr.png",
+                    width: ScreenUtil().setWidth(320),
+                    height: ScreenUtil().setHeight(160),
+                    fit: BoxFit.fill,
+                  ),
+                  onTap: (){
+                    print("身份证识别");
+                    requestPermission();
+                  },
+                )
             ),
             Positioned(
               left: ScreenUtil().setWidth(430),
@@ -230,5 +251,26 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
 
       },
     );
+  }
+  ///动态权限申请
+  Future requestPermission() async{
+    //申请权限
+    Map<PermissionGroup,PermissionStatus> permisson =
+       await PermissionHandler().requestPermissions([PermissionGroup.camera,PermissionGroup.storage]);
+    //申请结果
+    PermissionStatus permissionStatus = await PermissionHandler().checkPermissionStatus(PermissionGroup.camera);
+    if(permissionStatus == PermissionStatus.granted){
+      Navigator.
+      push(context, MaterialPageRoute(builder: (context) => CustomCameraPage())).
+      then((value) {
+          if(value != null){
+            setState(() {
+              imagePath = value;
+            });
+          }
+      });
+    }else{
+      //权限申请被拒绝，自己去处理
+    }
   }
 }

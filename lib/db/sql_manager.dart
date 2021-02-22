@@ -106,19 +106,27 @@ class SqlManager{
           sql = "select Distinct pcsbh,pcsmc from " + tableName +
               " where pcsbh like '"+ number +"_______'";
         }
+        _listFwz = await _database.rawQuery(sql);
+        print(_listFwz);
+        _listFwz.forEach((element) {
+          PcsFwzEntity pze = PcsFwzEntity.fromJson(element,tableName);
+          print(element);
+          list.add(pze);
+        });
       }else if(tableName == "TYPT_FWZGFGL_FWZJBXXDJB"){
         sql = "select distinct * from " + tableName +
             " where fwzjbxxdjb_fwzbh in " +
             "(SELECT distinct fwzbh FROM pcsfwzdid_only" +
             " where pcsbh = '"+ pcsbh +"')";
+
+        _listFwz = await _database.rawQuery(sql);
+        print(_listFwz);
+        _listFwz.forEach((element) {
+          PcsFwzEntity pze = PcsFwzEntity.fromJson(element,tableName);
+          print(element);
+          list.add(pze);
+        });
       }
-      _listFwz = await _database.rawQuery(sql);
-      print(_listFwz);
-      _listFwz.forEach((element) {
-        PcsFwzEntity pze = PcsFwzEntity.fromJson(element);
-        print(element);
-        list.add(pze);
-      });
     }
     return list ?? [];
   }
