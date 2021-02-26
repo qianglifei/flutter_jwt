@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 import 'package:path_provider/path_provider.dart';
 
 class CustomCameraPage extends StatefulWidget{
@@ -15,12 +16,9 @@ class CustomCameraPage extends StatefulWidget{
 }
 
 class CustomCameraPageState extends State<CustomCameraPage> {
-
-
-
   CameraController controller;
   List<CameraDescription> cameras;
-
+  String photoPath;
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
   void _camera() async{
@@ -55,7 +53,7 @@ class CustomCameraPageState extends State<CustomCameraPage> {
           children: <Widget>[
               Expanded(
                 //flex 用来设置当前可用空间占优比
-                flex: 3,
+                flex: 4,
                 child: Stack(
                   children: [
                     //相机预览Widget
@@ -69,23 +67,13 @@ class CustomCameraPageState extends State<CustomCameraPage> {
                 //flex用来设置当前可用空间的占优比
                 flex: 1,
                 //拍照操作区域布局
-                child: Text("jalsdkjf"),
-
+                child: Expanded(
+                  flex: 1,//flex用来设置当前可用空间的占优比
+                  child: _takePictureLayout(),//拍照操作区域布局
+                ),
               ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _cameraWidget(){
-    return Expanded(
-      flex: 1,
-      child: Stack(
-        children: <Widget>[
-          _cameraPreviewWidget(),
-          _cameraScan()
-        ],
       ),
     );
   }
@@ -103,6 +91,7 @@ class CustomCameraPageState extends State<CustomCameraPage> {
         );
      }else{
         return new Container(
+          height: ScreenUtil().uiSize.height * 3 /4,
           width: double.infinity,
           //AspectRatio 根据设置调整子元素child 的宽高比
           child: AspectRatio(
@@ -118,8 +107,12 @@ class CustomCameraPageState extends State<CustomCameraPage> {
     return new Positioned(
         child: new Container(
           alignment: Alignment.center,
-          margin: const EdgeInsets.fromLTRB(50, 50, 50, 50),
-          child:new Image.asset('images/icon_bg_identify_idcard.png'),
+          child:new Image.asset(
+              'images/icon_bg_identify_idcard.png',
+              height: ScreenUtil().setWidth(1000),
+              width: ScreenUtil().setHeight(1500),
+              fit: BoxFit.contain,
+          ),
         ));
   }
 
@@ -132,45 +125,22 @@ class CustomCameraPageState extends State<CustomCameraPage> {
     );
   }
 
-  Widget _cameraButton(){
-    return GestureDetector(
-      onTap: onTakePictureButtonPressed,
-      child: Container(
-        height: 70,
-        color: Colors.black,
-        alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(horizontal: 15),
-        child: Stack(
-          children: <Widget>[
-            GestureDetector(
-              onTap: (){
-                Navigator.pop(context);
-              },
-              child: Text("返回",style: TextStyle(color: Colors.white)),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: GestureDetector(
-                  onTap: onTakePictureButtonPressed,
-                  child: Icon(Icons.camera_alt,color: Colors.white,size: 50)
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   void dispose() {
     controller?.dispose();
     super.dispose();
+    // 强制竖屏
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
   }
 
   void onTakePictureButtonPressed() {
     takePicture().then((String filePath) {
       if (mounted) {
         if (filePath != null){
+          print(filePath);
           Navigator.of(context).pop(filePath);
         }
       }
@@ -185,14 +155,18 @@ class CustomCameraPageState extends State<CustomCameraPage> {
     final Directory extDir = await getApplicationDocumentsDirectory();
     final String dirPath = '${extDir.path}/Pictures/flutter_test';
     await Directory(dirPath).create(recursive: true);
-    final String filePath = '$dirPath/${timestamp()}.jpg';
+    String filePath = '$dirPath/${timestamp()}.jpg';
 
     if (controller.value.isTakingPicture) {
       // A capture is already pending, do nothing.
       return null;
     }
     try {
-      //await controller.takePicture(filePath);
+       await controller.takePicture().then((value){
+          XFile file = value;
+          print(file.path);
+       });
+      print("拍照");
     } on CameraException catch (e) {
       print("出现异常$e");
       return null;
@@ -202,38 +176,65 @@ class CustomCameraPageState extends State<CustomCameraPage> {
 
 
   Widget _takePictureLayout() {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-            RaisedButton(
-                onPressed:(){
+    return RotatedBox(
+        quarterTurns: 1,
+        child:
+        Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                RaisedButton(
+                  color: Colors.amberAccent,
+                  onPressed: () {
 
-                },
-              child: Text("拍照"),
-            ),
-            RaisedButton(
-              onPressed:(){
+                  },
+                  child: Text("取消"),
+                ),
+                RaisedButton(
+                  color: Colors.amberAccent,
+                  onPressed: () {
 
-              },
-              child: Text("拍照"),
-            ),
-            RaisedButton(
-              onPressed:(){
+                  },
+                  child: Text("确认"),
+                ),
+                RaisedButton(
+                  color: Colors.amberAccent,
+                  onPressed: () {
 
-              },
-              child: Text("拍照"),
-            ),
-            RaisedButton(
-              onPressed:(){
+                  },
+                  child: Text("重拍"),
+                ),
+                RaisedButton(
+                  color: Colors.amberAccent,
+                  onPressed: () {
+                    onTakePictureButtonPressed();
+                  },
+                  child: Text("拍照"),
+                ),
+              ],
+            )
+        )
+        );
+   }
 
-              },
-              child: Text("拍照"),
-            ),
-        ],
-      ),
-    );
+  Widget getPhotoPreview(){
+    if( null != photoPath){
+      return new Container(
+        width:double.infinity,
+        height: double.infinity,
+        color: Colors.black,
+        alignment: Alignment.center,
+        child: Image.file(File(photoPath)),
+      );
+    }else{
+      return new Container(
+        height: 1.0,
+        width: 1.0,
+        color: Colors.black,
+        alignment: Alignment.bottomLeft,
+      );
+    }
   }
 
 }
