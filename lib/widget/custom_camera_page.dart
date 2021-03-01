@@ -18,7 +18,9 @@ class CustomCameraPage extends StatefulWidget{
 class CustomCameraPageState extends State<CustomCameraPage> {
   CameraController controller;
   List<CameraDescription> cameras;
-  String photoPath;
+  String _photoPath ="";
+  bool _cameraLayoutIsVisible = false;
+  bool _cameraPreviewLayoutIsVisible = true;
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
   void _camera() async{
@@ -49,31 +51,37 @@ class CustomCameraPageState extends State<CustomCameraPage> {
       Container(
         width: double.infinity,
         height: double.infinity,
-        child: Column(
-          children: <Widget>[
-              Expanded(
-                //flex 用来设置当前可用空间占优比
-                flex: 4,
-                child: Stack(
-                  children: [
-                    //相机预览Widget
-                    _cameraPreviewWidget(),
-                    //悬浮的身份证框图
-                    _cameraIDCardFloatImage()
-                  ],
-                )
-              ),
-              Expanded(
-                //flex用来设置当前可用空间的占优比
-                flex: 1,
-                //拍照操作区域布局
-                child: Expanded(
-                  flex: 1,//flex用来设置当前可用空间的占优比
-                  child: _takePictureLayout(),//拍照操作区域布局
+        child: Stack(children: <Widget>[
+          getPhotoPreview(),//图片预览布局
+          Offstage(
+            offstage: _cameraLayoutIsVisible,
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  //flex 用来设置当前可用空间占优比
+                    flex: 4,
+                    child: Stack(
+                      children: [
+                        //相机预览Widget
+                        _cameraPreviewWidget(),
+                        //悬浮的身份证框图
+                        _cameraIDCardFloatImage()
+                      ],
+                    )
                 ),
-              ),
-          ],
-        ),
+                Expanded(
+                  //flex用来设置当前可用空间的占优比
+                  flex: 1,
+                  //拍照操作区域布局
+                  child: Expanded(
+                    flex: 1,//flex用来设置当前可用空间的占优比
+                    child: _takePictureLayout(),//拍照操作区域布局
+                  ),
+                ),
+              ],
+            ),
+          )
+        ])
       ),
     );
   }
@@ -137,41 +145,44 @@ class CustomCameraPageState extends State<CustomCameraPage> {
   }
 
   void onTakePictureButtonPressed() {
-    takePicture().then((String filePath) {
+    takePicture().then((XFile filePath) {
       if (mounted) {
         if (filePath != null){
-          print(filePath);
-          Navigator.of(context).pop(filePath);
+          setState(() {
+            _photoPath = filePath.path;
+            print(filePath.path);
+              if(_photoPath != null && _photoPath != ""){
+                _cameraPreviewLayoutIsVisible = false;
+                _cameraLayoutIsVisible = true;
+                //保存图片
+                _savePicture(_photoPath);
+              }else{
+                _cameraPreviewLayoutIsVisible = true;
+                _cameraLayoutIsVisible = false;
+              }
+          });
+//          Navigator.of(context).pop(filePath.path);
         }
       }
     });
   }
 
-  Future<String> takePicture() async {
+  Future<XFile> takePicture() async {
     if (!controller.value.isInitialized) {
       print('Error: select a camera first.');
       return null;
     }
-    final Directory extDir = await getApplicationDocumentsDirectory();
-    final String dirPath = '${extDir.path}/Pictures/flutter_test';
-    await Directory(dirPath).create(recursive: true);
-    String filePath = '$dirPath/${timestamp()}.jpg';
-
     if (controller.value.isTakingPicture) {
       // A capture is already pending, do nothing.
       return null;
     }
     try {
-       await controller.takePicture().then((value){
-          XFile file = value;
-          print(file.path);
-       });
-      print("拍照");
+      XFile file = await controller.takePicture();
+      return file;
     } on CameraException catch (e) {
       print("出现异常$e");
       return null;
     }
-    return filePath;
   }
 
 
@@ -189,7 +200,7 @@ class CustomCameraPageState extends State<CustomCameraPage> {
                   onPressed: () {
 
                   },
-                  child: Text("取消"),
+                  child: Text("删除"),
                 ),
                 RaisedButton(
                   color: Colors.amberAccent,
@@ -219,13 +230,16 @@ class CustomCameraPageState extends State<CustomCameraPage> {
    }
 
   Widget getPhotoPreview(){
-    if( null != photoPath){
-      return new Container(
-        width:double.infinity,
-        height: double.infinity,
-        color: Colors.black,
-        alignment: Alignment.center,
-        child: Image.file(File(photoPath)),
+    if( null != _photoPath){
+      return Offstage (
+          offstage: _cameraPreviewLayoutIsVisible, // 设置是否可见：true:不可见 false:可见
+          child: new Container(
+            width:double.infinity,
+            height: double.infinity,
+            color: Colors.black,
+            alignment: Alignment.center,
+            child: Image.file(File(_photoPath)),
+          )
       );
     }else{
       return new Container(
@@ -235,6 +249,15 @@ class CustomCameraPageState extends State<CustomCameraPage> {
         alignment: Alignment.bottomLeft,
       );
     }
+  }
+
+  ///保存图片
+  Future _savePicture(String imagePath) async{
+    final Directory extDir = await getApplicationDocumentsDirectory();
+    final String dirPath = '${extDir.path}/Pictures/ID_Card';
+    print(dirPath);
+    await Directory(dirPath).create(recursive: true);
+    String filePath = '$dirPath/${timestamp()}.jpg';
   }
 
 }
