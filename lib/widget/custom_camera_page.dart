@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:jwt/http/dio_utils.dart';
+import 'package:jwt/utils/encode_utils.dart';
 import 'package:path_provider/path_provider.dart';
 
 class CustomCameraPage extends StatefulWidget{
@@ -21,6 +23,7 @@ class CustomCameraPageState extends State<CustomCameraPage> {
   String _photoPath ="";
   bool _cameraLayoutIsVisible = false;
   bool _cameraPreviewLayoutIsVisible = true;
+  String _photoBase64 = "";
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
   void _camera() async{
@@ -52,7 +55,7 @@ class CustomCameraPageState extends State<CustomCameraPage> {
         width: double.infinity,
         height: double.infinity,
         child: Stack(children: <Widget>[
-          getPhotoPreview(),//图片预览布局
+          //getPhotoPreview(),//图片预览布局
           Offstage(
             offstage: _cameraLayoutIsVisible,
             child: Column(
@@ -152,10 +155,14 @@ class CustomCameraPageState extends State<CustomCameraPage> {
             _photoPath = filePath.path;
             print(filePath.path);
               if(_photoPath != null && _photoPath != ""){
-                _cameraPreviewLayoutIsVisible = false;
-                _cameraLayoutIsVisible = true;
+//                _cameraPreviewLayoutIsVisible = false;
+//                _cameraLayoutIsVisible = true;
                 //保存图片
                 _savePicture(_photoPath);
+//                //把照片变为Base64字符串
+//                EncodeUtil.image2Base64(_photoPath).then((value) {
+//                   _photoBase64 = value;
+//                });
               }else{
                 _cameraPreviewLayoutIsVisible = true;
                 _cameraLayoutIsVisible = false;
@@ -205,7 +212,23 @@ class CustomCameraPageState extends State<CustomCameraPage> {
                 RaisedButton(
                   color: Colors.amberAccent,
                   onPressed: () {
-
+                    Map<String,dynamic> requestBody = new Map();
+                    requestBody.addAll({
+                      "app_id": "ocr2cd56676a4904f27",
+                      "idcard": _photoBase64
+                    });
+                   //请求网络
+                   DioUtils.instance.postHttp(
+                       url: "http://ocr.beikongyun.com/ocr/api/idcardocr/base64",
+                       method: DioUtils.POST,
+                       parameters:requestBody,
+                       onSuccess: (data){
+                          print(data);
+                       },
+                      onError: (error){
+                        print(error);
+                      }
+                   );
                   },
                   child: Text("确认"),
                 ),
@@ -234,8 +257,8 @@ class CustomCameraPageState extends State<CustomCameraPage> {
       return Offstage (
           offstage: _cameraPreviewLayoutIsVisible, // 设置是否可见：true:不可见 false:可见
           child: new Container(
-            width:double.infinity,
-            height: double.infinity,
+            width:ScreenUtil().setWidth(1000),
+            height: ScreenUtil().setWidth(1000),
             color: Colors.black,
             alignment: Alignment.center,
             child: Image.file(File(_photoPath)),
@@ -251,13 +274,27 @@ class CustomCameraPageState extends State<CustomCameraPage> {
     }
   }
 
-  ///保存图片
-  Future _savePicture(String imagePath) async{
-    final Directory extDir = await getApplicationDocumentsDirectory();
-    final String dirPath = '${extDir.path}/Pictures/ID_Card';
-    print(dirPath);
-    await Directory(dirPath).create(recursive: true);
-    String filePath = '$dirPath/${timestamp()}.jpg';
+  ///保存并且裁切图片
+  Future<String> _savePicture(String imagePath) async {
+    //我们需要将图像保存在内存储目录中，以便在图库中显示图像，代替获取临时目录，而获取存储目录。
+    final directory = await getApplicationDocumentsDirectory();
+    //我们要创造一个名叫MyImages的文件夹，并将新图像添加到该文件夹中
+    final myImagePath = '${directory.path}/MyImages';
+    await new Directory(myImagePath).create();
+    //然后创建新的文件名
+    final String filePath = '$myImagePath/${timestamp()}.jpg';
+    File file = new File(imagePath);
+    //把临时文件 复制到自己的文件夹中
+    file.copy(filePath);
+
+    return filePath;
   }
+
+//  Future<String> _cutPicture(String filePath) async{
+//    ByteData byteData = await filePath.getByteData(quality: 80);
+//    return "";
+//  }
+
+
 
 }
