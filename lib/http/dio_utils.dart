@@ -78,7 +78,6 @@ class DioUtils {
     if (dio == null) {
       /// 全局属性：请求前缀、连接超时时间、响应超时时间
       var options = BaseOptions(
-        baseUrl: URLConfig.BASE_URL,
         connectTimeout: 15000,
         receiveTimeout: 15000,
         //responseType: ResponseType.plain,

@@ -216,7 +216,7 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
                   Navigator.of(context).push(MaterialPageRoute(builder: (context){
                     return App();
                   }));
-                  buildShowDialog(context);
+                  //buildShowDialog(context);
                   Map<String,dynamic> requestBody = new Map();
                   requestBody.addAll({
                     "user_name":"1142100000-g1",

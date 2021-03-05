@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -55,7 +56,6 @@ class CustomCameraPageState extends State<CustomCameraPage> {
         width: double.infinity,
         height: double.infinity,
         child: Stack(children: <Widget>[
-          //getPhotoPreview(),//图片预览布局
           Offstage(
             offstage: _cameraLayoutIsVisible,
             child: Column(
@@ -73,17 +73,13 @@ class CustomCameraPageState extends State<CustomCameraPage> {
                     )
                 ),
                 Expanded(
-                  //flex用来设置当前可用空间的占优比
-                  flex: 1,
-                  //拍照操作区域布局
-                  child: Expanded(
-                    flex: 1,//flex用来设置当前可用空间的占优比
-                    child: _takePictureLayout(),//拍照操作区域布局
-                  ),
+                  flex: 1,//flex用来设置当前可用空间的占优比
+                  child: _takePictureLayout(),//拍照操作区域布局
                 ),
               ],
             ),
-          )
+          ),
+          getPhotoPreview(),//图片预览布局
         ])
       ),
     );
@@ -102,8 +98,9 @@ class CustomCameraPageState extends State<CustomCameraPage> {
         );
      }else{
         return new Container(
-          height: ScreenUtil().uiSize.height * 3 /4,
-          width: double.infinity,
+          height: ScreenUtil().uiSize.height,
+          width: ScreenUtil().uiSize.width,
+          color: Colors.black,
           //AspectRatio 根据设置调整子元素child 的宽高比
           child: AspectRatio(
             aspectRatio: controller.value.aspectRatio,
@@ -155,20 +152,18 @@ class CustomCameraPageState extends State<CustomCameraPage> {
             _photoPath = filePath.path;
             print(filePath.path);
               if(_photoPath != null && _photoPath != ""){
-//                _cameraPreviewLayoutIsVisible = false;
-//                _cameraLayoutIsVisible = true;
+                _cameraPreviewLayoutIsVisible = false;
                 //保存图片
                 _savePicture(_photoPath);
-//                //把照片变为Base64字符串
-//                EncodeUtil.image2Base64(_photoPath).then((value) {
-//                   _photoBase64 = value;
-//                });
+                //把照片变为Base64字符串
+                EncodeUtil.image2Base64(_photoPath).then((value) {
+                   _photoBase64 = value;
+                   print(_photoBase64);
+                });
               }else{
                 _cameraPreviewLayoutIsVisible = true;
-                _cameraLayoutIsVisible = false;
               }
           });
-//          Navigator.of(context).pop(filePath.path);
         }
       }
     });
@@ -205,7 +200,11 @@ class CustomCameraPageState extends State<CustomCameraPage> {
                 RaisedButton(
                   color: Colors.amberAccent,
                   onPressed: () {
-
+                    setState(() {
+                      _cameraPreviewLayoutIsVisible = true;
+                      _photoBase64 = "";
+                      _photoPath = "";
+                    });
                   },
                   child: Text("删除"),
                 ),
@@ -217,13 +216,15 @@ class CustomCameraPageState extends State<CustomCameraPage> {
                       "app_id": "ocr2cd56676a4904f27",
                       "idcard": _photoBase64
                     });
+                    FormData data = FormData.fromMap(requestBody);
                    //请求网络
                    DioUtils.instance.postHttp(
                        url: "http://ocr.beikongyun.com/ocr/api/idcardocr/base64",
                        method: DioUtils.POST,
-                       parameters:requestBody,
+                       parameters:data,
                        onSuccess: (data){
                           print(data);
+                          Navigator.of(context).pop();
                        },
                       onError: (error){
                         print(error);
@@ -235,7 +236,6 @@ class CustomCameraPageState extends State<CustomCameraPage> {
                 RaisedButton(
                   color: Colors.amberAccent,
                   onPressed: () {
-
                   },
                   child: Text("重拍"),
                 ),
@@ -257,8 +257,8 @@ class CustomCameraPageState extends State<CustomCameraPage> {
       return Offstage (
           offstage: _cameraPreviewLayoutIsVisible, // 设置是否可见：true:不可见 false:可见
           child: new Container(
-            width:ScreenUtil().setWidth(1000),
-            height: ScreenUtil().setWidth(1000),
+            width:ScreenUtil().uiSize.width,
+            height: ScreenUtil().setWidth(1800),
             color: Colors.black,
             alignment: Alignment.center,
             child: Image.file(File(_photoPath)),
