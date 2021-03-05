@@ -54,12 +54,7 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
             child:CustomChooseWidget(
               "派出所",
               callBack: (){
-                SqlManager.copyDbFileToCacheDocument();
-                SqlManager.queryData().then((list){
-                  _list = list;
-                  print(_list);
-                });
-                print("派出所被点击");
+
               }
             ),
           ),
