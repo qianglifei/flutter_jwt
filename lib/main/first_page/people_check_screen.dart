@@ -5,6 +5,7 @@ import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
 import 'package:jwt/db/sql_manager.dart';
 import 'package:jwt/entity/pcs_fwz_entity.dart';
+import 'package:jwt/main/first_page/people_online_check/people_online_check_screen.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/custom_button.dart';
 import 'package:jwt/widget/custom_camera_page.dart';
@@ -165,6 +166,9 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                     "线上核查",
                     (){
                       print("线上核查");
+                      Navigator.push(context,MaterialPageRoute(builder:(_){
+                        return PeopleOnlineCheckScreen();
+                      }));
                     }
                 ),
               ],
@@ -198,17 +202,11 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
             Positioned(
                 left: ScreenUtil().setWidth(73),
                 top: ScreenUtil().setHeight(40),
-                child: InkWell(
-                  child: Image.asset("images/icon_ocr.png",
-                    width: ScreenUtil().setWidth(320),
-                    height: ScreenUtil().setHeight(160),
-                    fit: BoxFit.fill,
-                  ),
-                  onTap: (){
-                    print("身份证识别");
-                    requestPermission();
-                  },
-                )
+                child: Image.asset("images/icon_ocr.png",
+                  width: ScreenUtil().setWidth(320),
+                  height: ScreenUtil().setHeight(160),
+                  fit: BoxFit.fill,
+                ),
             ),
             Positioned(
               left: ScreenUtil().setWidth(430),
@@ -218,6 +216,10 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
           ],
         ),
       ),
+      onTap: (){
+          print("身份证识别");
+          requestPermission();
+      },
     );
   }
   
