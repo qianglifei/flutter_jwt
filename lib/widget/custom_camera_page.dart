@@ -265,6 +265,7 @@ class CustomCameraPageState extends State<CustomCameraPage> {
           )
       );
     }else{
+
       return new Container(
         height: 1.0,
         width: 1.0,
