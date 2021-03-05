@@ -4,9 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
 import 'package:jwt/db/sql_manager.dart';
+import 'package:jwt/entity/pcs_fwz_entity.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/custom_button.dart';
+import 'package:jwt/widget/custom_camera_page.dart';
+import 'package:jwt/widget/custom_choose_bottom_sheet.dart';
 import 'package:jwt/widget/custom_choose_widget.dart';
+import 'package:jwt/widget/custom_input_widget.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class PeopleCheckScreen extends BaseWidget{
@@ -18,9 +24,32 @@ class PeopleCheckScreen extends BaseWidget{
 }
 
 class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
-  List _list = [];
+  List<PcsFwzEntity> _list = [];
   String _title = "";
   Color _color;
+  bool _isVisible  = false;
+  int position = 100000;
+  SharedPreferences prefs;
+  String _pcsbm = "";
+  String _pcsbh = "";
+  String _fwzbh = "";
+  String imagePath;
+  @override
+  initState(){
+    // TODO: implement initState
+    super.initState();
+    SqlManager.copyDbFileToCacheDocument();
+    getData();
+  }
+
+  Future<void> getData() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _pcsbm = prefs.getString("pcsbm");
+      print(_pcsbm);
+    });
+  }
+
   @override
   CustomAppBar getAppBar() {
     // TODO: implement getAppBar
@@ -51,10 +80,15 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
           ),
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(44)),
-            child:CustomChooseWidget(
+            child:CustomChooseBottomSheet(
               "派出所",
-              callBack: (){
-
+              tableName: "PCSFWZDID_ONLY",
+              pcsbm: _pcsbm,
+              callBack: (String key){
+                setState(() {
+                  _pcsbh = key;
+                  print("派出所编号:$_pcsbh");
+                });
               }
             ),
           ),
@@ -69,87 +103,12 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
           ),
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
-            child: CustomChooseWidget(
+            child:CustomChooseBottomSheet(
                 "服务站",
-                callBack: (){
-                  print("服务站被点击");
-                  showModalBottomSheet(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
-                    ),
-                    context: context,
-                    builder: (BuildContext context) {
-                      return new Container(
-                        height: ScreenUtil().setHeight(1200),
-                        width: ScreenUtil().uiSize.width,
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              height: ScreenUtil().setHeight(130),
-                              width: ScreenUtil().uiSize.width,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                    Image.asset(
-                                      "images/icon_close.png",
-                                      width: ScreenUtil().setWidth(91),
-                                      height: ScreenUtil().setHeight(91),
-                                      fit: BoxFit.contain,
-                                    ),
-                                    Text("选择派出所",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
-                                    Text("确认",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              height: ScreenUtil().setHeight(24),
-                              color: Color.fromRGBO(247,248,250,1),
-                            ),
-                            Expanded(
-                                child: ListView.builder(
-                                  itemCount: 40,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return GestureDetector(
-                                      child: new Container(
-                                          color: Colors.blue,
-                                          padding: const EdgeInsets.all(8.0),
-                                          width: ScreenUtil().uiSize.width,
-                                          height: ScreenUtil().setHeight(144),
-                                          child: Stack(
-                                            children: <Widget>[
-                                              Positioned(
-                                                 child: Text("你的世界我曾今来过")
-                                              ),
-                                              Positioned(
-                                                  child: Offstage(
-                                                    offstage: true,
-//                                                    child: Image.asset("images/icon_"
-//
-//                                                    ),
-                                                  )
-                                              ),
-                                            ],
-                                          )
-                                      ),
-                                      onTap: (){
-                                        setState(() {
-                                          _title = _list[index];
-                                        });
-                                      },
-                                    );
-                                  },
-                                  shrinkWrap: true,
-                                ),
-                            ),
-                          ],
-                        )
-                      );
-                    },
-                  ).then((val) {
-                    print(val);
-                  });
+                tableName: "TYPT_FWZGFGL_FWZJBXXDJB",
+                pcsbm: _pcsbh,
+                callBack: (String key){
+
                 }
             ),
           ),
@@ -159,13 +118,9 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
           ),
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(44)),
-            child: CustomChooseWidget(
-                "姓名",
-                callBack: (){
-                  print("姓名被点击");
-                }
-            ),
-          ),
+            child: CustomInputWidget(
+              "姓名",hint: "请输入姓名",
+          )),
           //横线
           Padding(
               padding: EdgeInsets.only(left: ScreenUtil().setWidth(40),right: ScreenUtil().setWidth(40)),
@@ -177,12 +132,9 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
           ),
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
-            child: CustomChooseWidget(
-                "证件号码",
-                callBack: (){
-                  print("证件号码");
-                }
-            ),
+            child: CustomInputWidget(
+              "证件号码",hint: "请输入身份证号码",
+              )
           ),
           Padding(
             padding: EdgeInsets.only(left:ScreenUtil().setWidth(140),top: ScreenUtil().setHeight(56)),
@@ -246,11 +198,17 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
             Positioned(
                 left: ScreenUtil().setWidth(73),
                 top: ScreenUtil().setHeight(40),
-                child: Image.asset("images/icon_ocr.png",
-                  width: ScreenUtil().setWidth(320),
-                  height: ScreenUtil().setHeight(160),
-                  fit: BoxFit.fill,
-                ),
+                child: InkWell(
+                  child: Image.asset("images/icon_ocr.png",
+                    width: ScreenUtil().setWidth(320),
+                    height: ScreenUtil().setHeight(160),
+                    fit: BoxFit.fill,
+                  ),
+                  onTap: (){
+                    print("身份证识别");
+                    requestPermission();
+                  },
+                )
             ),
             Positioned(
               left: ScreenUtil().setWidth(430),
@@ -293,5 +251,26 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
 
       },
     );
+  }
+  ///动态权限申请
+  Future requestPermission() async{
+    //申请权限
+    Map<PermissionGroup,PermissionStatus> permisson =
+       await PermissionHandler().requestPermissions([PermissionGroup.camera,PermissionGroup.storage]);
+    //申请结果
+    PermissionStatus permissionStatus = await PermissionHandler().checkPermissionStatus(PermissionGroup.camera);
+    if(permissionStatus == PermissionStatus.granted){
+      Navigator.
+      push(context, MaterialPageRoute(builder: (context) => CustomCameraPage())).
+      then((value) {
+          if(value != null){
+            setState(() {
+              imagePath = value;
+            });
+          }
+      });
+    }else{
+      //权限申请被拒绝，自己去处理
+    }
   }
 }
