@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:jwt/entity/pcs_fwz_entity.dart';
+import 'package:jwt/main/first_page/people_online_check/nation_entity.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -69,26 +70,19 @@ class SqlManager{
     _database = await openDatabase(path,readOnly: true);
   }
 
-  //查询派出所数据
-  static Future<List> queryPCSData() async {
+  //查询民族数据
+  static Future<List> queryNationData() async {
     // open the database
-    _list = await _database.rawQuery('select Distinct pcsbh,pcsmc FROM PCSFWZDID_ONLY');
-    List pcsList = [];
+    _list = await _database.rawQuery('select Distinct cd_id,cd_name FROM CDG_NATION');
+    List<NationEntity> nationList = [];
     print('list $_list');
-    _list.forEach((item){
-      print('Map $item');
-      Map map = item;
-      PcsFwzEntity bean = new PcsFwzEntity();
-      map.forEach((key,value){
-        if(key == "PCSMC"){
-          bean.key = value;
-        }else if(key == "PCSBH"){
-          bean.value = value;
-        }
-      });
-      pcsList.add(bean);
+    //遍历民族数据
+    _list.forEach((element) {
+       NationEntity nationEntity =  NationEntity.fromJson(element);
+       print(nationEntity);
+       nationList.add(nationEntity);
     });
-    return pcsList ?? [];
+    return nationList ?? [];
   }
 
   //查询派出所或服务站数据

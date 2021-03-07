@@ -41,7 +41,7 @@
 	</array>
 
 	<key>NSCameraUsageDescription</key>
-    <string>The app tries to use your camera</string>
+    <string>app想要使用您的相机</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>The app tries to use your microphone</string>
 </dict>
