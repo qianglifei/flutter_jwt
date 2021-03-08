@@ -32,40 +32,40 @@ class PeopleOnlineCheckScreenState extends BaseWidgetState<PeopleOnlineCheckScre
   @override
   Widget getContentWidget(BuildContext context) {
     // TODO: implement getContentWidget
-    return BlocProvider(
-        create: (BuildContext context){
-          return PeopleOnlineCheckBloc();
-        },
-        child: SingleChildScrollView(
+    return BlocBuilder<PeopleOnlineCheckBloc,PeopleOnlineCheckState>(
+        builder: (context,state){
+          return SingleChildScrollView(
             //TODO 滚动特性，允许滚出边界，出边界后会弹会来
-           physics: BouncingScrollPhysics(),
-           child: Column(
-             mainAxisSize: MainAxisSize.max,
-             mainAxisAlignment: MainAxisAlignment.start,
-             crossAxisAlignment: CrossAxisAlignment.center,
-             children: [
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
                 CustomIDCard(),
                 _buildBaseInfoWidget("基本信息"),
                 CustomInputWidget(
-                  "现住地址"
+                    "现住地址"
                 ),
-               //横线
-               Padding(
-                   padding: EdgeInsets.only(left: ScreenUtil().setWidth(40),right: ScreenUtil().setWidth(40)),
-                   child: Container(
-                       width: ScreenUtil().uiSize.width,
-                       height: ScreenUtil().setHeight(3),
-                       color: Color.fromRGBO(247,248,250,1)
-                   )
-               ),
+                //横线
+                Padding(
+                    padding: EdgeInsets.only(left: ScreenUtil().setWidth(40),right: ScreenUtil().setWidth(40)),
+                    child: Container(
+                        width: ScreenUtil().uiSize.width,
+                        height: ScreenUtil().setHeight(3),
+                        color: Color.fromRGBO(247,248,250,1)
+                    )
+                ),
                 CustomInputWidget(
-                  "手机号码"
+                    "手机号码"
                 ),
-               _buildBaseInfoWidget("信息备注"),
-             ],
-           ),
-        )
+                _buildBaseInfoWidget("信息备注"),
+              ],
+            ),
+          );
+        }
     );
+
   }
 
   @override
