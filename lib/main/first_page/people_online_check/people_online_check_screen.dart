@@ -6,9 +6,10 @@ import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
 import 'package:jwt/main/first_page/people_online_check/people_online_check_bloc.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
+import 'package:jwt/widget/custom_button.dart';
+import 'package:jwt/widget/custom_choose_bottom_sheet.dart';
 import 'package:jwt/widget/custom_id_card_widget.dart';
 import 'package:jwt/widget/custom_input_widget.dart';
-
 
 // ignore: must_be_immutable
 class PeopleOnlineCheckScreen extends BaseWidget{
@@ -16,7 +17,7 @@ class PeopleOnlineCheckScreen extends BaseWidget{
   BaseWidgetState<BaseWidget> getState()  => new PeopleOnlineCheckScreenState();
 }
 
-class PeopleOnlineCheckScreenState extends BaseWidgetState<PeopleOnlineCheckScreen>{
+class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScreen>{
   @override
   CustomAppBar getAppBar() {
     // TODO: implement getAppBar
@@ -34,34 +35,71 @@ class PeopleOnlineCheckScreenState extends BaseWidgetState<PeopleOnlineCheckScre
     // TODO: implement getContentWidget
     return BlocBuilder<PeopleOnlineCheckBloc,PeopleOnlineCheckState>(
         builder: (context,state){
-          return SingleChildScrollView(
-            //TODO 滚动特性，允许滚出边界，出边界后会弹会来
-            physics: BouncingScrollPhysics(),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CustomIDCard(),
-                _buildBaseInfoWidget("基本信息"),
-                CustomInputWidget(
-                    "现住地址"
-                ),
-                //横线
-                Padding(
-                    padding: EdgeInsets.only(left: ScreenUtil().setWidth(40),right: ScreenUtil().setWidth(40)),
-                    child: Container(
-                        width: ScreenUtil().uiSize.width,
-                        height: ScreenUtil().setHeight(3),
-                        color: Color.fromRGBO(247,248,250,1)
-                    )
-                ),
-                CustomInputWidget(
-                    "手机号码"
-                ),
-                _buildBaseInfoWidget("信息备注"),
-              ],
-            ),
+          return Column(
+            children: [
+              Expanded(
+                  child: SingleChildScrollView(
+                    //TODO 滚动特性，允许滚出边界，出边界后会弹会来
+                    physics: BouncingScrollPhysics(),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CustomIDCard(),
+                        _buildBaseInfoWidget("基本信息"),
+                        CustomInputWidget(
+                            "现住地址"
+                        ),
+                        //横线
+                        Padding(
+                            padding: EdgeInsets.only(left: ScreenUtil().setWidth(40),right: ScreenUtil().setWidth(40)),
+                            child: Container(
+                                width: ScreenUtil().uiSize.width,
+                                height: ScreenUtil().setHeight(3),
+                                color: Color.fromRGBO(247,248,250,1)
+                            )
+                        ),
+                        CustomInputWidget(
+                            "手机号码"
+                        ),
+                        _buildBaseInfoWidget("信息备注"),
+                        CustomChooseBottomSheet("核准程度"),
+                        //横线
+                        Padding(
+                            padding: EdgeInsets.only(left: ScreenUtil().setWidth(40),right: ScreenUtil().setWidth(40)),
+                            child: Container(
+                                width: ScreenUtil().uiSize.width,
+                                height: ScreenUtil().setHeight(3),
+                                color: Color.fromRGBO(247,248,250,1)
+                            )
+                        ),
+                        CustomInputWidget(
+                            "备注信息"
+                        ),
+
+                      ],
+                    ),
+                  ),
+              ),
+              CustomButton(
+                  ScreenUtil().setWidth(952),
+                  ScreenUtil().setHeight(120),
+                  Colors.blue,
+                  Colors.white,
+                  "提交",
+                      (){
+                    print("线上核查");
+                    Navigator.push(context,MaterialPageRoute(builder:(_){
+                      return BlocProvider(
+                        create: (context)=> PeopleOnlineCheckBloc(),
+                        child: PeopleOnlineCheckScreen(),
+                      );
+                    }));
+                  },
+                marginBottom: ScreenUtil().setHeight(56),
+              ),
+            ],
           );
         }
     );

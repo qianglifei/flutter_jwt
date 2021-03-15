@@ -50,7 +50,7 @@ class CustomIDCardState extends State<CustomIDCard> {
              child: Stack(
                children: [
                  Positioned(
-                   child: _buildInputTextWidget("姓        名"),
+                   child: _buildInputTextWidget("姓        名",nameController,"姓名"),
                  ),
                  Positioned(
                    child: _buildTextWidget("证件号码"),
@@ -65,7 +65,7 @@ class CustomIDCardState extends State<CustomIDCard> {
                    top: ScreenUtil().setHeight(300),
                  ),
                  Positioned(
-                   child: _buildInputTextWidget("户籍地址"),
+                   child: _buildInputTextWidget("户籍地址",residenceAddressController,"户籍地址"),
                    top: ScreenUtil().setHeight(400),
                  ),
                  Positioned(
@@ -97,7 +97,7 @@ class CustomIDCardState extends State<CustomIDCard> {
   }
 
  //横排多个文本显示输入widget
- Widget _buildInputTextWidget(String title) {
+ Widget _buildInputTextWidget(String title,TextEditingController controller,String hintText) {
     return Container(
       width: ScreenUtil().uiSize.width,
       margin: EdgeInsets.only(top: ScreenUtil().setHeight(10),bottom: ScreenUtil().setHeight(10)),
@@ -129,11 +129,10 @@ class CustomIDCardState extends State<CustomIDCard> {
                 maxHeight: 50.0,
                 minHeight: 10.0,
               ),
-              color: Colors.cyan,
               width: ScreenUtil().setWidth(460),
               child: TextField(
                 autofocus: false,
-                controller: nameController,
+                controller: controller,
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
                 style: TextStyle(fontSize: ScreenUtil().setSp(40,allowFontScalingSelf: true)),
@@ -141,7 +140,7 @@ class CustomIDCardState extends State<CustomIDCard> {
                   fillColor: Colors.cyan,
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(vertical: 8),
-                  hintText: "请输入姓名",
+                  hintText:"请输入"+ hintText,
                 ),
               ),
             ),
@@ -273,12 +272,13 @@ class CustomIDCardState extends State<CustomIDCard> {
                                                     child: Text("确认",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
                                                     onTap: (){
                                                       //添加选择事件
-                                                      BlocProvider.of<PeopleOnlineCheckBloc>(context).add(NationSureEvent(nationSure: _selectedContent));
-//                                                      setState(() {
-//                                                        // ignore: unnecessary_statements
-//                                                        _selectedContent;
-//
-//                                                      });
+                   //                                   BlocProvider.of<PeopleOnlineCheckBloc>(context).add(NationSureEvent(nationSure: _selectedContent));
+                                                      setState(() {
+                                                        // ignore: unnecessary_statements
+                                                        _selectedContent;
+                                                      });
+                                                      Navigator.pop(context);
+
                                                     },
                                                   )
                                                 ],
@@ -327,9 +327,6 @@ class CustomIDCardState extends State<CustomIDCard> {
                                                         print(_title);
                                                         print(_list[position].value);
                                                         _selectedContent = _list[position].value;
-                                                        if(widget.callBack != null && _list[position].value != null){
-                                                          widget.callBack( _list[position].key);
-                                                        }
                                                       });
                                                     },
                                                   );
