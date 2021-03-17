@@ -122,3 +122,6 @@ flutter:
     - images/icon_select_true.png
     - images/icon_bg_identify_idcard.png
     - images/icon_card_bj.png
+    - images/icon_head.png
+    - images/icon_register.png
+    - images/icon_unregister.png

@@ -357,7 +357,7 @@ class HomepageScreenState extends BaseWidgetState<HomepageScreen> {
             ),
            Padding(
                padding: EdgeInsets.only(left: ScreenUtil().setWidth(56),right: ScreenUtil().setWidth(38)),
-               child: Text("8月26日，中国人民警察警旗授旗仪式在人民大...",
+               child: Text("8月26日，中国人民警察警旗授旗仪式...",
                    style: TextStyle(fontSize: ScreenUtil().setSp(40),
                    color: Color.fromRGBO(140,141,142,1)),
                    overflow:TextOverflow.ellipsis,

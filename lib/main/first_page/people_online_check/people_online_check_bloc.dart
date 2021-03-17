@@ -7,12 +7,13 @@ part 'people_online_check_event.dart';
 part 'people_online_check_state.dart';
 
 class PeopleOnlineCheckBloc extends Bloc<PeopleOnlineCheckEvent, PeopleOnlineCheckState> {
-  PeopleOnlineCheckBloc() : super(PeopleOnlineCheckInitial());
+  PeopleOnlineCheckBloc() : super(PeopleOnlineCheckState(nationSure: ""));
 
   @override
-  Stream<PeopleOnlineCheckState> mapEventToState(
-    PeopleOnlineCheckEvent event,
-  ) async* {
+  Stream<PeopleOnlineCheckState> mapEventToState(PeopleOnlineCheckEvent event) async* {
     // TODO: implement mapEventToState
+    if(event is NationSureEvent){
+       yield PeopleOnlineCheckState()..nationSure = event.nationSure;
+    }
   }
 }
