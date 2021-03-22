@@ -222,7 +222,7 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
                     "user_name":"1142100000-g1",
                     "user_password":"123456",
                     "imsi":"2a6d138bc0f6282e",
-                    "version":"1.0.7"
+                    "version":"1.3.2"
                   });
                   DioUtils.instance.postHttp<LoginResponseEntity>(
                       url: URLConfig.LOGIN ,
@@ -231,7 +231,6 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
                       onSuccess: (data){
                         //dialog 消息消失
                         Navigator.of(context).pop();
-
 //                        Fluttertoast.showToast(
 //                            msg: "登录成功",
 //                            toastLength: Toast.LENGTH_SHORT,
@@ -240,8 +239,7 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
 //                            backgroundColor: Colors.red,
 //                            textColor: Colors.white,
 //                            fontSize: 16.0
-//                        );
-                        print(data.toJson());
+//                        );print(data.toJson());
                         saveData(data);
                         Navigator.of(context).push(MaterialPageRoute(builder: (context){
                             return App();

@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:jwt/config/url_config.dart';
+import 'package:jwt/http/dio_utils.dart';
 import 'package:meta/meta.dart';
 
 part 'test_event.dart';
@@ -27,5 +29,26 @@ class TestBloc extends Bloc<TestEvent, TestState> {
           ..selectedIndex = state.selectedIndex
           ..isExtended = !state.isExtended;
     }
+  }
+
+  getPeopleCheckResult(){
+    Map<String,dynamic> requestBody = new Map();
+    requestBody.addAll({
+      "user_name":"1142103000-g2",
+      "user_password":"123456",
+      "imsi":"2a6d138bc0f6282e",
+      "version":"1.3.2"
+    });
+    DioUtils.instance.postHttp(
+      url: URLConfig.rkhc_rkhccx,
+      method: DioUtils.POST,
+      parameters:  requestBody,
+      onSuccess: (data){
+
+      },
+      onError: (error){
+
+      }
+    );
   }
 }

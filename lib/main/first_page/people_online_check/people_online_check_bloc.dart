@@ -7,6 +7,7 @@ part 'people_online_check_event.dart';
 part 'people_online_check_state.dart';
 
 class PeopleOnlineCheckBloc extends Bloc<PeopleOnlineCheckEvent, PeopleOnlineCheckState> {
+  String native;
   PeopleOnlineCheckBloc() : super(PeopleOnlineCheckState(nationSure: ""));
 
   @override
