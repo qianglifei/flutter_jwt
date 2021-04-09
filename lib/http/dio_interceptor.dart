@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 ///日志拦截器
@@ -21,7 +19,8 @@ class LogInterceptors extends InterceptorsWrapper{
 
     Future<dynamic> future = Future(()async{
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      return prefs.getString("Authorization");
+      print(prefs.getString("token"));
+      return prefs.getString("token");
     });
 
     return future.then((value) {

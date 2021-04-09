@@ -90,6 +90,7 @@ class DioUtils {
       dio = new Dio(options);
       /// 增加拦截器并添加 token
       dio.interceptors.add(LogInterceptors(dio));
+      /// 增加token拦截器
     }
     return dio;
   }

@@ -6,6 +6,7 @@ import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
 import 'package:jwt/main/first_page/homepage_screen.dart';
 import 'package:jwt/main/first_page/people_online_check/people_online_check_bloc.dart';
+import 'package:jwt/main/first_page/people_online_check/people_online_check_response_entity.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/custom_button.dart';
 import 'package:jwt/widget/custom_choose_bottom_sheet.dart';
@@ -14,12 +15,21 @@ import 'package:jwt/widget/custom_input_widget.dart';
 
 // ignore: must_be_immutable
 class PeopleOnlineCheckScreen extends BaseWidget{
+  PeopleOnlineCheckResponseEntity mEntity;
+  PeopleOnlineCheckScreen(this.mEntity);
+
   @override
   BaseWidgetState<BaseWidget> getState()  => new PeopleOnlineCheckScreenState();
 }
 
 class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScreen>{
   PeopleOnlineCheckBloc _bloc;
+  String _name = "";
+  String _idCard = "";
+  String _birthDate = "";
+  String _nation = "";
+  String _headImagePath = "";
+  String _isStandardAddress = "";
   @override
   CustomAppBar getAppBar() {
     // TODO: implement getAppBar
@@ -37,7 +47,26 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
     // TODO: implement initState
     super.initState();
     _bloc = PeopleOnlineCheckBloc();
+    _initData();
   }
+
+  void _initData(){
+    setState(() {
+        _isStandardAddress = widget.mEntity.returnStandAdder ?? "";
+        _name = widget.mEntity.returnData.bipXm ?? "";
+        _idCard = widget.mEntity.returnData.bipSfzhm ?? "";
+        _birthDate = widget.mEntity.returnData.bipBirthday ?? "";
+        _headImagePath = widget.mEntity.returnData.img ?? "";
+        _nation = widget.mEntity.returnData.bipNation;
+        print(_name);
+        print(_isStandardAddress);
+        print(_idCard);
+        print(_birthDate);
+        print(_headImagePath);
+    });
+
+  }
+
   @override
   Widget getContentWidget(BuildContext context) {
     return BlocListener(
@@ -161,12 +190,12 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
        "提交",
        (){
          print("线上核查");
-         Navigator.push(context,MaterialPageRoute(builder:(_){
-           return BlocProvider(
-             create: (context)=> PeopleOnlineCheckBloc(),
-             child: PeopleOnlineCheckScreen(),
-           );
-         }));
+//         Navigator.push(context,MaterialPageRoute(builder:(_){
+//           return BlocProvider(
+//             create: (context)=> PeopleOnlineCheckBloc(),
+//             child:
+//           );
+//         }));
        },
        marginBottom: ScreenUtil().setHeight(56),
      );

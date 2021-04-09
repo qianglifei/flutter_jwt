@@ -6,14 +6,15 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:jwt/db/sql_manager.dart';
 import 'package:jwt/main/first_page/people_online_check/nation_entity.dart';
 import 'package:jwt/main/first_page/people_online_check/people_online_check_bloc.dart';
+import 'package:jwt/main/first_page/people_online_check/people_online_check_response_entity.dart';
 
 typedef CallBack = void Function(String value);
 
 // ignore: must_be_immutable
 class CustomIDCard extends StatefulWidget{
   CallBack callBack;
-  PeopleOnlineCheckBloc peopleOnlineCheckBloc;
-  CustomIDCard({this.callBack ,this.peopleOnlineCheckBloc});
+  PeopleOnlineCheckResponseEntity mEntity;
+  CustomIDCard({this.callBack});
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -139,12 +140,12 @@ class CustomIDCardState extends State<CustomIDCard> {
                 decoration: InputDecoration(
                   fillColor: Colors.cyan,
                   border: InputBorder.none,
+                  labelText: "",
                   contentPadding: EdgeInsets.symmetric(vertical: 8),
                   hintText:"请输入"+ hintText,
                 ),
               ),
             ),
-
           ),
         ],
       ),
@@ -353,6 +354,5 @@ class CustomIDCardState extends State<CustomIDCard> {
           );
         }
     );
-
   }
 }

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,12 +10,12 @@ import 'package:jwt/db/sql_manager.dart';
 import 'package:jwt/entity/pcs_fwz_entity.dart';
 import 'package:jwt/http/dio_utils.dart';
 import 'package:jwt/main/first_page/people_online_check/people_online_check_bloc.dart';
+import 'package:jwt/main/first_page/people_online_check/people_online_check_response_entity.dart';
 import 'package:jwt/main/first_page/people_online_check/people_online_check_screen.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/custom_button.dart';
 import 'package:jwt/widget/custom_camera_page.dart';
 import 'package:jwt/widget/custom_choose_bottom_sheet.dart';
-import 'package:jwt/widget/custom_choose_widget.dart';
 import 'package:jwt/widget/custom_input_widget.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -169,27 +170,29 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                     Colors.white,
                     "线上核查",
                     (){
-                      Map<String,dynamic> requestBody = new Map();
+                      Map<String,String> requestBody = new Map();
                       requestBody.addAll({
                         "rdj_sspcsbm":_pcsbm,
-                        "bip_xm":"强利飞",
-                        "bip_sfzhm":"130725199201121614"
+                        "bip_xm":"高渐离",
+                        "bip_sfzhm":"140108198506020089"
                       });
-                      DioUtils.instance.request(URLConfig.rkhc_rkhccx,
+                      DioUtils.instance.postHttp<PeopleOnlineCheckResponseEntity>(
+                        url:URLConfig.rkhc_rkhccx,
                         parameters: requestBody,
                         method: DioUtils.POST,
                         onSuccess: (data){
-                           print(data);
-//                          Navigator.push(context,MaterialPageRoute(builder:(_){
-//                            return BlocProvider(
-//                              create: (context)=> PeopleOnlineCheckBloc(),
-//                              child: PeopleOnlineCheckScreen(),
-//                            );
-//                          }));
+                            print(data);
+                            Navigator.push(context,MaterialPageRoute(builder:(_){
+                              return BlocProvider(
+                                create: (context)=> PeopleOnlineCheckBloc(),
+                                child: PeopleOnlineCheckScreen(data),
+                              );
+                            }));
                         },
                         onError: (errorInfo){
                             print("信息核查失败");
                         }
+
                       );
 
                     }

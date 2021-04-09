@@ -219,10 +219,10 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
                   buildShowDialog(context);
                   Map<String,dynamic> requestBody = new Map();
                   requestBody.addAll({
-                    "user_name":"1142100000-g1",
+                    "user_name":"1142103000-g1",
                     "user_password":"123456",
-                    "imsi":"2a6d138bc0f6282e",
-                    "version":"1.3.2"
+                    "imsi":"abedd79f09bab900",
+                    "version":"1.3.5"
                   });
                   DioUtils.instance.postHttp<LoginResponseEntity>(
                       url: URLConfig.LOGIN ,
