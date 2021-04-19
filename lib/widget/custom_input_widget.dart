@@ -5,8 +5,9 @@ import 'package:flutter_screenutil/screenutil.dart';
 // ignore: must_be_immutable
 class CustomInputWidget extends StatefulWidget{
   String _title;
+  String content= "";
   String hint;
-  CustomInputWidget(this._title,{Key key,this.hint});
+  CustomInputWidget(this._title,{Key key,this.hint,this.content});
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -18,6 +19,12 @@ class CustomInputWidgetState extends State<CustomInputWidget> {
   //输入框控制器
   TextEditingController inputController = TextEditingController();
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    inputController.text = widget.content;
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -49,6 +56,10 @@ class CustomInputWidgetState extends State<CustomInputWidget> {
                       hintText: widget.hint,
                       hintStyle: TextStyle(color: Color.fromRGBO(188,188,188,1))
                     ),
+                    //发生改变时赋值
+                    onChanged: (val){
+                        widget.content = val;
+                    },
                   ),
               ),
           ),

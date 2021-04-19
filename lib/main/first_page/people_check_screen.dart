@@ -176,24 +176,24 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                         "bip_xm":"高渐离",
                         "bip_sfzhm":"140108198506020089"
                       });
-                      DioUtils.instance.postHttp<PeopleOnlineCheckResponseEntity>(
-                        url:URLConfig.rkhc_rkhccx,
-                        parameters: requestBody,
-                        method: DioUtils.POST,
-                        onSuccess: (data){
-                            print(data);
-                            Navigator.push(context,MaterialPageRoute(builder:(_){
-                              return BlocProvider(
-                                create: (context)=> PeopleOnlineCheckBloc(),
-                                child: PeopleOnlineCheckScreen(data),
-                              );
-                            }));
-                        },
-                        onError: (errorInfo){
-                            print("信息核查失败");
-                        }
+                      BlocProvider.of<PeopleOnlineCheckBloc>(context).add(PeopleCheckEvent(map: requestBody));
+//                      DioUtils.instance.postHttp<PeopleOnlineCheckResponseReturnData>(
+//                        url:URLConfig.rkhc_rkhccx,
+//                        parameters: requestBody,
+//                        method: DioUtils.POST,
+//                        onSuccess: (data){
+//                            Navigator.push(context,MaterialPageRoute(builder:(_){
+//                              return BlocProvider(
+//                                create: (context)=> PeopleOnlineCheckBloc(),
+//                                child: PeopleOnlineCheckScreen(mEntity: data),
+//                              );
+//                            }));
+//                        },
+//                        onError: (errorInfo){
+//                            print(errorInfo);
+//                        }
 
-                      );
+//                      );
 
                     }
                 ),

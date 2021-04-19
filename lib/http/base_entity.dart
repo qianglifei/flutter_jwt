@@ -5,8 +5,10 @@ import 'package:jwt/generated/json/base/json_convert_content.dart';
 class BaseEntity<T>{
   int returnCode;
   String returnMsg;
+  String returnStandAdder;
+  String returnType;
   T returnData;
-  BaseEntity({this.returnCode,this.returnMsg,this.returnData});
+  BaseEntity({this.returnCode,this.returnMsg,this.returnData,this.returnStandAdder,this.returnType});
 
   BaseEntity.fromJson(Map<String, dynamic> json) {
     if (json['returnData'] != null&&json['returnData']!='null') {
@@ -14,6 +16,8 @@ class BaseEntity<T>{
     }
     returnCode = json['returnCode'];
     returnMsg = json['returnMsg'];
+    returnStandAdder = json['returnStandAdder'];
+    returnType = json["returnType"];
   }
 
   Map<String, dynamic> toJson() {
@@ -23,6 +27,8 @@ class BaseEntity<T>{
     }
     data['returnCode'] = this.returnCode;
     data['returnMsg'] = this.returnMsg;
+    data['returnStandAdder'] = this.returnStandAdder;
+    data['returnType'] = this.returnType;
     return data;
   }
 }

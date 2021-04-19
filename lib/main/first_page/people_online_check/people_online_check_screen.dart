@@ -15,11 +15,13 @@ import 'package:jwt/widget/custom_input_widget.dart';
 
 // ignore: must_be_immutable
 class PeopleOnlineCheckScreen extends BaseWidget{
-  PeopleOnlineCheckResponseEntity mEntity;
-  PeopleOnlineCheckScreen(this.mEntity);
+  PeopleOnlineCheckResponseReturnData mEntity;
+  PeopleOnlineCheckScreen({@required this.mEntity});
 
   @override
-  BaseWidgetState<BaseWidget> getState()  => new PeopleOnlineCheckScreenState();
+  BaseWidgetState<BaseWidget> getState()  {
+    return new PeopleOnlineCheckScreenState();
+  }
 }
 
 class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScreen>{
@@ -47,24 +49,17 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
     // TODO: implement initState
     super.initState();
     _bloc = PeopleOnlineCheckBloc();
-    _initData();
+    initData();
   }
 
-  void _initData(){
+  void initData(){
     setState(() {
-        _isStandardAddress = widget.mEntity.returnStandAdder ?? "";
-        _name = widget.mEntity.returnData.bipXm ?? "";
-        _idCard = widget.mEntity.returnData.bipSfzhm ?? "";
-        _birthDate = widget.mEntity.returnData.bipBirthday ?? "";
-        _headImagePath = widget.mEntity.returnData.img ?? "";
-        _nation = widget.mEntity.returnData.bipNation;
-        print(_name);
-        print(_isStandardAddress);
-        print(_idCard);
-        print(_birthDate);
-        print(_headImagePath);
+        _name = widget.mEntity.bipXm ?? "";
+        _idCard = widget.mEntity.bipSfzhm ?? "";
+        _birthDate = widget.mEntity.bipBirthday ?? "";
+        _headImagePath = widget.mEntity.img ?? "";
+        _nation = widget.mEntity.bipNation;
     });
-
   }
 
   @override
@@ -95,12 +90,14 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
                          CustomIDCard(),
                          _buildBaseInfoWidget("基本信息"),
                          CustomInputWidget(
-                             "现住地址"
+                             "现住地址",
+                             content: widget.mEntity.rzfXzdxxdz,
                          ),
                          //横线
                          _buildLineWidget(),
                          CustomInputWidget(
-                             "手机号码"
+                             "手机号码",
+                             content: widget.mEntity.bipConTelephone,
                          ),
                          _buildBaseInfoWidget("信息备注"),
                          CustomChooseBottomSheet("核准程度"),
