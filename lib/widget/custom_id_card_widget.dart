@@ -39,6 +39,7 @@ class CustomIDCardState extends State<CustomIDCard> {
   List<NationEntity> _list;
   String _title = "";
   String _selectedContent = "请选择";
+  String _content = "请选择民族";
   int position = 100000;
   @override
   void initState() {
@@ -245,7 +246,7 @@ class CustomIDCardState extends State<CustomIDCard> {
                       top: ScreenUtil().setHeight(10),
                     ),
                     child: GestureDetector(
-                      child: Text("选择民族", style: TextStyle(
+                      child: Text(_content, style: TextStyle(
                           color: Color.fromRGBO(34, 34, 34, 1),
                           fontSize: ScreenUtil().setSp(40,allowFontScalingSelf: true)
                       )
@@ -288,13 +289,13 @@ class CustomIDCardState extends State<CustomIDCard> {
                                                       Navigator.pop(context);
                                                     },
                                                   ),
-                                                  Text("选择民族",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
+                                                  Text("请选择民族",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
                                                   InkWell(
                                                     child: Text("确认",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
                                                     onTap: (){
                                                       setState(() {
-                                                        // ignore: unnecessary_statements
-                                                        _selectedContent;
+                                                        _content = _selectedContent;
+                                                        print("niha$_content");
                                                       });
                                                       Navigator.pop(context);
                                                     },
@@ -345,6 +346,7 @@ class CustomIDCardState extends State<CustomIDCard> {
                                                         print(_title);
                                                         print(_list[position].value);
                                                         _selectedContent = _list[position].value;
+                                                        print(_selectedContent);
                                                       });
                                                     },
                                                   );
@@ -358,9 +360,7 @@ class CustomIDCardState extends State<CustomIDCard> {
                                   },
                                 );
                               },
-                            ).then((vas) {
-                              print(vas);
-                            });
+                            );
                           }
                         });
                       },
