@@ -40,7 +40,7 @@ class CustomInputWidgetState extends State<CustomInputWidget> {
               child: Text(widget._title,style: TextStyle(fontSize: ScreenUtil().setSp(48),color: Color.fromRGBO(100,100,100,1)))
           ),
           Positioned(
-              top: ScreenUtil().setHeight(40),
+              top: ScreenUtil().setHeight(56),
               right: ScreenUtil().setWidth(64),
               left: ScreenUtil().setWidth(300),
               child: Container(

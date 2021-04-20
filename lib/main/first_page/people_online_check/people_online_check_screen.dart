@@ -32,6 +32,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
   String _nation = "";
   String _headImagePath = "";
   String _isStandardAddress = "";
+  String _residentAddress = "";
   @override
   CustomAppBar getAppBar() {
     // TODO: implement getAppBar
@@ -59,6 +60,10 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
         _birthDate = widget.mEntity.bipBirthday ?? "";
         _headImagePath = widget.mEntity.img ?? "";
         _nation = widget.mEntity.bipNation;
+        _residentAddress = widget.mEntity.bipRprAddress;
+        if(_birthDate.isNotEmpty){
+          _birthDate = _birthDate.substring(0,4) + "-${_birthDate.substring(4,6)}" + "-${_birthDate.substring(6,8)}";
+        }
     });
   }
 
@@ -87,7 +92,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
                        mainAxisAlignment: MainAxisAlignment.start,
                        crossAxisAlignment: CrossAxisAlignment.center,
                        children: [
-                         CustomIDCard(),
+                         CustomIDCard(_name,_idCard,_birthDate,_nation,_residentAddress),
                          _buildBaseInfoWidget("基本信息"),
                          CustomInputWidget(
                              "现住地址",

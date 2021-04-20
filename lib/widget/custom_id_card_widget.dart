@@ -14,7 +14,14 @@ typedef CallBack = void Function(String value);
 class CustomIDCard extends StatefulWidget{
   CallBack callBack;
   PeopleOnlineCheckResponseEntity mEntity;
-  CustomIDCard({this.callBack});
+  String _name = "";
+  String _idCard = "";
+  String _birthDate = "";
+  String _nation = "";
+  String _headImagePath = "";
+  String _isStandardAddress = "";
+  String _residentAddress = "";
+  CustomIDCard(this._name,this._idCard,this._birthDate,this._nation,this._residentAddress,{this.callBack});
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -34,6 +41,15 @@ class CustomIDCardState extends State<CustomIDCard> {
   String _selectedContent = "请选择";
   int position = 100000;
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+       nameController.text = widget._name;
+       residenceAddressController.text = widget._residentAddress;
+    });
+  }
+  @override
   Widget build(BuildContext context) {
      return BlocBuilder<PeopleOnlineCheckBloc,PeopleOnlineCheckState>(
          builder: (context,state){
@@ -51,14 +67,14 @@ class CustomIDCardState extends State<CustomIDCard> {
              child: Stack(
                children: [
                  Positioned(
-                   child: _buildInputTextWidget("姓        名",nameController,"姓名"),
+                   child: _buildInputTextWidget("姓        名",nameController,"姓名",widget._name),
                  ),
                  Positioned(
-                   child: _buildTextWidget("证件号码"),
+                   child: _buildTextWidget("证件号码",widget._idCard),
                    top: ScreenUtil().setHeight(100),
                  ),
                  Positioned(
-                   child: _buildTextWidget("出生日期"),
+                   child: _buildTextWidget("出生日期",widget._birthDate),
                    top: ScreenUtil().setHeight(200),
                  ),
                  Positioned(
@@ -66,18 +82,23 @@ class CustomIDCardState extends State<CustomIDCard> {
                    top: ScreenUtil().setHeight(300),
                  ),
                  Positioned(
-                   child: _buildInputTextWidget("户籍地址",residenceAddressController,"户籍地址"),
+                   child: _buildInputTextWidget("户籍地址",residenceAddressController,"户籍地址",widget._residentAddress),
                    top: ScreenUtil().setHeight(400),
                  ),
                  Positioned(
                    top: ScreenUtil().setHeight(25),
                    right: ScreenUtil().setWidth(47),
-                   child: Image.asset(
-                     "images/icon_head.png",
-                     width: ScreenUtil().setWidth(260),
-                     height: ScreenUtil().setHeight(320),
-                     fit: BoxFit.contain,
-                   ),
+                   child: GestureDetector(
+                      child: Image.asset(
+                       "images/icon_cart_title.png",
+                       width: ScreenUtil().setWidth(260),
+                       height: ScreenUtil().setHeight(320),
+                       fit: BoxFit.contain,
+                       ),
+                      onTap: (){
+
+                      },
+                   )
                  ),
                  Positioned(
                    top: ScreenUtil().setHeight(290),
@@ -98,7 +119,7 @@ class CustomIDCardState extends State<CustomIDCard> {
   }
 
  //横排多个文本显示输入widget
- Widget _buildInputTextWidget(String title,TextEditingController controller,String hintText) {
+ Widget _buildInputTextWidget(String title,TextEditingController controller,String hintText,String content) {
     return Container(
       width: ScreenUtil().uiSize.width,
       margin: EdgeInsets.only(top: ScreenUtil().setHeight(10),bottom: ScreenUtil().setHeight(10)),
@@ -140,7 +161,6 @@ class CustomIDCardState extends State<CustomIDCard> {
                 decoration: InputDecoration(
                   fillColor: Colors.cyan,
                   border: InputBorder.none,
-                  labelText: "",
                   contentPadding: EdgeInsets.symmetric(vertical: 8),
                   hintText:"请输入"+ hintText,
                 ),
@@ -153,7 +173,7 @@ class CustomIDCardState extends State<CustomIDCard> {
   }
 
   //横排多个文本显示widget
-  Widget _buildTextWidget(String title) {
+  Widget _buildTextWidget(String title ,String content) {
     return Container(
       width: ScreenUtil().uiSize.width,
       height: ScreenUtil().setHeight(100),
@@ -181,9 +201,9 @@ class CustomIDCardState extends State<CustomIDCard> {
               left: ScreenUtil().setWidth(64),
               top: ScreenUtil().setHeight(10),
             ),
-            child: Text("",
+            child: Text(content,
                 style: TextStyle(
-                    color: Color.fromRGBO(42, 168, 245, 1),
+                    color:  Color.fromRGBO(34, 34, 34, 1),
                     fontSize: ScreenUtil().setSp(40,allowFontScalingSelf: true)
                 )
             ),
@@ -268,18 +288,15 @@ class CustomIDCardState extends State<CustomIDCard> {
                                                       Navigator.pop(context);
                                                     },
                                                   ),
-                                                  Text("选择派出所",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
+                                                  Text("选择民族",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
                                                   InkWell(
                                                     child: Text("确认",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
                                                     onTap: (){
-                                                      //添加选择事件
-                   //                                   BlocProvider.of<PeopleOnlineCheckBloc>(context).add(NationSureEvent(nationSure: _selectedContent));
                                                       setState(() {
                                                         // ignore: unnecessary_statements
                                                         _selectedContent;
                                                       });
                                                       Navigator.pop(context);
-
                                                     },
                                                   )
                                                 ],
