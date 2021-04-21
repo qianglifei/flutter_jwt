@@ -10,6 +10,7 @@ import 'package:jwt/main/first_page/people_online_check/people_online_check_resp
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/custom_button.dart';
 import 'package:jwt/widget/custom_choose_bottom_sheet.dart';
+import 'package:jwt/widget/custom_choose_widget.dart';
 import 'package:jwt/widget/custom_id_card_widget.dart';
 import 'package:jwt/widget/custom_input_widget.dart';
 
@@ -105,7 +106,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
                              content: widget.mEntity.bipConTelephone,
                          ),
                          _buildBaseInfoWidget("信息备注"),
-                         CustomChooseBottomSheet("核准程度"),
+                         CustomChooseWidget("核准程度"),
                          //横线
                          _buildLineWidget(),
                          CustomInputWidget(

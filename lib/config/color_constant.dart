@@ -1,0 +1,12 @@
+
+import 'package:flutter/material.dart';
+
+class ColorConstant{
+    static const Color CUSTOM_ALERT_BACKGROUND = Colors.white;
+    static const Color CUSTOM_ALERT_BLACK = Colors.black;
+    static const Color CUSTOM_ALERT_ClEAR = Colors.white;
+    //信息核查程度
+    static const Color CUSTOM_INFO_CHECKED = Color.fromRGBO(100, 100, 100, 1);
+    static const Color CUSTOM_INFO_UNCHECKED = Color.fromRGBO(52,135,215,1);
+
+}

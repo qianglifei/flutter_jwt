@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 
+import 'custom_alert_dialog.dart';
+
 
 ///typedef 给某一种特定的函数类型起一个名字，可以类比class和对象
 ///这样理解，自己定义了一种数据类型，不过这种数据类型 是函数类型
@@ -52,12 +54,17 @@ class CustomChooseWidgetState extends State<CustomChooseWidget> {
         ),
       ),
       onTap: (){
-        setState(() {
-            if(widget._title != null && widget.callBack != null){
-                widget.callBack();
-            }
-        });
+        popDialog(context, ShowAlertDialog(title: "核准程度",content: "sdf",items: ["取消","确认"],));
       },
     );
+  }
+
+  static void popDialog(BuildContext context, Widget widget) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (ctx) {
+          return widget;
+      });
   }
 }
