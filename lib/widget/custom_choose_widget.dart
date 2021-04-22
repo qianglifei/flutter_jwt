@@ -41,6 +41,11 @@ class CustomChooseWidgetState extends State<CustomChooseWidget> {
                 child: Text(widget._title,style: TextStyle(fontSize: ScreenUtil().setSp(48),color: Color.fromRGBO(100,100,100,1)))
             ),
             Positioned(
+                top: ScreenUtil().setHeight(30),
+                right: ScreenUtil().setWidth(100),
+                child: Text(widget._title,style: TextStyle(fontSize: ScreenUtil().setSp(48),color: Color.fromRGBO(100,100,100,1)))
+            ),
+            Positioned(
                 top: ScreenUtil().setHeight(50),
                 right: ScreenUtil().setWidth(64),
                 child: Image.asset(

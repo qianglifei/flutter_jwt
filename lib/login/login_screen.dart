@@ -14,6 +14,7 @@ import 'package:jwt/login/test_view.dart';
 import 'package:jwt/main/app.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/progress_dialog.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
@@ -213,6 +214,7 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
                 ),
                 child: new Text('登录',style: TextStyle(fontSize: ScreenUtil().setSp(56,allowFontScalingSelf: true))),
                 onPressed: () {
+
                   Navigator.of(context).push(MaterialPageRoute(builder: (context){
                     return App();
                   }));
@@ -231,15 +233,6 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
                       onSuccess: (data){
                         //dialog 消息消失
                         Navigator.of(context).pop();
-//                        Fluttertoast.showToast(
-//                            msg: "登录成功",
-//                            toastLength: Toast.LENGTH_SHORT,
-//                            gravity: ToastGravity.CENTER,
-//                            timeInSecForIosWeb: 1,
-//                            backgroundColor: Colors.red,
-//                            textColor: Colors.white,
-//                            fontSize: 16.0
-//                        );print(data.toJson());
                         saveData(data);
                         Navigator.of(context).push(MaterialPageRoute(builder: (context){
                             return App();

@@ -85,6 +85,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
              return Column(
                children: [
                  Expanded(
+                   flex: 2,
                    child: SingleChildScrollView(
                      //TODO 滚动特性，允许滚出边界，出边界后会弹会来
                      physics: BouncingScrollPhysics(),

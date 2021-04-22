@@ -241,7 +241,7 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
       ),
       onTap: (){
           print("身份证识别");
-          requestPermission();
+         // requestPermission();
       },
     );
   }
@@ -277,25 +277,25 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
       },
     );
   }
-  ///动态权限申请
-  Future requestPermission() async{
-    //申请权限
-    Map<PermissionGroup,PermissionStatus> permisson =
-       await PermissionHandler().requestPermissions([PermissionGroup.camera,PermissionGroup.storage]);
-    //申请结果
-    PermissionStatus permissionStatus = await PermissionHandler().checkPermissionStatus(PermissionGroup.camera);
-    if(permissionStatus == PermissionStatus.granted){
-      Navigator.
-      push(context, MaterialPageRoute(builder: (context) => CustomCameraPage())).
-      then((value) {
-          if(value != null){
-            setState(() {
-              imagePath = value;
-            });
-          }
-      });
-    }else{
-      //权限申请被拒绝，自己去处理
-    }
-  }
+//  ///动态权限申请
+//  Future requestPermission() async{
+//    //申请权限
+//    Map<PermissionGroup,PermissionStatus> permisson =
+//       await PermissionHandler().requestPermissions([PermissionGroup.camera,PermissionGroup.storage]);
+//    //申请结果
+//    PermissionStatus permissionStatus = await PermissionHandler().checkPermissionStatus(PermissionGroup.camera);
+//    if(permissionStatus == PermissionStatus.granted){
+//      Navigator.
+//      push(context, MaterialPageRoute(builder: (context) => CustomCameraPage())).
+//      then((value) {
+//          if(value != null){
+//            setState(() {
+//              imagePath = value;
+//            });
+//          }
+//      });
+//    }else{
+//      //权限申请被拒绝，自己去处理
+//    }
+//  }
 }

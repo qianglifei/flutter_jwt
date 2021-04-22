@@ -10,11 +10,14 @@ class CustomButton extends StatefulWidget{
   double radius;
   Color colors;
   Color textColor;
+
   String contentText;
+
   double marginBottom;
+  double marginTop;
   final _callBack callBack;
 
-  CustomButton(this.width,this.height, this.colors,this.textColor,this.contentText,this.callBack,{this.marginBottom = 0}) :
+  CustomButton(this.width,this.height, this.colors,this.textColor,this.contentText,this.callBack,{this.marginBottom = 0,this.marginTop = 0}) :
   assert(width != null),
   assert(height != null),
   assert(colors != null),
@@ -35,7 +38,7 @@ class CustomButtonState extends State<CustomButton>{
     return Container(
       width: widget.width,
       height: widget.height,
-      margin: EdgeInsets.only(bottom: widget.marginBottom),
+      margin: EdgeInsets.only(bottom: widget.marginBottom,top: widget.marginTop),
       child: InkWell(
           child: Container(
             child: Center(

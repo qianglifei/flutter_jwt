@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:jwt/config/color_constant.dart';
-import 'package:jwt/widget/custom_checkbox.dart';
+import 'package:jwt/widget/custom_checkbox_layout.dart';
 
 // ignore: must_be_immutable
 class ShowAlertDialog extends StatefulWidget {
@@ -41,7 +41,7 @@ class _ShowAlertDialogState extends State<ShowAlertDialog> {
           child: Container(
             color: ColorConstant.CUSTOM_ALERT_BACKGROUND,
             width: ScreenUtil().setWidth(952),
-            height: ScreenUtil().setHeight(795),
+            height: ScreenUtil().setHeight(1005),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -76,7 +76,7 @@ class _ShowAlertDialogState extends State<ShowAlertDialog> {
   }
 
   Widget _buildCheckBoxWidget(){
-    return CustomCheckBox();
+    return CustomCheckBoxLayout();
   }
 
   Widget _itemCreat() {
