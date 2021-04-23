@@ -8,6 +8,7 @@ import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
 import 'package:jwt/config/url_config.dart';
 import 'package:jwt/entity/login_response_entity.dart';
+import 'package:jwt/grant/grant_utils.dart';
 import 'package:jwt/http/common_service.dart';
 import 'package:jwt/http/dio_utils.dart';
 import 'package:jwt/login/test_view.dart';
@@ -214,10 +215,8 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
                 ),
                 child: new Text('登录',style: TextStyle(fontSize: ScreenUtil().setSp(56,allowFontScalingSelf: true))),
                 onPressed: () {
-
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                    return App();
-                  }));
+                  GrantedUtils s = GrantedUtils.instance;
+                  s.requestPermissionGranted();
                   buildShowDialog(context);
                   Map<String,dynamic> requestBody = new Map();
                   requestBody.addAll({
