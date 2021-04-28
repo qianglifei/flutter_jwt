@@ -44,5 +44,8 @@
     <string>app想要使用您的相机</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>The app tries to use your microphone</string>
+    <key>NSAppTransportSecurity</key>
+    <key>NSAllowsArbitraryLoads</key>
+    <true/>
 </dict>
 </plist>
