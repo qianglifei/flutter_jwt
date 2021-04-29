@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jwt/base/base_widget.dart';
+import 'package:jwt/login/login_bloc.dart';
 import 'package:jwt/login/login_screen.dart';
 import 'package:jwt/main/app.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
@@ -27,8 +29,12 @@ class SplashScreenState extends BaseWidgetState<SplashScreen> {
 //      }),(route) => route == null);
 //    });
     Future.delayed(Duration(seconds: 2),(){
+
         Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context){
-          return LoginScreen();
+          return BlocProvider(
+            create: (context)=> LoginBloc(),
+            child: LoginScreen()
+          );
         }), (route) => route == null);
     });
   }

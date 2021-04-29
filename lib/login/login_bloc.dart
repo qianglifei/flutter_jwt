@@ -15,9 +15,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     // TODO: implement mapEventToState
     try{
       if(event is LoginPressEvent){
-         LoginResponseEntity responseEntity = await LoginRepository.loginRequest(event.map);
-         print(responseEntity.toString());
-         yield LoginSuccessState(responseEntity);
+         LoginResponseEntity entity = await LoginRepository.loginRequest(event.map);
+//         print("登录成功了："+ entity.toString());
+         yield LoginSuccessState(entity);
       }
     }catch(e){
       final errMsg = '登录错误';
