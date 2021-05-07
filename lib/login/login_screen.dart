@@ -319,28 +319,12 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
                     buildShowDialog(context);
                     Map<String,dynamic> requestBody = new Map();
                     requestBody.addAll({
-                      "user_name":"1142103000-g1",
+                      "user_name":"1142100000-a1",
                       "user_password":"123456",
-                      "imsi":"abedd79f09bab900",
+                      "imsi":"e2dbd5d7b0dc3cfe",
                       "version":"1.3.5"
                     });
                     BlocProvider.of<LoginBloc>(context).add(LoginPressEvent(map: requestBody));
-//                  DioUtils.instance.postHttp<LoginResponseEntity>(
-//                      url: URLConfig.LOGIN ,
-//                      method: DioUtils.POST,
-//                      parameters:requestBody ,
-//                      onSuccess: (data){
-//                        //dialog 消息消失
-//                        Navigator.of(context).pop();
-//                        saveData(data);
-//                        Navigator.of(context).push(MaterialPageRoute(builder: (context){
-//                            return App();
-//                        }));
-//                      },
-//                      onError: (error){
-//                        Navigator.of(context).pop();
-//                        print("---error");
-//                      });
                   },
                 )
             )

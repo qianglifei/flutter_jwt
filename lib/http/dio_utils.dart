@@ -106,13 +106,7 @@ class DioUtils {
     }
   }
   ///Post请求 && put delect...
-  void postHttp<T>(
-      { String url,
-        String method,
-        parameters,
-        Function(T t) onSuccess,
-        Function(String error) onError,
-      }) async {
+  void postHttp<T>({String url, String method, parameters, Function(T t) onSuccess, Function(String error) onError}) async {
     ///定义请求参数
     parameters = parameters ?? {};
     getResponse(url: url,parameters: parameters,onSuccess: onSuccess,onError: onError);
