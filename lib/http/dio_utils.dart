@@ -106,13 +106,13 @@ class DioUtils {
     }
   }
   ///Post请求 && put delect...
-  void postHttp<T>({String url, String method, parameters, Function(T t) onSuccess, Function(String error) onError}) async {
+  Future<T> postHttp<T>({String url, String method, parameters, Function(T t) onSuccess, Function(String error) onError}) async {
     ///定义请求参数
     parameters = parameters ?? {};
-    getResponse(url: url,parameters: parameters,onSuccess: onSuccess,onError: onError);
+    return getResponse(url: url,parameters: parameters,onSuccess: onSuccess,onError: onError);
   }
 
-  void getResponse<T>({  String url, String method, parameters, Function(T t) onSuccess,  Function(String error) onError}) async {
+  Future<T> getResponse<T>({  String url, String method, parameters, Function(T t) onSuccess,  Function(String error) onError}) async {
     try {
       Response response;
       Dio dio = createInstance();
@@ -133,6 +133,8 @@ class DioUtils {
           response =  await dio.post((url == null || url.isEmpty ) ? URLConfig.BASE_URL : url, data: parameters);
           break;
       }
+      BaseEntity<T> bean = BaseEntity.fromJson(response.data);
+      return bean.returnData;
       /// 拦截http层异常码
       print(response.statusCode);
       if (response.statusCode == 200) {
@@ -142,6 +144,7 @@ class DioUtils {
         if(bean.returnCode == 1 && onSuccess != null){
           ///返回泛型Bean
           onSuccess(bean.returnData);
+          //return bean.returnData;
         }else{
           onError(bean.returnMsg);
         }

@@ -16,18 +16,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     // TODO: implement mapEventToState
       if(event is LoginPressEvent){
-       DioUtils.instance.postHttp<LoginResponseEntity>(
-            url: URLConfig.LOGIN ,
-            method: DioUtils.POST,
-            parameters:event.map,
-            onSuccess: (data) {
-              print("登录成功了：" + data.toJson().toString());
-            //  yield LoginSuccessState(data);
-            },
-            onError: (error){
-              return error;
-            }
-        );
+        LoginRepository l = new LoginRepository();
+        l.loginRequest(event.map);
+        print("请求完毕，返回数据");
+        yield LoginSuccessState(null);
       }
   }
 }
