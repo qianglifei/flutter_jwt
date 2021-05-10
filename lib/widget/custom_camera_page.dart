@@ -217,19 +217,19 @@ class CustomCameraPageState extends State<CustomCameraPage> {
                       "idcard": _photoBase64
                     });
                     FormData data = FormData.fromMap(requestBody);
-                   //请求网络
-                   DioUtils.instance.postHttp(
-                       url: "http://ocr.beikongyun.com/ocr/api/idcardocr/base64",
-                       method: DioUtils.POST,
-                       parameters:data,
-                       onSuccess: (data){
-                          print(data);
-                          Navigator.of(context).pop();
-                       },
-                      onError: (error){
-                        print(error);
-                      }
-                   );
+//                   //请求网络
+//                   DioUtils.instance.postHttp(
+//                       url: "http://ocr.beikongyun.com/ocr/api/idcardocr/base64",
+//                       method: DioUtils.POST,
+//                       parameters:data,
+//                       onSuccess: (data){
+//                          print(data);
+//                          Navigator.of(context).pop();
+//                       },
+//                      onError: (error){
+//                        print(error);
+//                      }
+//                   );
                   },
                   child: Text("确认"),
                 ),

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
@@ -105,14 +106,22 @@ class DioUtils {
       print(e);
     }
   }
+
   ///Post请求 && put delect...
-  Future<T> postHttp<T>({String url, String method, parameters, Function(T t) onSuccess, Function(String error) onError}) async {
+  void postHttps<T>({String url, String method, parameters, Function(T t) onSuccess, Function(String error) onError}) async {
     ///定义请求参数
     parameters = parameters ?? {};
-    return getResponse(url: url,parameters: parameters,onSuccess: onSuccess,onError: onError);
+    getResponse(url: url,parameters: parameters,onSuccess: onSuccess,onError: onError);
   }
 
-  Future<T> getResponse<T>({  String url, String method, parameters, Function(T t) onSuccess,  Function(String error) onError}) async {
+  ///Post请求 && put delect...
+  Future<T> postHttp<T>({String url, String method, parameters}) async {
+    ///定义请求参数
+    parameters = parameters ?? {};
+    return getResponses(url: url,parameters: parameters,);
+  }
+
+  void getResponse<T>({ String url, String method, parameters, Function(T t) onSuccess,  Function(String error) onError}) async {
     try {
       Response response;
       Dio dio = createInstance();
@@ -133,8 +142,6 @@ class DioUtils {
           response =  await dio.post((url == null || url.isEmpty ) ? URLConfig.BASE_URL : url, data: parameters);
           break;
       }
-      BaseEntity<T> bean = BaseEntity.fromJson(response.data);
-      return bean.returnData;
       /// 拦截http层异常码
       print(response.statusCode);
       if (response.statusCode == 200) {
@@ -155,6 +162,34 @@ class DioUtils {
       print('请求出错：' + e.toString());
       onError(e.toString());
     }
+  }
+
+  Future<T> getResponses<T>({String url, String method, parameters}) async {
+      Response response;
+      Dio dio = createInstance();
+      switch(method){
+        case GET:
+          response =  await dio.get((url == null || url.isEmpty ) ? URLConfig.BASE_URL : url, queryParameters: parameters);
+          break;
+        case PUT:
+          response =  await dio.put((url == null || url.isEmpty ) ? URLConfig.BASE_URL : url, queryParameters: parameters);
+          break;
+        case PATCH:
+          response =  await dio.patch((url == null || url.isEmpty ) ? URLConfig.BASE_URL : url, queryParameters: parameters);
+          break;
+        case DELETE:
+          response =  await dio.delete((url == null || url.isEmpty ) ? URLConfig.BASE_URL : url, queryParameters: parameters);
+          break;
+        default:
+          response =  await dio.post((url == null || url.isEmpty ) ? URLConfig.BASE_URL : url, data: parameters);
+          break;
+      }
+      BaseEntity<T> bean = BaseEntity.fromJson(response.data);
+      if(bean.returnCode == 1 || bean.returnCode == -10){
+        return bean.returnData;
+      }else {
+        return null;
+      }
   }
 
   /// 清空 dio 对象

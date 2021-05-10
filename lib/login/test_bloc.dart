@@ -39,16 +39,5 @@ class TestBloc extends Bloc<TestEvent, TestState> {
       "imsi":"2a6d138bc0f6282e",
       "version":"1.3.2"
     });
-    DioUtils.instance.postHttp(
-      url: URLConfig.rkhc_rkhccx,
-      method: DioUtils.POST,
-      parameters:  requestBody,
-      onSuccess: (data){
-
-      },
-      onError: (error){
-
-      }
-    );
   }
 }

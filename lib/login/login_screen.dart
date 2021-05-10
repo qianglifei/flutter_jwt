@@ -75,13 +75,14 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
           }
           if(state is LoginSuccessState){
              print("登录成功");
-            // Navigator.of(context).pop();
-//             saveData(state.loginModel);
-             print(state.loginModel);
-//            Navigator.of(context).push(MaterialPageRoute(builder: (context){
-//                return App();
-//            }));
-
+             saveData(state.loginModel);
+             print(state.loginModel.userGsdw);
+             Navigator.of(context).pop();
+             Future.delayed(Duration.zero, () {
+               Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                 return App();
+               }));
+             });
           }
           if(state is LoginFailureState){
             print("登录失败");

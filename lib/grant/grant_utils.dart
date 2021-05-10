@@ -1,4 +1,3 @@
-
 import 'package:permission_handler/permission_handler.dart';
 
 class GrantedUtils {
@@ -31,6 +30,12 @@ class GrantedUtils {
       Permission.camera,
     ].request();
     requestPermissionGranted();
+  }
+
+  // ignore: non_constant_identifier_names
+  Future PermissionGranted() async{
+      var status = await Permission.camera.isGranted;
+      return status;
   }
 
   // 检查程序必要的权限是否开启

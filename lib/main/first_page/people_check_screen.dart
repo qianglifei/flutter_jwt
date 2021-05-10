@@ -176,7 +176,7 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                         "bip_xm":"高渐离",
                         "bip_sfzhm":"140108198506020089"
                       });
-                      DioUtils.instance.postHttp<PeopleOnlineCheckResponseReturnData>(
+                      DioUtils.instance.postHttps<PeopleOnlineCheckResponseReturnData>(
                         url:URLConfig.rkhc_rkhccx,
                         parameters: requestBody,
                         method: DioUtils.POST,
@@ -241,7 +241,7 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
       ),
       onTap: (){
           print("身份证识别");
-         // requestPermission();
+          requestPermission();
       },
     );
   }
@@ -277,25 +277,14 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
       },
     );
   }
-//  ///动态权限申请
-//  Future requestPermission() async{
-//    //申请权限
-//    Map<PermissionGroup,PermissionStatus> permisson =
-//       await PermissionHandler().requestPermissions([PermissionGroup.camera,PermissionGroup.storage]);
-//    //申请结果
-//    PermissionStatus permissionStatus = await PermissionHandler().checkPermissionStatus(PermissionGroup.camera);
-//    if(permissionStatus == PermissionStatus.granted){
-//      Navigator.
-//      push(context, MaterialPageRoute(builder: (context) => CustomCameraPage())).
-//      then((value) {
-//          if(value != null){
-//            setState(() {
-//              imagePath = value;
-//            });
-//          }
-//      });
-//    }else{
-//      //权限申请被拒绝，自己去处理
-//    }
-//  }
+  ///动态权限申请
+  Future requestPermission() async{
+    var status = await Permission.camera.isGranted;
+    if(status){
+      print("授权成功");
+      Navigator.push(context, MaterialPageRoute(builder: (context) => CustomCameraPage()));
+    }else{
+      print("授权失败");
+    }
+  }
 }

@@ -1,4 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 ///日志拦截器
 class LogInterceptors extends InterceptorsWrapper{
@@ -55,19 +58,39 @@ class LogInterceptors extends InterceptorsWrapper{
   }
 
   ///  error统一处理
-  void formatError(DioError e) {
+  DioError formatError(DioError e) {
     if (e.type == DioErrorType.CONNECT_TIMEOUT) {
+      Fluttertoast.showToast(msg: "连接超时");
       print(e.hashCode.toString() + "连接超时");
+      return e;
     } else if (e.type == DioErrorType.SEND_TIMEOUT) {
+      Fluttertoast.showToast(msg: "请求超时");
       print(e.hashCode.toString() + "请求超时");
+      return e;
     } else if (e.type == DioErrorType.RECEIVE_TIMEOUT) {
+      Fluttertoast.showToast(msg: "响应超时");
       print(e.hashCode.toString() + "响应超时");
+      return e;
     } else if (e.type == DioErrorType.RESPONSE) {
+      Fluttertoast.showToast(msg: "服务器异常");
       print(e.hashCode.toString() + "出现异常404 503");
+      return e;
     } else if (e.type == DioErrorType.CANCEL) {
+      Fluttertoast.showToast(msg: "请求取消");
       print(e.hashCode.toString() + "请求取消");
+      return e;
     } else {
+      Fluttertoast.
+      showToast(
+          msg: "网络连接失败",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 21
+      );
       print("message =${e.message}");
+      return e;
     }
   }
 }

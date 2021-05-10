@@ -48,22 +48,22 @@ class PeopleOnlineCheckBloc extends Bloc<PeopleOnlineCheckEvent, PeopleOnlineChe
   }
 
   peopleCheckData(){
-        DioUtils.instance.postHttp<PeopleOnlineCheckResponseReturnData>(
-        url:URLConfig.rkhc_rkhccx,
-        parameters: state.map,
-        method: DioUtils.POST,
-        onSuccess: (data){
-//          Navigator.push(context,MaterialPageRoute(builder:(_){
-//            return BlocProvider(
-//              create: (context)=> PeopleOnlineCheckBloc(),
-//              child: PeopleOnlineCheckScreen(mEntity: data),
-//            );
-//          }));
-        },
-        onError: (errorInfo){
-          print(errorInfo);
-        }
-    );
+//        DioUtils.instance.postHttp<PeopleOnlineCheckResponseReturnData>(
+//        url:URLConfig.rkhc_rkhccx,
+//        parameters: state.map,
+//        method: DioUtils.POST,
+//        onSuccess: (data){
+////          Navigator.push(context,MaterialPageRoute(builder:(_){
+////            return BlocProvider(
+////              create: (context)=> PeopleOnlineCheckBloc(),
+////              child: PeopleOnlineCheckScreen(mEntity: data),
+////            );
+////          }));
+//        },
+//        onError: (errorInfo){
+//          print(errorInfo);
+//        }
+//    );
   }
 
 }

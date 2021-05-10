@@ -16,10 +16,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     // TODO: implement mapEventToState
       if(event is LoginPressEvent){
-        LoginRepository l = new LoginRepository();
-        l.loginRequest(event.map);
+        LoginResponseEntity entity = await LoginRepository.loginRequest(event.map);
+        print(entity.userName);
         print("请求完毕，返回数据");
-        yield LoginSuccessState(null);
+        yield LoginSuccessState(entity);
       }
   }
 }

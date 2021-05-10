@@ -70,18 +70,8 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
 
   @override
   Widget getContentWidget(BuildContext context) {
-    return BlocListener(
-        listener: (context,state){
-            switch(state){
-              case HomepageScreen:{
-
-              }break;
-              default:break;
-            }
-        },
-       cubit: _bloc,
-       child: BlocBuilder<PeopleOnlineCheckBloc,PeopleOnlineCheckState>(
-           builder: (context,state){
+    return BlocBuilder<PeopleOnlineCheckBloc,PeopleOnlineCheckState>(
+         builder: (context,state){
              return Column(
                children: [
                  Expanded(
@@ -121,9 +111,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
                ],
              );
            }
-       ),
-    );
-    // TODO: implement getContentWidget
+       );
   }
   /// 加载进度条
   buildShowDialog(BuildContext context) {
