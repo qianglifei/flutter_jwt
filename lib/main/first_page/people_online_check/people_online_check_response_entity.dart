@@ -48,6 +48,7 @@ class PeopleOnlineCheckResponseReturnData with JsonConvert<PeopleOnlineCheckResp
 	@JSONField(name: "rzf_xzdxxdz")
 	String rzfXzdxxdz;
 
+
 	@override
   String toString() {
     return 'PeopleOnlineCheckResponseReturnData{bipBirthday: $bipBirthday, bipConTelephone: $bipConTelephone, bipNation: $bipNation, bipRprAddress: $bipRprAddress, bipSfzhm: $bipSfzhm, bipXb: $bipXb, bipXm: $bipXm, fwzjbxxdjbFwzbh: $fwzjbxxdjbFwzbh, fwzjbxxdjbFwzmc: $fwzjbxxdjbFwzmc, img: $img, rdjDjrq: $rdjDjrq, rdjGrbh: $rdjGrbh, rdjSspcsbm: $rdjSspcsbm, rdjSspcsmc: $rdjSspcsmc, rldGlybm: $rldGlybm, rldGlymc: $rldGlymc, rzfFwbh: $rzfFwbh, rzfSfbzdz: $rzfSfbzdz, rzfXzdxxdz: $rzfXzdxxdz}';

@@ -181,10 +181,11 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                         parameters: requestBody,
                         method: DioUtils.POST,
                         onSuccess: (data){
+                            print(data);
                             Navigator.push(context,MaterialPageRoute(builder:(_){
                               return BlocProvider(
                                 create: (context)=> PeopleOnlineCheckBloc(),
-                                child: PeopleOnlineCheckScreen(mEntity: data),
+                                child: PeopleOnlineCheckScreen(mEntity: data.returnData,returnMsg: data.returnMsg,returnStandAdder: data.returnStandAdder,returnType: data.returnType),
                               );
                             }));
                         },

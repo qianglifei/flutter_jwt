@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:jwt/config/url_config.dart';
 import 'package:jwt/generated/json/login_response_entity_helper.dart';
 import 'package:jwt/http/base_entity.dart';
@@ -96,7 +97,7 @@ class DioUtils {
     return dio;
   }
   ///Get请求
-  void getHttp <T>({String url, parameters, Function(T t) onSuccess,  Function(String error) onError, }) async {
+  void getHttp <T>({String url, parameters, Function(BaseEntity<T> baseEntity) onSuccess,  Function(String error) onError, }) async {
     try {
       Dio dio = createInstance();
       Response response = await dio.get(URLConfig.BASE_URL);
@@ -108,7 +109,7 @@ class DioUtils {
   }
 
   ///Post请求 && put delect...
-  void postHttps<T>({String url, String method, parameters, Function(T t) onSuccess, Function(String error) onError}) async {
+  void postHttps<T>({String url, String method, parameters, Function(BaseEntity<T> baseEntity) onSuccess, Function(String error) onError}) async {
     ///定义请求参数
     parameters = parameters ?? {};
     getResponse(url: url,parameters: parameters,onSuccess: onSuccess,onError: onError);
@@ -121,7 +122,7 @@ class DioUtils {
     return getResponses(url: url,parameters: parameters,);
   }
 
-  void getResponse<T>({ String url, String method, parameters, Function(T t) onSuccess,  Function(String error) onError}) async {
+  void getResponse<T>({ String url, String method, parameters, Function(BaseEntity<T> baseEntity) onSuccess,  Function(String error) onError}) async {
     try {
       Response response;
       Dio dio = createInstance();
@@ -148,12 +149,14 @@ class DioUtils {
         ///这里做BaseEntity泛型解析，封装 并拦截后台code异常码，可拦截自定义处理
         BaseEntity<T> bean = BaseEntity.fromJson(response.data);
         print(bean.returnCode);
-        if(bean.returnCode == 1 && onSuccess != null){
-          ///返回泛型Bean
-          onSuccess(bean.returnData);
-          //return bean.returnData;
+        if((bean.returnCode == 1) && onSuccess != null){
+           ///请求成功，返回泛型Bean
+           onSuccess(bean);
+        }else if(bean.returnCode == -10){
+           ///请求成功,无数据
+           onSuccess(bean);
         }else{
-          onError(bean.returnMsg);
+           onError(bean.returnMsg);
         }
       } else {
         throw Exception('statusCode:${response.statusCode}+${response.statusMessage}');

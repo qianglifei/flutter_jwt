@@ -21,7 +21,8 @@ class CustomIDCard extends StatefulWidget{
   String _headImagePath = "";
   String _isStandardAddress = "";
   String _residentAddress = "";
-  CustomIDCard(this._name,this._idCard,this._birthDate,this._nation,this._residentAddress,{this.callBack});
+  String _isRegister = "";
+  CustomIDCard(this._name,this._idCard,this._birthDate,this._nation,this._residentAddress,this._isRegister,{this.callBack});
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -105,7 +106,7 @@ class CustomIDCardState extends State<CustomIDCard> {
                    top: ScreenUtil().setHeight(290),
                    right: ScreenUtil().setWidth(47),
                    child: Image.asset(
-                     "images/icon_register.png",
+                     widget._isRegister == "-10"  ?  "images/icon_unregister.png" : "images/icon_register.png",
                      width: ScreenUtil().setWidth(260),
                      height: ScreenUtil().setHeight(320),
                      fit: BoxFit.contain,

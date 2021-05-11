@@ -163,6 +163,8 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
     _preferences.setString("token", data.token);
   }
 
+
+
   Widget _initLayout() {
     return Container(
         width: ScreenUtil.defaultSize.width,
@@ -332,5 +334,14 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
           ],
         )
     );
+  }
+
+  @override
+  void dispose() {
+    phoneController.dispose();
+    passController.dispose();
+    // TODO: implement dispose
+    super.dispose();
+
   }
 }

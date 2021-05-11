@@ -17,7 +17,10 @@ import 'package:jwt/widget/custom_input_widget.dart';
 // ignore: must_be_immutable
 class PeopleOnlineCheckScreen extends BaseWidget{
   PeopleOnlineCheckResponseReturnData mEntity;
-  PeopleOnlineCheckScreen({@required this.mEntity});
+  String returnMsg;
+  String returnStandAdder;
+  String returnType;
+  PeopleOnlineCheckScreen({@required this.mEntity,@required this.returnMsg,@required this.returnStandAdder,@required this.returnType});
 
   @override
   BaseWidgetState<BaseWidget> getState()  {
@@ -34,6 +37,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
   String _headImagePath = "";
   String _isStandardAddress = "";
   String _residentAddress = "";
+  String _isRegister = "";
   @override
   CustomAppBar getAppBar() {
     // TODO: implement getAppBar
@@ -56,15 +60,17 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
 
   void initData(){
     setState(() {
-        _name = widget.mEntity.bipXm ?? "";
-        _idCard = widget.mEntity.bipSfzhm ?? "";
-        _birthDate = widget.mEntity.bipBirthday ?? "";
-        _headImagePath = widget.mEntity.img ?? "";
-        _nation = widget.mEntity.bipNation;
-        _residentAddress = widget.mEntity.bipRprAddress;
-        if(_birthDate.isNotEmpty){
-          _birthDate = _birthDate.substring(0,4) + "-${_birthDate.substring(4,6)}" + "-${_birthDate.substring(6,8)}";
-        }
+           _isRegister = widget.returnMsg == "该人员未登记!" ? "-10" : "1";
+           _isStandardAddress = widget.returnStandAdder ?? "";
+//        _name = widget.mEntity.bipXm ?? "";
+//        _idCard = widget.mEntity.bipSfzhm ?? "";
+//        _birthDate = widget.mEntity.bipBirthday ?? "";
+//        _headImagePath = widget.mEntity.img ?? "";
+//        _nation = widget.mEntity.bipNation;
+//        _residentAddress = widget.mEntity.bipRprAddress;
+//        if(_birthDate.isNotEmpty){
+//          _birthDate = _birthDate.substring(0,4) + "-${_birthDate.substring(4,6)}" + "-${_birthDate.substring(6,8)}";
+//        }
     });
   }
 
@@ -84,17 +90,18 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
                        mainAxisAlignment: MainAxisAlignment.start,
                        crossAxisAlignment: CrossAxisAlignment.center,
                        children: [
-                         CustomIDCard(_name,_idCard,_birthDate,_nation,_residentAddress),
+                         CustomIDCard(_name,_idCard,_birthDate,_nation,_residentAddress,_isRegister),
                          _buildBaseInfoWidget("基本信息"),
                          CustomInputWidget(
                              "现住地址",
-                             content: widget.mEntity.rzfXzdxxdz,
+                             content: "",
                          ),
+                         _buildStandardWidget(_isStandardAddress),
                          //横线
                          _buildLineWidget(),
                          CustomInputWidget(
                              "手机号码",
-                             content: widget.mEntity.bipConTelephone,
+                             content: "",
                          ),
                          _buildBaseInfoWidget("信息备注"),
                          CustomChooseWidget("核准程度"),
@@ -149,7 +156,41 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
   void onClickErrorWidget() {
     // TODO: implement onClickErrorWidget
   }
-
+  
+  Widget _buildStandardWidget(String standardAddress) {
+    print(standardAddress);
+    return standardAddress == "-1" ? Container(
+      height: ScreenUtil().setHeight(80),
+      child: Stack(
+        children: [
+          Positioned(
+              right: ScreenUtil().setWidth(220),
+              child: Image.asset(
+                 "images/icon_ban.png",
+                  width: 20,
+                  height: 20,
+                  fit: BoxFit.fill,
+              )
+          ),
+          Positioned(
+              right: ScreenUtil().setWidth(10),
+              child: Text("非标准地址",style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    ): Container(
+        height: ScreenUtil().setHeight(80),
+        child: Stack(
+          children: [
+            Positioned(
+              right: ScreenUtil().setWidth(10),
+              child: Text("标准地址",style: TextStyle(color: Colors.green)),
+            ),
+          ],
+      ),
+    );
+  }
+  
   Widget _buildBaseInfoWidget(String title) {
     return Container(
       alignment: AlignmentDirectional.centerStart,
