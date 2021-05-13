@@ -60,8 +60,8 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
 
   void initData(){
     setState(() {
-           _isRegister = widget.returnMsg == "该人员未登记!" ? "-10" : "1";
-           _isStandardAddress = widget.returnStandAdder ?? "";
+        _isRegister = widget.returnMsg == "该人员未登记!" ? "-10" : "1";
+        _isStandardAddress = widget.returnStandAdder ?? "";
 //        _name = widget.mEntity.bipXm ?? "";
 //        _idCard = widget.mEntity.bipSfzhm ?? "";
 //        _birthDate = widget.mEntity.bipBirthday ?? "";

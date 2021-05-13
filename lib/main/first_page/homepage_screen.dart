@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
+import 'package:jwt/login/login_bloc.dart';
 import 'package:jwt/main/first_page/people_check_screen.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/custom_firstpage_checkbox.dart';
@@ -278,13 +280,13 @@ class HomepageScreenState extends BaseWidgetState<HomepageScreen> {
           switch(flag){
             case "1":{
               ///路由跳转
-              Navigator.push(context, MaterialPageRoute(builder: (_) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return new PeopleCheckScreen();
               }));
             }break;
             case "2":{
               ///路由跳转
-              Navigator.push(context, MaterialPageRoute(builder: (_) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return new HouseCheckScreen();
               }));
             }break;

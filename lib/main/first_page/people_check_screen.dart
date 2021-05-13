@@ -182,12 +182,21 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                         method: DioUtils.POST,
                         onSuccess: (data){
                             print(data);
-                            Navigator.push(context,MaterialPageRoute(builder:(_){
-                              return BlocProvider(
-                                create: (context)=> PeopleOnlineCheckBloc(),
-                                child: PeopleOnlineCheckScreen(mEntity: data.returnData,returnMsg: data.returnMsg,returnStandAdder: data.returnStandAdder,returnType: data.returnType),
-                              );
-                            }));
+                            if(data.returnCode == -1){
+                              Navigator.push(context,MaterialPageRoute(builder:(context){
+                                return BlocProvider(
+                                  create: (context)=> PeopleOnlineCheckBloc(),
+                                  child: PeopleOnlineCheckScreen(mEntity: data.returnData,returnMsg: data.returnMsg,returnStandAdder: data.returnStandAdder,returnType: data.returnType),
+                                );
+                              }));
+                            }else if(data.returnCode == 1){
+                              Navigator.push(context,MaterialPageRoute(builder:(context){
+                                return BlocProvider(
+                                  create: (context)=> PeopleOnlineCheckBloc(),
+                                  child: PeopleOnlineCheckScreen(mEntity: data.returnData,returnMsg: data.returnMsg,returnStandAdder: data.returnStandAdder,returnType: data.returnType),
+                                );
+                              }));
+                            }
                         },
                         onError: (errorInfo){
                             print(errorInfo);

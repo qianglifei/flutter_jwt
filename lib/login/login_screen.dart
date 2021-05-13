@@ -79,9 +79,9 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
              print(state.loginModel.userGsdw);
              Navigator.of(context).pop();
              Future.delayed(Duration.zero, () {
-               Navigator.of(context).push(MaterialPageRoute(builder: (context){
+               Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context){
                  return App();
-               }));
+               }), (route) => route == null);
              });
           }
           if(state is LoginFailureState){

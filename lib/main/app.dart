@@ -28,13 +28,9 @@ class AppState extends State<App> {
 
   int elevation = 4;
 
-
   @override
   void initState() {
-    Future.delayed(Duration.zero, () {
-      // TODO: implement initState
-      super.initState();
-    });
+    super.initState();
   }
   @override
   Widget build(BuildContext context) {

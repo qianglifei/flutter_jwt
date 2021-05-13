@@ -17,12 +17,14 @@ class CustomInputWidget extends StatefulWidget{
 
 class CustomInputWidgetState extends State<CustomInputWidget> {
   //输入框控制器
-  TextEditingController inputController = TextEditingController();
+  TextEditingController inputController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    inputController = TextEditingController();
+    inputController.addListener(() { });
     inputController.text = widget.content;
   }
   @override
@@ -47,8 +49,7 @@ class CustomInputWidgetState extends State<CustomInputWidget> {
                   color: Colors.white,
                   width: ScreenUtil().setWidth(1000),
                   height: ScreenUtil().setHeight(144),
-                  child: TextField(
-                    autofocus: false,
+                  child: TextFormField(
                     textAlign: TextAlign.end,
                     controller: inputController,
                     keyboardType: TextInputType.text,
