@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 
+typedef CallBack = void Function(String value);
 // ignore: must_be_immutable
 class CustomInputWidget extends StatefulWidget{
   String _title;
   String content= "";
   String hint;
-  CustomInputWidget(this._title,{Key key,this.hint,this.content});
+  CallBack callBack;
+  CustomInputWidget(this._title,{Key key,this.hint,this.content,this.callBack});
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -60,6 +62,9 @@ class CustomInputWidgetState extends State<CustomInputWidget> {
                     //发生改变时赋值
                     onChanged: (val){
                         widget.content = val;
+                        if(widget.content != null && "" != widget.content){
+                          widget.callBack(widget.content);
+                        }
                     },
                   ),
               ),

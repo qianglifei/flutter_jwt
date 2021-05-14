@@ -40,6 +40,8 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
   String _pcsbh = "";
   String _fwzbh = "";
   String imagePath;
+  String name = "";
+  String sfzhm = "";
   @override
   initState(){
     // TODO: implement initState
@@ -125,7 +127,12 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(44)),
             child: CustomInputWidget(
-              "姓名",hint: "请输入姓名",
+                "姓名",
+                hint: "请输入姓名",
+                callBack: (value){
+                    print(value);
+                    name = value;
+                },
           )),
           //横线
           Padding(
@@ -139,7 +146,12 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
             child: CustomInputWidget(
-              "证件号码",hint: "请输入身份证号码",
+                  "证件号码",
+                  hint: "请输入身份证号码",
+                  callBack: (value){
+                    print(value);
+                    sfzhm = value;
+                  },
               )
           ),
           Padding(
@@ -173,8 +185,8 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                       Map<String,String> requestBody = new Map();
                       requestBody.addAll({
                         "rdj_sspcsbm":_pcsbm,
-                        "bip_xm":"高渐离",
-                        "bip_sfzhm":"140108198506020089"
+                        "bip_xm":name,
+                        "bip_sfzhm":sfzhm,
                       });
                       DioUtils.instance.postHttps<PeopleOnlineCheckResponseReturnData>(
                         url:URLConfig.rkhc_rkhccx,
@@ -182,11 +194,16 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                         method: DioUtils.POST,
                         onSuccess: (data){
                             print(data);
-                            if(data.returnCode == -1){
+                            print(data);
+                            if(data.returnCode == -10){
                               Navigator.push(context,MaterialPageRoute(builder:(context){
                                 return BlocProvider(
                                   create: (context)=> PeopleOnlineCheckBloc(),
-                                  child: PeopleOnlineCheckScreen(mEntity: data.returnData,returnMsg: data.returnMsg,returnStandAdder: data.returnStandAdder,returnType: data.returnType),
+                                  child: PeopleOnlineCheckScreen(
+                                    returnMsg: data.returnMsg,
+                                    returnStandAdder: data.returnStandAdder,
+                                    returnType: data.returnType,
+                                  ),
                                 );
                               }));
                             }else if(data.returnCode == 1){

@@ -20,7 +20,9 @@ class PeopleOnlineCheckScreen extends BaseWidget{
   String returnMsg;
   String returnStandAdder;
   String returnType;
-  PeopleOnlineCheckScreen({@required this.mEntity,@required this.returnMsg,@required this.returnStandAdder,@required this.returnType});
+  String shzhm;
+  String xm;
+  PeopleOnlineCheckScreen({this.mEntity,this.returnMsg,this.returnStandAdder,this.returnType,this.shzhm,this.xm});
 
   @override
   BaseWidgetState<BaseWidget> getState()  {
@@ -62,15 +64,20 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
     setState(() {
         _isRegister = widget.returnMsg == "该人员未登记!" ? "-10" : "1";
         _isStandardAddress = widget.returnStandAdder ?? "";
-//        _name = widget.mEntity.bipXm ?? "";
-//        _idCard = widget.mEntity.bipSfzhm ?? "";
-//        _birthDate = widget.mEntity.bipBirthday ?? "";
-//        _headImagePath = widget.mEntity.img ?? "";
-//        _nation = widget.mEntity.bipNation;
-//        _residentAddress = widget.mEntity.bipRprAddress;
-//        if(_birthDate.isNotEmpty){
-//          _birthDate = _birthDate.substring(0,4) + "-${_birthDate.substring(4,6)}" + "-${_birthDate.substring(6,8)}";
-//        }
+        if(_isRegister == "-10"){
+          _idCard = widget.shzhm ?? "";
+          _name = widget.xm ?? "";
+        }else if(_isRegister == "1"){
+            _name = widget.mEntity.bipXm ?? "";
+            _idCard = widget.mEntity.bipSfzhm ?? "";
+            _birthDate = widget.mEntity.bipBirthday ?? "";
+            _headImagePath = widget.mEntity.img ?? "";
+            _nation = widget.mEntity.bipNation;
+            _residentAddress = widget.mEntity.bipRprAddress;
+            if(_birthDate.isNotEmpty){
+              _birthDate = _birthDate.substring(0,4) + "-${_birthDate.substring(4,6)}" + "-${_birthDate.substring(6,8)}";
+            }
+        }
     });
   }
 
