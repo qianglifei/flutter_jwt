@@ -79,7 +79,46 @@ class MineScreenState extends BaseWidgetState<MineScreen> {
                   color: Color.fromRGBO(247,248,250,1)
               )
           ),
-          buildExitLoginWidget()
+          buildExitLoginWidget(),
+          Container(
+
+            constraints:BoxConstraints(
+
+              maxHeight:200.0,
+
+              minHeight:50.0,
+
+            ),
+
+            decoration:BoxDecoration(
+
+                color: Colors.grey[200],
+
+                borderRadius:BorderRadius.all(Radius.circular(10))
+
+            ),
+
+            padding:EdgeInsets.only(
+
+                left:16.0, right:16.0, top:8.0, bottom:4.0),
+
+            child:TextField(
+
+              maxLines:null,
+
+              keyboardType: TextInputType.multiline,
+
+              autofocus:true,
+
+              decoration:InputDecoration.collapsed(
+
+                hintText:"备注",
+
+              ),
+
+            ),
+
+          )
         ],
       )
     );

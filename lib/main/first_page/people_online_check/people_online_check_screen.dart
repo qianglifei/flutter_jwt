@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
 import 'package:jwt/main/first_page/homepage_screen.dart';
 import 'package:jwt/main/first_page/people_online_check/people_online_check_bloc.dart';
 import 'package:jwt/main/first_page/people_online_check/people_online_check_response_entity.dart';
+import 'package:jwt/utils/age_utils.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/custom_button.dart';
 import 'package:jwt/widget/custom_choose_bottom_sheet.dart';
@@ -22,7 +24,8 @@ class PeopleOnlineCheckScreen extends BaseWidget{
   String returnType;
   String shzhm;
   String xm;
-  PeopleOnlineCheckScreen({this.mEntity,this.returnMsg,this.returnStandAdder,this.returnType,this.shzhm,this.xm});
+  String returnBz;
+  PeopleOnlineCheckScreen({this.mEntity,this.returnMsg,this.returnStandAdder,this.returnType,this.shzhm,this.xm,this.returnBz});
 
   @override
   BaseWidgetState<BaseWidget> getState()  {
@@ -62,11 +65,15 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
 
   void initData(){
     setState(() {
-        _isRegister = widget.returnMsg == "该人员未登记!" ? "-10" : "1";
+        _isRegister = widget.returnMsg.contains("该人员未登记")  ? "-10" : "1";
         _isStandardAddress = widget.returnStandAdder ?? "";
         if(_isRegister == "-10"){
+          if(widget.returnBz != null){
+              Fluttertoast.showToast(msg: widget.returnBz);
+          }
           _idCard = widget.shzhm ?? "";
           _name = widget.xm ?? "";
+          _birthDate = AgeUtils().getBirthday(_idCard);
         }else if(_isRegister == "1"){
             _name = widget.mEntity.bipXm ?? "";
             _idCard = widget.mEntity.bipSfzhm ?? "";
@@ -100,18 +107,31 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
                          CustomIDCard(_name,_idCard,_birthDate,_nation,_residentAddress,_isRegister),
                          _buildBaseInfoWidget("基本信息"),
                          CustomInputWidget(
-                             "现住地址",
-                             content: "",
+                           "现住地址",
+                           hint: "请输入现住地址",
+                           content: "",
+                           callBack: (value){
+                             print(value);
+                           },
                          ),
                          _buildStandardWidget(_isStandardAddress),
                          //横线
                          _buildLineWidget(),
                          CustomInputWidget(
-                             "手机号码",
-                             content: "",
+                           "手机号码",
+                           hint: "请输入手机号码",
+                           content: "",
+                           callBack: (value){
+                             print(value);
+                           },
                          ),
                          _buildBaseInfoWidget("信息备注"),
-                         CustomChooseWidget("核准程度"),
+                         CustomChooseWidget(
+                             "核准程度",
+                             callBack: (){
+
+                             }
+                         ),
                          //横线
                          _buildLineWidget(),
                          CustomInputWidget(
@@ -166,7 +186,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
   
   Widget _buildStandardWidget(String standardAddress) {
     print(standardAddress);
-    return standardAddress == "-1" ? Container(
+    return standardAddress == "0" ? Container(
       height: ScreenUtil().setHeight(80),
       child: Stack(
         children: [
@@ -239,5 +259,37 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
        },
        marginBottom: ScreenUtil().setHeight(56),
      );
+  }
+
+  buildShowDialogs(BuildContext context) {
+    return showCupertinoDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return  Center(
+              child: Container(
+                  padding:const EdgeInsets.all(20.0),
+                  decoration: BoxDecoration(
+                    //黑色背景
+                      color: Colors.black87,
+                      //圆角边框
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: Column(
+                    //控件里面内容主轴负轴剧中显示
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      //主轴高度最小
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        CircularProgressIndicator(),
+                        Padding(
+                            padding: EdgeInsets.only(top: 3),
+                            child: Text(
+                                '加载中...',
+                                style: TextStyle(fontSize:15,color: Colors.white,decoration: TextDecoration.none,)
+                            )
+                        )
+                      ]
+                  )));
+        });
   }
 }

@@ -3,11 +3,13 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:jwt/config/color_constant.dart';
 import 'package:jwt/config/string_constant.dart';
 
+typedef Callback = void Function(bool isChecked,String value);
 // ignore: must_be_immutable
 class CustomCheckBoxWidget extends StatefulWidget{
   bool isChecked = false;
-  CustomCheckBoxWidget({@required this.isChecked});
 
+  Callback callback;
+  CustomCheckBoxWidget({@required this.isChecked,this.callback});
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -57,7 +59,10 @@ class CustomCheckBoxWidgetState extends State<CustomCheckBoxWidget>{
       ),
       onTap:(){
         setState(() {
-          widget.isChecked = !widget.isChecked;
+            if(widget.isChecked != null){
+              widget.isChecked = !widget.isChecked;
+              widget.callback(widget.isChecked,"1");
+            }
         });
       },
     );

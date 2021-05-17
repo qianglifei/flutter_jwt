@@ -12,6 +12,7 @@ import 'package:jwt/http/dio_utils.dart';
 import 'package:jwt/main/first_page/people_online_check/people_online_check_bloc.dart';
 import 'package:jwt/main/first_page/people_online_check/people_online_check_response_entity.dart';
 import 'package:jwt/main/first_page/people_online_check/people_online_check_screen.dart';
+import 'package:jwt/utils/idcard_utils.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/custom_button.dart';
 import 'package:jwt/widget/custom_camera_page.dart';
@@ -42,6 +43,7 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
   String imagePath;
   String name = "";
   String sfzhm = "";
+  String returnBz = "";
   @override
   initState(){
     // TODO: implement initState
@@ -133,6 +135,7 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                     print(value);
                     name = value;
                 },
+
           )),
           //横线
           Padding(
@@ -182,43 +185,52 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                     Colors.white,
                     "线上核查",
                     (){
-                      Map<String,String> requestBody = new Map();
-                      requestBody.addAll({
-                        "rdj_sspcsbm":_pcsbm,
-                        "bip_xm":name,
-                        "bip_sfzhm":sfzhm,
-                      });
-                      DioUtils.instance.postHttps<PeopleOnlineCheckResponseReturnData>(
-                        url:URLConfig.rkhc_rkhccx,
-                        parameters: requestBody,
-                        method: DioUtils.POST,
-                        onSuccess: (data){
-                            print(data);
-                            print(data);
-                            if(data.returnCode == -10){
-                              Navigator.push(context,MaterialPageRoute(builder:(context){
-                                return BlocProvider(
-                                  create: (context)=> PeopleOnlineCheckBloc(),
-                                  child: PeopleOnlineCheckScreen(
-                                    returnMsg: data.returnMsg,
-                                    returnStandAdder: data.returnStandAdder,
-                                    returnType: data.returnType,
-                                  ),
-                                );
-                              }));
-                            }else if(data.returnCode == 1){
-                              Navigator.push(context,MaterialPageRoute(builder:(context){
-                                return BlocProvider(
-                                  create: (context)=> PeopleOnlineCheckBloc(),
-                                  child: PeopleOnlineCheckScreen(mEntity: data.returnData,returnMsg: data.returnMsg,returnStandAdder: data.returnStandAdder,returnType: data.returnType),
-                                );
-                              }));
+                      if(IdCardUtils().isIdCard(sfzhm)){
+                        buildShowDialog(context);
+                        Map<String,String> requestBody = new Map();
+                        requestBody.addAll({
+                          "rdj_sspcsbm":_pcsbm,
+                          "bip_xm":name,
+                          "bip_sfzhm":sfzhm,
+                        });
+                        DioUtils.instance.postHttps<PeopleOnlineCheckResponseReturnData>(
+                            url:URLConfig.rkhc_rkhccx,
+                            parameters: requestBody,
+                            method: DioUtils.POST,
+                            onSuccess: (data){
+                              print(data);
+                              print(data);
+                              Navigator.of(context).pop();
+                              if(data.returnCode == -10){
+                                Navigator.of(context).pop();
+                                Navigator.push(context,MaterialPageRoute(builder:(context){
+                                  return BlocProvider(
+                                    create: (context)=> PeopleOnlineCheckBloc(),
+                                    child: PeopleOnlineCheckScreen(
+                                      returnMsg: data.returnMsg,
+                                      returnStandAdder: data.returnStandAdder,
+                                      returnType: data.returnType,
+                                      shzhm: sfzhm,
+                                      xm: name,
+                                      returnBz:data.returnBz,
+                                    ),
+                                  );
+                                }));
+                              }else if(data.returnCode == 1){
+                                Navigator.push(context,MaterialPageRoute(builder:(context){
+                                  return BlocProvider(
+                                    create: (context)=> PeopleOnlineCheckBloc(),
+                                    child: PeopleOnlineCheckScreen(mEntity: data.returnData,returnMsg: data.returnMsg,returnStandAdder: data.returnStandAdder,returnType: data.returnType),
+                                  );
+                                }));
+                              }
+                            },
+                            onError: (errorInfo){
+                              Navigator.of(context).pop();
+                              print(errorInfo);
                             }
-                        },
-                        onError: (errorInfo){
-                            print(errorInfo);
-                        }
-                      );
+                        );
+                      }
                     }
                 ),
               ],
@@ -313,5 +325,37 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
     }else{
       print("授权失败");
     }
+  }
+
+  buildShowDialog(BuildContext context) {
+    return showCupertinoDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return  Center(
+              child: Container(
+                  padding:const EdgeInsets.all(20.0),
+                  decoration: BoxDecoration(
+                    //黑色背景
+                      color: Colors.black87,
+                      //圆角边框
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: Column(
+                    //控件里面内容主轴负轴剧中显示
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      //主轴高度最小
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        CircularProgressIndicator(),
+                        Padding(
+                            padding: EdgeInsets.only(top: 3),
+                            child: Text(
+                                '加载中...',
+                                style: TextStyle(fontSize:15,color: Colors.white,decoration: TextDecoration.none,)
+                            )
+                        )
+                      ]
+                  )));
+        });
   }
 }

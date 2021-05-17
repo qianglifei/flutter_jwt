@@ -7,6 +7,7 @@ class BaseEntity<T>{
   String returnMsg;
   String returnStandAdder;
   String returnType;
+  String returnBz;
   T returnData;
   BaseEntity({this.returnCode,this.returnMsg,this.returnData,this.returnStandAdder,this.returnType});
 
@@ -18,6 +19,7 @@ class BaseEntity<T>{
     returnMsg = json['returnMsg'];
     returnStandAdder = json['returnStandAdder'];
     returnType = json["returnType"];
+    returnBz = json["returnBz"];
   }
 
   Map<String, dynamic> toJson() {
@@ -29,6 +31,7 @@ class BaseEntity<T>{
     data['returnMsg'] = this.returnMsg;
     data['returnStandAdder'] = this.returnStandAdder;
     data['returnType'] = this.returnType;
+    data['returnBz'] = this.returnBz;
     return data;
   }
 }

@@ -6,7 +6,13 @@ import 'package:jwt/config/string_constant.dart';
 import 'package:jwt/widget/custom_button.dart';
 import 'package:jwt/widget/custom_checkbox_widget.dart';
 
+typedef Callback = void Function(String value,String remark);
+// ignore: must_be_immutable
 class CustomCheckBoxLayout extends StatefulWidget{
+
+  Callback callback;
+
+  CustomCheckBoxLayout();
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -16,6 +22,9 @@ class CustomCheckBoxLayout extends StatefulWidget{
 
 class CustomCheckBoxWidgetLayoutState extends State<CustomCheckBoxLayout>{
    TextEditingController _remarkTextController = new  TextEditingController();
+   bool isChecked = false ;
+   bool isCheckeds = true ;
+   String _hzcd="";
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -37,10 +46,33 @@ class CustomCheckBoxWidgetLayoutState extends State<CustomCheckBoxLayout>{
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomCheckBoxWidget(
-                isChecked: false
+                isChecked: isChecked,
+                callback: (isChecked,value){
+                  setState(() {
+                    this.isChecked = isChecked;
+                    if(this.isCheckeds){
+                      isCheckeds = false;
+                      _hzcd = "2";
+                    }else{
+                      isCheckeds = true;
+                    }
+                  });
+                },
             ),
             CustomCheckBoxWidget(
-                isChecked: false
+                isChecked: isCheckeds,
+                callback: (isChecked,value){
+                  setState(() {
+                    _hzcd = value;
+                    this.isCheckeds = isChecked;
+                    if(this.isChecked){
+                      this.isChecked = false;
+                      _hzcd = "3";
+                    }else{
+                      this.isChecked = true;
+                    }
+                  });
+                },
             ),
           ],
         ),
@@ -49,7 +81,7 @@ class CustomCheckBoxWidgetLayoutState extends State<CustomCheckBoxLayout>{
           child: Text("备注",style: TextStyle(
               fontSize: ScreenUtil().setSp(48,allowFontScalingSelf: true),
               color: ColorConstant.TEXT_COLOR_GRAY
-          )
+            )
           ),
         ),
         Container(
@@ -68,6 +100,9 @@ class CustomCheckBoxWidgetLayoutState extends State<CustomCheckBoxLayout>{
             decoration: InputDecoration.collapsed(
 
             ),
+            onChanged: (value){
+                _remarkTextController.text = value;
+            },
           ),
         ),
         Row(
@@ -90,9 +125,12 @@ class CustomCheckBoxWidgetLayoutState extends State<CustomCheckBoxLayout>{
                 ScreenUtil().setHeight(120),
                 Colors.blue,
                 Colors.white,
-                "提交",
+                "确认",
                 (){
                     Navigator.of(context).pop();
+                    if(widget.callback != null){
+                        widget.callback(_remarkTextController.text,_hzcd);
+                    }
                 },
                marginTop: ScreenUtil().setHeight(40),
             ),

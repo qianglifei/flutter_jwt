@@ -38,10 +38,13 @@ dependencies:
   permission_handler: ^6.1.3
   path_provider: ^2.0.1
   fluttertoast: ^8.0.6
+  event_bus: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  #Flutter 国际化插件
+  flutter_localizations:
+    sdk: flutter
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -129,3 +132,5 @@ flutter:
     - images/icon_cart_title.png
     - images/icon_select.png
     - images/icon_ban.png
+flutter_intl:
+  enabled: true
