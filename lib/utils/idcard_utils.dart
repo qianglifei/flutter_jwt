@@ -134,7 +134,7 @@ class IdCardUtils{
       return null;
     }
     String genderStr = idCard.substring(16, 17);
-    return (int.parse(genderStr) % 2 != 0) ? '男' : '女';
+    return (int.parse(genderStr) % 2 != 0) ? '1' : '2';
   }
 
   ///返回出生年月日，请验证身份证号合法之后再使用该函数，

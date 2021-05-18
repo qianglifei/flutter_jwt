@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:jwt/config/url_config.dart';
+import 'package:jwt/entity/login_response_entity.dart';
 import 'package:jwt/http/dio_utils.dart';
+import 'package:jwt/main/first_page/people_online_check/people_check_submit_repository.dart';
 import 'package:jwt/main/first_page/people_online_check/people_online_check_response_entity.dart';
 import 'package:meta/meta.dart';
 
@@ -18,12 +20,9 @@ class PeopleOnlineCheckBloc extends Bloc<PeopleOnlineCheckEvent, PeopleOnlineChe
     // TODO: implement mapEventToState
     // TODO: View 中 添加的事件，会在此处调用，此处处理数据后，将数据yield,只能触发一次BlockBuilder，
     // TODO：它内部就会比较上一次的MainState对象，如果相同，就不build了
-//    if(event is PeopleOnlineCheckInitEvent){
-//       yield await init();
-//    }else if(event is PeopleCheckEvent){
-//      yield peopleCheckData();
-//    }
-
+   if(event is PeopleCheckEvent){
+     LoginResponseEntity entity = await PeopleCheckSubmitRepository.peopleCheckSubmitRequest(event.map);
+    }
   }
 
 

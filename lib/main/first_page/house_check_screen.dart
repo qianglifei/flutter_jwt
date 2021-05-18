@@ -51,7 +51,7 @@ class HouseCheckScreenState extends BaseWidgetState<HouseCheckScreen> {
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(44)),
             child:CustomChooseWidget(
                 "派出所",
-                callBack: (){
+                callBack: (value,remark){
                   print("派出所被点击");
                 }
             ),
@@ -69,7 +69,7 @@ class HouseCheckScreenState extends BaseWidgetState<HouseCheckScreen> {
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
             child: CustomChooseWidget(
                 "服务站",
-                callBack: (){
+                callBack: (value,remark){
                   print("服务站被点击");
                 }
             ),

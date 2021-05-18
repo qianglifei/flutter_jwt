@@ -8,7 +8,7 @@ import 'custom_alert_dialog.dart';
 ///这样理解，自己定义了一种数据类型，不过这种数据类型 是函数类型
 ///一个一个的具体实现的函数就相当于按照这种类型实力话对象会有类型检查
 ///typedef ValveChanged<T> = void Function(T value)
-typedef _CallBack = void Function(String value,{String remark});
+typedef _CallBack = void Function(String value,String remark);
 // ignore: must_be_immutable
 class CustomChooseWidget extends StatefulWidget{
   String _title;
@@ -59,7 +59,14 @@ class CustomChooseWidgetState extends State<CustomChooseWidget> {
         ),
       ),
       onTap: (){
-        popDialog(context, ShowAlertDialog(title: "核准程度",content: "sdf",items: ["取消","确认"],));
+        popDialog(context, ShowAlertDialog(
+            title: "核准程度",
+            content: "sdf",
+            items: ["取消","确认"],
+            callback: (value,remark){
+               widget.callBack(value,remark);
+            }
+        ));
       },
     );
   }

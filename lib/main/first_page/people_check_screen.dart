@@ -75,169 +75,10 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
   @override
   Widget getContentWidget(BuildContext context) {
     // TODO: implement getContentWidget
-    return Container(
-      width: ScreenUtil().uiSize.width,
-      height: ScreenUtil().uiSize.height,
-      color: Color.fromRGBO(247,248,250,1),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Padding(
-              padding: EdgeInsets.only(left: ScreenUtil().setWidth(64),top: ScreenUtil().setHeight(44)),
-              child: Text("核查区域",style: TextStyle(fontSize: ScreenUtil().setSp(48,allowFontScalingSelf: true),color: Color.fromRGBO(140,141,142,1))),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: ScreenUtil().setHeight(44)),
-            child:CustomChooseBottomSheet(
-              "派出所",
-              tableName: "PCSFWZDID_ONLY",
-              pcsbm: _pcsbm,
-              callBack: (String key){
-                setState(() {
-                  _pcsbh = key;
-                  print("派出所编号:$_pcsbh");
-                });
-              }
-            ),
-          ),
-          //横线
-          Padding(
-              padding: EdgeInsets.only(left: ScreenUtil().setWidth(40),right: ScreenUtil().setWidth(40)),
-              child: Container(
-                  width: ScreenUtil().uiSize.width,
-                  height: ScreenUtil().setHeight(3),
-                  color: Color.fromRGBO(247,248,250,1)
-              )
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
-            child:CustomChooseBottomSheet(
-                "服务站",
-                tableName: "TYPT_FWZGFGL_FWZJBXXDJB",
-                pcsbm: _pcsbh,
-                callBack: (String key){
-
-                }
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: ScreenUtil().setWidth(64),top: ScreenUtil().setHeight(44)),
-            child: Text("个人信息",style: TextStyle(fontSize: ScreenUtil().setSp(48,allowFontScalingSelf: true),color: Color.fromRGBO(140,141,142,1))),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: ScreenUtil().setHeight(44)),
-            child: CustomInputWidget(
-                "姓名",
-                hint: "请输入姓名",
-                callBack: (value){
-                    print(value);
-                    name = value;
-                },
-
-          )),
-          //横线
-          Padding(
-              padding: EdgeInsets.only(left: ScreenUtil().setWidth(40),right: ScreenUtil().setWidth(40)),
-              child: Container(
-                  width: ScreenUtil().uiSize.width,
-                  height: ScreenUtil().setHeight(3),
-                  color: Color.fromRGBO(247,248,250,1)
-              )
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
-            child: CustomInputWidget(
-                  "证件号码",
-                  hint: "请输入身份证号码",
-                  callBack: (value){
-                    print(value);
-                    sfzhm = value;
-                  },
-              )
-          ),
-          Padding(
-            padding: EdgeInsets.only(left:ScreenUtil().setWidth(140),top: ScreenUtil().setHeight(56)),
-            child: _buildScanWidget(),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: ScreenUtil().setHeight(300)),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-               CustomButton(
-                   ScreenUtil().setWidth(450),
-                   ScreenUtil().setHeight(120),
-                   Colors.white,
-                   Colors.blue,
-                    "离线暂存",
-                   (){
-                     print("离线暂存");
-                   }
-               ),
-                CustomButton(
-                    ScreenUtil().setWidth(450),
-                    ScreenUtil().setHeight(120),
-                    Colors.blue,
-                    Colors.white,
-                    "线上核查",
-                    (){
-                      if(IdCardUtils().isIdCard(sfzhm)){
-                        buildShowDialog(context);
-                        Map<String,String> requestBody = new Map();
-                        requestBody.addAll({
-                          "rdj_sspcsbm":_pcsbm,
-                          "bip_xm":name,
-                          "bip_sfzhm":sfzhm,
-                        });
-                        DioUtils.instance.postHttps<PeopleOnlineCheckResponseReturnData>(
-                            url:URLConfig.rkhc_rkhccx,
-                            parameters: requestBody,
-                            method: DioUtils.POST,
-                            onSuccess: (data){
-                              print(data);
-                              print(data);
-                              Navigator.of(context).pop();
-                              if(data.returnCode == -10){
-                                Navigator.of(context).pop();
-                                Navigator.push(context,MaterialPageRoute(builder:(context){
-                                  return BlocProvider(
-                                    create: (context)=> PeopleOnlineCheckBloc(),
-                                    child: PeopleOnlineCheckScreen(
-                                      returnMsg: data.returnMsg,
-                                      returnStandAdder: data.returnStandAdder,
-                                      returnType: data.returnType,
-                                      shzhm: sfzhm,
-                                      xm: name,
-                                      returnBz:data.returnBz,
-                                    ),
-                                  );
-                                }));
-                              }else if(data.returnCode == 1){
-                                Navigator.push(context,MaterialPageRoute(builder:(context){
-                                  return BlocProvider(
-                                    create: (context)=> PeopleOnlineCheckBloc(),
-                                    child: PeopleOnlineCheckScreen(mEntity: data.returnData,returnMsg: data.returnMsg,returnStandAdder: data.returnStandAdder,returnType: data.returnType),
-                                  );
-                                }));
-                              }
-                            },
-                            onError: (errorInfo){
-                              Navigator.of(context).pop();
-                              print(errorInfo);
-                            }
-                        );
-                      }
-                    }
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return SingleChildScrollView(
+     //TODO 滚动特性，允许滚出边界，出边界后会弹会来
+    physics: BouncingScrollPhysics(),
+      child: _buildLayout(context),
     );
   }
 
@@ -325,6 +166,173 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
     }else{
       print("授权失败");
     }
+  }
+
+  Widget _buildLayout(BuildContext context){
+    return Container(
+      width: ScreenUtil().uiSize.width,
+      height: ScreenUtil().uiSize.height,
+      color: Color.fromRGBO(247,248,250,1),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(left: ScreenUtil().setWidth(64),top: ScreenUtil().setHeight(44)),
+            child: Text("核查区域",style: TextStyle(fontSize: ScreenUtil().setSp(48,allowFontScalingSelf: true),color: Color.fromRGBO(140,141,142,1))),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: ScreenUtil().setHeight(44)),
+            child:CustomChooseBottomSheet(
+                "派出所",
+                tableName: "PCSFWZDID_ONLY",
+                pcsbm: _pcsbm,
+                callBack: (String key){
+                  setState(() {
+                    _pcsbh = key;
+                    print("派出所编号:$_pcsbh");
+                  });
+                }
+            ),
+          ),
+          //横线
+          Padding(
+              padding: EdgeInsets.only(left: ScreenUtil().setWidth(40),right: ScreenUtil().setWidth(40)),
+              child: Container(
+                  width: ScreenUtil().uiSize.width,
+                  height: ScreenUtil().setHeight(3),
+                  color: Color.fromRGBO(247,248,250,1)
+              )
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
+            child:CustomChooseBottomSheet(
+                "服务站",
+                tableName: "TYPT_FWZGFGL_FWZJBXXDJB",
+                pcsbm: _pcsbh,
+                callBack: (String key){
+
+                }
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: ScreenUtil().setWidth(64),top: ScreenUtil().setHeight(44)),
+            child: Text("个人信息",style: TextStyle(fontSize: ScreenUtil().setSp(48,allowFontScalingSelf: true),color: Color.fromRGBO(140,141,142,1))),
+          ),
+          Padding(
+              padding: EdgeInsets.only(top: ScreenUtil().setHeight(44)),
+              child: CustomInputWidget(
+                "姓名",
+                hint: "请输入姓名",
+                callBack: (value){
+                  print(value);
+                  name = value;
+                },
+
+              )),
+          //横线
+          Padding(
+              padding: EdgeInsets.only(left: ScreenUtil().setWidth(40),right: ScreenUtil().setWidth(40)),
+              child: Container(
+                  width: ScreenUtil().uiSize.width,
+                  height: ScreenUtil().setHeight(3),
+                  color: Color.fromRGBO(247,248,250,1)
+              )
+          ),
+          Padding(
+              padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
+              child: CustomInputWidget(
+                "证件号码",
+                hint: "请输入身份证号码",
+                callBack: (value){
+                  print(value);
+                  sfzhm = value;
+                },
+              )
+          ),
+          Padding(
+            padding: EdgeInsets.only(left:ScreenUtil().setWidth(140),top: ScreenUtil().setHeight(56)),
+            child: _buildScanWidget(),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: ScreenUtil().setHeight(300)),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                CustomButton(
+                    ScreenUtil().setWidth(450),
+                    ScreenUtil().setHeight(120),
+                    Colors.white,
+                    Colors.blue,
+                    "离线暂存",
+                        (){
+                      print("离线暂存");
+                    }
+                ),
+                CustomButton(
+                    ScreenUtil().setWidth(450),
+                    ScreenUtil().setHeight(120),
+                    Colors.blue,
+                    Colors.white,
+                    "线上核查",
+                        (){
+                      if(IdCardUtils().isIdCard(sfzhm)){
+                        buildShowDialog(context);
+                        Map<String,String> requestBody = new Map();
+                        requestBody.addAll({
+                          "rdj_sspcsbm":_pcsbm,
+                          "bip_xm":name,
+                          "bip_sfzhm":sfzhm,
+                        });
+                        DioUtils.instance.postHttps<PeopleOnlineCheckResponseReturnData>(
+                            url:URLConfig.rkhc_rkhccx,
+                            parameters: requestBody,
+                            method: DioUtils.POST,
+                            onSuccess: (data){
+                              print(data);
+                              print(data);
+                              Navigator.of(context).pop();
+                              if(data.returnCode == -10){
+                                Navigator.of(context).pop();
+                                Navigator.push(context,MaterialPageRoute(builder:(context){
+                                  return BlocProvider(
+                                    create: (context)=> PeopleOnlineCheckBloc(),
+                                    child: PeopleOnlineCheckScreen(
+                                      returnMsg: data.returnMsg,
+                                      returnStandAdder: data.returnStandAdder,
+                                      returnType: data.returnType,
+                                      shzhm: sfzhm,
+                                      xm: name,
+                                      returnBz:data.returnBz,
+                                    ),
+                                  );
+                                }));
+                              }else if(data.returnCode == 1){
+                                Navigator.push(context,MaterialPageRoute(builder:(context){
+                                  return BlocProvider(
+                                    create: (context)=> PeopleOnlineCheckBloc(),
+                                    child: PeopleOnlineCheckScreen(mEntity: data.returnData,returnMsg: data.returnMsg,returnStandAdder: data.returnStandAdder,returnType: data.returnType),
+                                  );
+                                }));
+                              }
+                            },
+                            onError: (errorInfo){
+                              Navigator.of(context).pop();
+                              print(errorInfo);
+                            }
+                        );
+                      }
+                    }
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   buildShowDialog(BuildContext context) {

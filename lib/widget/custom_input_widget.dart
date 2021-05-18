@@ -9,7 +9,8 @@ class CustomInputWidget extends StatefulWidget{
   String content= "";
   String hint;
   CallBack callBack;
-  CustomInputWidget(this._title,{Key key,this.hint,this.content,this.callBack});
+  bool enables;
+  CustomInputWidget(this._title,{Key key,this.hint,this.content,this.callBack, this.enables = true});
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -61,6 +62,7 @@ class CustomInputWidgetState extends State<CustomInputWidget> {
               ),
               padding:EdgeInsets.only(left:20.0, right:10.0, top:15.0, bottom:4.0),
               child: TextField(
+                enabled: widget.enables,
                 textAlign: TextAlign.right,
                 controller: inputController,
                 keyboardType: TextInputType.multiline,

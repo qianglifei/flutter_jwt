@@ -39,7 +39,7 @@ abstract class BaseWidgetState <T extends BaseWidget> extends State<T>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: getBaseAppBar(),
       body: Container(
         //背景颜色，自己可以更具需求变更

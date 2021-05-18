@@ -12,7 +12,7 @@ class CustomCheckBoxLayout extends StatefulWidget{
 
   Callback callback;
 
-  CustomCheckBoxLayout();
+  CustomCheckBoxLayout({this.callback});
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -22,9 +22,9 @@ class CustomCheckBoxLayout extends StatefulWidget{
 
 class CustomCheckBoxWidgetLayoutState extends State<CustomCheckBoxLayout>{
    TextEditingController _remarkTextController = new  TextEditingController();
-   bool isChecked = false ;
+   bool isChecked = true ;
    bool isCheckeds = true ;
-   String _hzcd="";
+   String _hzcd = "";
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -46,30 +46,34 @@ class CustomCheckBoxWidgetLayoutState extends State<CustomCheckBoxLayout>{
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomCheckBoxWidget(
+                StringConstant.INFO_PRECISE,
                 isChecked: isChecked,
-                callback: (isChecked,value){
+                callback: (isChecked){
                   setState(() {
-                    this.isChecked = isChecked;
-                    if(this.isCheckeds){
-                      isCheckeds = false;
-                      _hzcd = "2";
+                    this.isChecked = !isChecked;
+                    if(this.isChecked){
+                      this.isCheckeds = false;
+                      _hzcd = "3";
                     }else{
-                      isCheckeds = true;
+                      this.isCheckeds = true;
+                      _hzcd = "2";
                     }
                   });
                 },
             ),
             CustomCheckBoxWidget(
+                StringConstant.INFO_INACCURATE,
                 isChecked: isCheckeds,
-                callback: (isChecked,value){
+                callback: (isChecked){
                   setState(() {
-                    _hzcd = value;
-                    this.isCheckeds = isChecked;
-                    if(this.isChecked){
+                    this.isCheckeds = !isChecked;
+                    print(this.isCheckeds);
+                    if(this.isCheckeds){
                       this.isChecked = false;
-                      _hzcd = "3";
+                      _hzcd = "2";
                     }else{
                       this.isChecked = true;
+                      _hzcd = "3";
                     }
                   });
                 },
@@ -129,7 +133,7 @@ class CustomCheckBoxWidgetLayoutState extends State<CustomCheckBoxLayout>{
                 (){
                     Navigator.of(context).pop();
                     if(widget.callback != null){
-                        widget.callback(_remarkTextController.text,_hzcd);
+                        widget.callback(_hzcd,_remarkTextController.text);
                     }
                 },
                marginTop: ScreenUtil().setHeight(40),
@@ -138,6 +142,14 @@ class CustomCheckBoxWidgetLayoutState extends State<CustomCheckBoxLayout>{
         )
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _remarkTextController.removeListener(() { });
+    _remarkTextController.dispose();
   }
 }
 
