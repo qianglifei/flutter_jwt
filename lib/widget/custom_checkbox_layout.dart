@@ -100,7 +100,7 @@ class CustomCheckBoxWidgetLayoutState extends State<CustomCheckBoxLayout>{
             controller: _remarkTextController,
             maxLines: null,
             keyboardType: TextInputType.multiline,
-            autofocus: true,
+            autofocus: false,
             decoration: InputDecoration.collapsed(
 
             ),

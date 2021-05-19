@@ -160,11 +160,9 @@ class CustomChooseBottomSheetState extends State<CustomChooseBottomSheet> {
                                     position = index;
                                     _title = _list[position].value;
                                     print(_title);
-                                    print(_list[position].value);
+                                    print(_list[position].key);
                                     _selectedContent = _list[position].value;
-                                    if(widget.callBack != null && _list[position].value != null){
-                                       widget.callBack( _list[position].key);
-                                    }
+                                    widget.callBack( _list[position].key +"");
                                   });
                                 },
                               );

@@ -79,6 +79,7 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
              print(state.loginModel.userGsdw);
              Navigator.of(context).pop();
              Future.delayed(Duration.zero, () {
+               //跳转界面
                Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context){
                  return App();
                }), (route) => route == null);
@@ -146,6 +147,8 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
     _preferences.setString("user_name", data.userName);
     //用户操作时间
     _preferences.setString("user_czsj", data.userCjsj);
+    //单位编码
+    _preferences.setString("user_dwbm", data.userDwbm);
     //用户权限 // 用户类型（5分局领导 4分局民警 3派出所领导2派出所民警1服务站）
     _preferences.setString("usertype", data.userYhlx);
     if(data.userYhlx == "4" || data.userYhlx == "5"){

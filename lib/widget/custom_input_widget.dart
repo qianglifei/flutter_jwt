@@ -66,7 +66,7 @@ class CustomInputWidgetState extends State<CustomInputWidget> {
                 textAlign: TextAlign.right,
                 controller: inputController,
                 keyboardType: TextInputType.multiline,
-                autofocus: true,
+                autofocus: false,
                 decoration: InputDecoration.collapsed(
                   hintText: widget.hint,
                   hintStyle: TextStyle(color: Color.fromRGBO(188,188,188,1))

@@ -44,6 +44,10 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
   String name = "";
   String sfzhm = "";
   String returnBz = "";
+  String _account_authority = "";
+  bool _isVisiableFWZ = true;
+  String _rdj_sspcsbm = "";
+  String _fwzjbxxdjb_fwzbh = "";
   @override
   initState(){
     // TODO: implement initState
@@ -56,6 +60,14 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
     prefs = await SharedPreferences.getInstance();
     setState(() {
       _pcsbm = prefs.getString("pcsbm");
+      _account_authority = prefs.getString("Account_authority");
+      // 0 是分局
+      if(_account_authority == "0"){
+          _isVisiableFWZ = true;
+      // 1 是派出所
+      }else if(_account_authority == "1"){
+          _isVisiableFWZ = false;
+      }
       print(_pcsbm);
     });
   }
@@ -188,10 +200,10 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                 "派出所",
                 tableName: "PCSFWZDID_ONLY",
                 pcsbm: _pcsbm,
-                callBack: (String key){
+                callBack: (key){
                   setState(() {
-                    _pcsbh = key;
-                    print("派出所编号:$_pcsbh");
+                    _rdj_sspcsbm = key;
+                    print("派出所编号:$key");
                   });
                 }
             ),
@@ -207,14 +219,20 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
           ),
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
-            child:CustomChooseBottomSheet(
-                "服务站",
-                tableName: "TYPT_FWZGFGL_FWZJBXXDJB",
-                pcsbm: _pcsbh,
-                callBack: (String key){
+            child: Offstage(
+                offstage: _isVisiableFWZ,
+                child: CustomChooseBottomSheet(
+                  "服务站",
+                  tableName: "TYPT_FWZGFGL_FWZJBXXDJB",
+                  pcsbm: _pcsbh,
+                  callBack: (key){
+                    setState(() {
+                      _fwzjbxxdjb_fwzbh = key;
+                    });
+                  }
+                ),
+            )
 
-                }
-            ),
           ),
           Padding(
             padding: EdgeInsets.only(left: ScreenUtil().setWidth(64),top: ScreenUtil().setHeight(44)),
@@ -283,7 +301,8 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                         buildShowDialog(context);
                         Map<String,String> requestBody = new Map();
                         requestBody.addAll({
-                          "rdj_sspcsbm":_pcsbm,
+                          "rdj_sspcsbm":_rdj_sspcsbm,
+                          "fwzjbxxdjb_fwzbh": _fwzjbxxdjb_fwzbh,
                           "bip_xm":name,
                           "bip_sfzhm":sfzhm,
                         });
@@ -307,6 +326,8 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                                       shzhm: sfzhm,
                                       xm: name,
                                       returnBz:data.returnBz,
+                                      fwzjbxxdjb_fwzbh: _fwzjbxxdjb_fwzbh,
+                                      rdj_sspcsbm: _rdj_sspcsbm,
                                     ),
                                   );
                                 }));
@@ -314,7 +335,15 @@ class PeopleCheckScreenState extends BaseWidgetState<PeopleCheckScreen> {
                                 Navigator.push(context,MaterialPageRoute(builder:(context){
                                   return BlocProvider(
                                     create: (context)=> PeopleOnlineCheckBloc(),
-                                    child: PeopleOnlineCheckScreen(mEntity: data.returnData,returnMsg: data.returnMsg,returnStandAdder: data.returnStandAdder,returnType: data.returnType),
+                                    child: PeopleOnlineCheckScreen(
+                                        mEntity: data.returnData,
+                                        returnMsg: data.returnMsg,
+                                        returnStandAdder: data.returnStandAdder,
+                                        returnType: data.returnType,
+                                        grbh: data.returnData.rdjGrbh,
+                                        fwzjbxxdjb_fwzbh: _fwzjbxxdjb_fwzbh,
+                                        rdj_sspcsbm: _rdj_sspcsbm,
+                                    ),
                                   );
                                 }));
                               }

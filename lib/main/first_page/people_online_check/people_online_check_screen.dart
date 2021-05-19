@@ -30,7 +30,16 @@ class PeopleOnlineCheckScreen extends BaseWidget{
   String shzhm;
   String xm;
   String returnBz;
-  PeopleOnlineCheckScreen({this.mEntity,this.returnMsg,this.returnStandAdder,this.returnType,this.shzhm,this.xm,this.returnBz});
+  // ignore: non_constant_identifier_names
+  String rdj_sspcsbm = "";
+  // ignore: non_constant_identifier_names
+  String fwzjbxxdjb_fwzbh = "";
+  String grbh = "";
+  PeopleOnlineCheckScreen({this.mEntity,this.returnMsg,this.returnStandAdder,
+    this.returnType,this.shzhm,this.xm,this.returnBz,
+    // ignore: non_constant_identifier_names
+    this.rdj_sspcsbm,this.fwzjbxxdjb_fwzbh,this.grbh
+  });
 
   @override
   BaseWidgetState<BaseWidget> getState()  {
@@ -44,11 +53,13 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
   String _idCard = "";
   String _birthDate = "";
   String _nation = "";
+  String _nationCode = "";
   String _headImagePath = "";
   String _isStandardAddress = "";
   String _residentAddress = "";
   String _isRegister = "";
   String _hzcd = "核准程度";
+  String _hzcdCode = "";
   String _bz = "";
   String _phoneNumber = "";
   String _nowAddress = "";
@@ -63,7 +74,8 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
   String _content = "请选择民族";
   int position = 100000;
   SharedPreferences prefs;
-
+  String _glybm = "";
+  String _rdj_djrq = "";
   @override
   CustomAppBar getAppBar() {
     // TODO: implement getAppBar
@@ -78,12 +90,10 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
-    _bloc = PeopleOnlineCheckBloc();
-
     initLoginData();
     initData();
+    // TODO: implement initState
+    super.initState();
   }
   Future<void> initLoginData() async {
     prefs =  await SharedPreferences.getInstance();
@@ -102,14 +112,25 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
           residenceAddressController.text =_residentAddress;
           _birthDate = AgeUtils().getBirthday(_idCard);
         }else if(_isRegister == "1"){
-            _name = widget.mEntity.bipXm ?? "";
+             _name = widget.mEntity.bipXm ?? "";
             _idCard = widget.mEntity.bipSfzhm ?? "";
             _birthDate = widget.mEntity.bipBirthday ?? "";
             _headImagePath = widget.mEntity.img ?? "";
-            _nation = widget.mEntity.bipNation;
-            _residentAddress = widget.mEntity.bipRprAddress;
+            _nation = widget.mEntity.bipNation ?? "";
+            _residentAddress = widget.mEntity.bipRprAddress ?? "";
+            _nowAddress = widget.mEntity.rzfXzdxxdz ?? "";
+            _phoneNumber = widget.mEntity.bipConTelephone ?? "";
+            _glybm = widget.mEntity.rldGlybm ?? "";
+            _rdj_djrq = widget.mEntity.rdjDjrq?? "";
             if(_birthDate.isNotEmpty){
               _birthDate = _birthDate.substring(0,4) + "-${_birthDate.substring(4,6)}" + "-${_birthDate.substring(6,8)}";
+            }
+            if(_rdj_djrq.isNotEmpty){
+               _rdj_djrq = _rdj_djrq.substring(0,4) + "-${_rdj_djrq.substring(4,6)}" + "-${_rdj_djrq.substring(6,8)}";
+            }
+            if(_nation.isNotEmpty){
+              _nationCode = _nation.split("-")[0];
+              _nation = _nation.split("-")[1];
             }
         }
     });
@@ -136,7 +157,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
                          CustomInputWidget(
                            "现住地址",
                            hint: "请输入现住地址",
-                           content: "",
+                           content: _nowAddress,
                            callBack: (value){
                              _nowAddress = value;
                            },
@@ -147,9 +168,17 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
                          CustomInputWidget(
                            "手机号码",
                            hint: "请输入手机号码",
-                           content: "",
+                           content: _phoneNumber,
                            callBack: (value){
                               _phoneNumber = value;
+                           },
+                         ),
+                         CustomInputWidget(
+                           "登记时间",
+                           hint: "",
+                           content: _phoneNumber,
+                           callBack: (value){
+                             _phoneNumber = value;
                            },
                          ),
                          _buildBaseInfoWidget("信息备注"),
@@ -158,6 +187,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
                              callBack: (value,remark){
                                  setState(() {
                                      _bz = remark;
+                                     _hzcdCode = value;
                                      if(value == "2"){
                                          _hzcd = StringConstant.INFO_PRECISE;
                                      }else if(value == "3"){
@@ -170,7 +200,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
                          _buildLineWidget(),
                          CustomInputWidget(
                              "备注信息",
-                              enables: false,
+                              enables: true,
                               content: _bz,
                          ),
                        ],
@@ -288,23 +318,23 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
           print("线上核查");
           Map<String,dynamic> requestMap = new Map();
           requestMap.addAll({
-              "rdj_grbh":"",
-              "rdj_sspcsbm":"",
-              "fwzjbxxdjb_fwzbh":"",
-              "rld_glybm":"",
+              "rdj_grbh": widget.grbh,
+              "rdj_sspcsbm": widget.rdj_sspcsbm,
+              "fwzjbxxdjb_fwzbh": widget.fwzjbxxdjb_fwzbh,
+              "rld_glybm":_glybm,
               "bip_xm":_name,
               "bip_sfzhm":_idCard,
               "bip_xb":IdCardUtils().getGender(_idCard),
               "bip_birthday":_birthDate,
-              "bip_nation":_nation,
+              "bip_nation":_nationCode,
               "bip_rpr_address":_residentAddress,
-              "rrzf_xzdxxdz":_nowAddress,
+              "rzf_xzdxxdz":_nowAddress,
               "bip_con_telephone":_phoneNumber,
               "user_name":prefs.getString("user_name"),
               "user_gsdw":prefs.getString("user_gsdw"),
               "user_dwbm":prefs.getString("user_dwbm"),
-              "rkhc_hcsj":prefs.getString("user_dwbm"),
-              "rkhc_hzcd":_hzcd,
+              "rkhc_hcsj":"",
+              "rkhc_hzcd":_hzcdCode,
               "_bz":_bz,
               "img":"",
               "rdj_djrq": "",
@@ -375,7 +405,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
              top: ScreenUtil().setHeight(200),
            ),
            Positioned(
-             child: _buildChooseTextWidget("民        族"),
+             child: _buildChooseTextWidget("民        族",_nation),
              top: ScreenUtil().setHeight(300),
            ),
            Positioned(
@@ -414,6 +444,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
 
   //横排多个文本显示输入widget
   Widget _buildInputTextWidget(String title,TextEditingController controller,String hintText,String content) {
+    controller.text = content;
     return Container(
       width: ScreenUtil().uiSize.width,
       margin: EdgeInsets.only(top: ScreenUtil().setHeight(10),bottom: ScreenUtil().setHeight(10)),
@@ -514,192 +545,151 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
   }
 
   //横排文本选择widget
-  Widget _buildChooseTextWidget(String title) {
-    return BlocBuilder<PeopleOnlineCheckBloc, PeopleOnlineCheckState>(
-        builder: (context, state) {
-          return Container(
-            width: ScreenUtil().uiSize.width,
-            height: ScreenUtil().setHeight(100),
-            margin: EdgeInsets.only(top: ScreenUtil().setHeight(10),
-                bottom: ScreenUtil().setHeight(10)),
-            color: Colors.transparent,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: ScreenUtil().setWidth(64),
-                    top: ScreenUtil().setHeight(10),
-                  ),
-                  child: Text(title,
-                      style: TextStyle(
-                          color: Color.fromRGBO(42, 168, 245, 1),
-                          fontSize: ScreenUtil().setSp(
-                              40, allowFontScalingSelf: true)
-                      )
-                  ),
-                ),
-                Padding(
-                    padding: EdgeInsets.only(
-                      left: ScreenUtil().setWidth(64),
-                      top: ScreenUtil().setHeight(10),
-                    ),
-                    child: GestureDetector(
-                      child: Text(_content, style: TextStyle(
-                          color: Color.fromRGBO(34, 34, 34, 1),
-                          fontSize: ScreenUtil().setSp(
-                              40, allowFontScalingSelf: true)
-                      )
-                      ),
-                      onTap: () {
-                        print("选择民族");
-                        SqlManager.queryNationData().then((list) {
-                          _list = list;
-                          if (_list != null) {
-                            showModalBottomSheet(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(30),
-                                    topRight: Radius.circular(30)),
-                              ),
-                              context: context,
-                              builder: (BuildContext context) {
-                                return StatefulBuilder(
-                                  builder: (context, state) {
-                                    ///这里的state就是setState
-                                    return Container(
-                                        height: ScreenUtil().setHeight(1200),
-                                        width: ScreenUtil().uiSize.width,
-                                        child: Column(
-                                          children: <Widget>[
-                                            Container(
-                                              height: ScreenUtil().setHeight(
-                                                  130),
-                                              width: ScreenUtil().uiSize.width,
-                                              color: Colors.white,
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment: MainAxisAlignment
-                                                    .spaceAround,
-                                                crossAxisAlignment: CrossAxisAlignment
-                                                    .center,
-                                                children: <Widget>[
-                                                  InkWell(
-                                                    child: Image.asset(
-                                                      "images/icon_close.png",
-                                                      width: ScreenUtil()
-                                                          .setWidth(91),
-                                                      height: ScreenUtil()
-                                                          .setHeight(91),
-                                                      fit: BoxFit.contain,
-                                                    ),
-                                                    onTap: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                  ),
-                                                  Text("请选择民族",
-                                                      style: TextStyle(
-                                                          fontSize: ScreenUtil()
-                                                              .setSp(56),
-                                                          color: Color.fromRGBO(
-                                                              52, 135, 215,
-                                                              1))),
-                                                  InkWell(
-                                                    child: Text("确认",
-                                                        style: TextStyle(
-                                                            fontSize: ScreenUtil()
-                                                                .setSp(56),
-                                                            color: Color
-                                                                .fromRGBO(52,
-                                                                135, 215, 1))),
-                                                    onTap: () {
-                                                      setState(() {
-                                                        _content =
-                                                            _selectedContent;
-                                                        print("niha$_content");
-                                                      });
-                                                      Navigator.pop(context);
-                                                    },
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                            Container(
-                                              height: ScreenUtil().setHeight(
-                                                  24),
-                                              color: Color.fromRGBO(
-                                                  247, 248, 250, 1),
-                                            ),
-                                            Expanded(
-                                              child: ListView.builder(
-                                                itemCount: _list.length,
-                                                itemBuilder: (
-                                                    BuildContext context,
-                                                    int index) {
-                                                  return GestureDetector(
-                                                    child: new Container(
-                                                        color: position == index ? Color.fromRGBO(247, 248, 250, 1) : Colors.white,
-                                                        width: ScreenUtil().uiSize.width,
-                                                        height: ScreenUtil().setHeight(144),
-                                                        child: Stack(
-                                                          children: <Widget>[
-                                                            Positioned(
-                                                                top: ScreenUtil().setHeight(40),
-                                                                left: ScreenUtil().setWidth(64),
-                                                                child: Text(_list[index].value,
-                                                                    style: TextStyle(fontSize: ScreenUtil().setSp(44)))
-                                                            ),
-                                                            Positioned(
-                                                                right: ScreenUtil().setWidth(64),
-                                                                top: ScreenUtil().setHeight(45),
-                                                                child: Offstage(
-                                                                  offstage: position == index ? false : true,
-                                                                  child: Image.asset(
-                                                                    "images/icon_select_true.png",
-                                                                    width: ScreenUtil().setWidth(48),
-                                                                    height: ScreenUtil().setHeight(32),
-                                                                    fit: BoxFit.contain,
-                                                                  ),
-                                                                )
-                                                            ),
-                                                          ],
-                                                        )
-                                                    ),
-                                                    onTap: () {
-                                                      ///为了区分把setState改个名字
-                                                      state(() {
-                                                        position = index;
-                                                        _title = _list[position].value;
-                                                        print(_title);
-                                                        print(_list[position].value);
-                                                        _selectedContent =
-                                                            _list[position].value;
-                                                        print(_selectedContent);
-                                                      });
-                                                    },
-                                                  );
-                                                },
-                                                shrinkWrap: true,
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                    );
-                                  },
-                                );
-                              },
-                            );
-                          }
-                        });
-                      },
-                    )
-                ),
-              ],
+  Widget _buildChooseTextWidget(String title,String content) {
+    _content = content ?? "";
+    return Container(
+      width: ScreenUtil().uiSize.width,
+      height: ScreenUtil().setHeight(100),
+      margin: EdgeInsets.only(top: ScreenUtil().setHeight(10), bottom: ScreenUtil().setHeight(10)),
+      color: Colors.transparent,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(
+              left: ScreenUtil().setWidth(64),
+              top: ScreenUtil().setHeight(10),
             ),
-          );
-        }
+            child: Text(title, style: TextStyle(color: Color.fromRGBO(42, 168, 245, 1), fontSize: ScreenUtil().setSp(40, allowFontScalingSelf: true))),
+          ),
+          Padding(
+              padding: EdgeInsets.only(
+                left: ScreenUtil().setWidth(64),
+                top: ScreenUtil().setHeight(10),
+              ),
+              child: GestureDetector(
+                child: Text(_content, style: TextStyle(color: Color.fromRGBO(34, 34, 34, 1), fontSize: ScreenUtil().setSp(40, allowFontScalingSelf: true))),
+                onTap: () {
+                  print("选择民族");
+                  SqlManager.queryNationData().then((list) {
+                    _list = list;
+                    if (_list != null) {
+                      showModalBottomSheet(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30)),
+                        ),
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StatefulBuilder(
+                            builder: (context, state) {
+                              ///这里的state就是setState
+                              return Container(
+                                  height: ScreenUtil().setHeight(1200),
+                                  width: ScreenUtil().uiSize.width,
+                                  child: Column(
+                                    children: <Widget>[
+                                      Container(
+                                        height: ScreenUtil().setHeight(130),
+                                        width: ScreenUtil().uiSize.width,
+                                        color: Colors.white,
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            InkWell(
+                                              child: Image.asset(
+                                                "images/icon_close.png",
+                                                width: ScreenUtil().setWidth(91),
+                                                height: ScreenUtil().setHeight(91),
+                                                fit: BoxFit.contain,
+                                              ),
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            Text("请选择民族", style: TextStyle(fontSize: ScreenUtil().setSp(56), color: Color.fromRGBO(52, 135, 215, 1))),
+                                            InkWell(
+                                              child: Text("确认", style: TextStyle(fontSize: ScreenUtil().setSp(56), color: Color.fromRGBO(52, 135, 215, 1))),
+                                              onTap: () {
+                                                setState(() {
+                                                  _content = _selectedContent;
+                                                  print("niha$_content");
+                                                });
+                                                Navigator.pop(context);
+                                              },
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        height: ScreenUtil().setHeight(24),
+                                        color: Color.fromRGBO(247, 248, 250, 1),
+                                      ),
+                                      Expanded(
+                                        child: ListView.builder(
+                                          itemCount: _list.length,
+                                          itemBuilder: (BuildContext context, int index) {
+                                            return GestureDetector(
+                                              child: new Container(
+                                                  color: position == index ? Color.fromRGBO(247, 248, 250, 1) : Colors.white,
+                                                  width: ScreenUtil().uiSize.width,
+                                                  height: ScreenUtil().setHeight(144),
+                                                  child: Stack(
+                                                    children: <Widget>[
+                                                      Positioned(
+                                                          top: ScreenUtil().setHeight(40),
+                                                          left: ScreenUtil().setWidth(64),
+                                                          child: Text(_list[index].value,
+                                                              style: TextStyle(fontSize: ScreenUtil().setSp(44)))
+                                                      ),
+                                                      Positioned(
+                                                          right: ScreenUtil().setWidth(64),
+                                                          top: ScreenUtil().setHeight(45),
+                                                          child: Offstage(
+                                                            offstage: position == index ? false : true,
+                                                            child: Image.asset(
+                                                              "images/icon_select_true.png",
+                                                              width: ScreenUtil().setWidth(48),
+                                                              height: ScreenUtil().setHeight(32),
+                                                              fit: BoxFit.contain,
+                                                            ),
+                                                          )
+                                                      ),
+                                                    ],
+                                                  )
+                                              ),
+                                              onTap: () {
+                                                ///为了区分把setState改个名字
+                                                state(() {
+                                                  position = index;
+                                                  _title = _list[position].value;
+                                                  _selectedContent = _list[position].value;
+                                                });
+                                              },
+                                            );
+                                          },
+                                          shrinkWrap: true,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                              );
+                            },
+                          );
+                        },
+                      );
+                    }
+                  });
+                },
+              )
+          ),
+        ],
+      ),
     );
   }
 
