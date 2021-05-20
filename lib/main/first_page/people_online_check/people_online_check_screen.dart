@@ -17,8 +17,9 @@ import 'package:jwt/widget/custom_button.dart';
 import 'package:jwt/widget/custom_choose_bottom_sheet.dart';
 import 'package:jwt/widget/custom_choose_widget.dart';
 import 'package:jwt/widget/custom_input_widget.dart';
+import 'package:jwt/widget/custom_text_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:intl/intl.dart';
 import 'nation_entity.dart';
 
 // ignore: must_be_immutable
@@ -62,6 +63,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
   String _hzcdCode = "";
   String _bz = "";
   String _phoneNumber = "";
+  String _registerTime = "";
   String _nowAddress = "";
   //姓名控制器
   TextEditingController nameController = TextEditingController();
@@ -76,6 +78,8 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
   SharedPreferences prefs;
   String _glybm = "";
   String _rdj_djrq = "";
+  String _account_authority = "";
+  bool _isVisiableFWZ = false;
   @override
   CustomAppBar getAppBar() {
     // TODO: implement getAppBar
@@ -99,9 +103,18 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
     prefs =  await SharedPreferences.getInstance();
   }
   void initData(){
+    //将时间字符串转为时间对象
+    String nowTime = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
     setState(() {
         _isRegister = widget.returnMsg.contains("该人员未登记")  ? "-10" : "1";
         _isStandardAddress = widget.returnStandAdder ?? "";
+        // 0 是分局
+        if(_account_authority == "0"){
+          _isVisiableFWZ = true;
+          // 1 是派出所
+        }else if(_account_authority == "1"){
+          _isVisiableFWZ = false;
+        }
         if(_isRegister == "-10"){
           if(widget.returnBz != null){
               Fluttertoast.showToast(msg: widget.returnBz);
@@ -111,6 +124,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
           nameController.text = _name;
           residenceAddressController.text =_residentAddress;
           _birthDate = AgeUtils().getBirthday(_idCard);
+          _rdj_djrq = nowTime;
         }else if(_isRegister == "1"){
              _name = widget.mEntity.bipXm ?? "";
             _idCard = widget.mEntity.bipSfzhm ?? "";
@@ -126,7 +140,9 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
               _birthDate = _birthDate.substring(0,4) + "-${_birthDate.substring(4,6)}" + "-${_birthDate.substring(6,8)}";
             }
             if(_rdj_djrq.isNotEmpty){
-               _rdj_djrq = _rdj_djrq.substring(0,4) + "-${_rdj_djrq.substring(4,6)}" + "-${_rdj_djrq.substring(6,8)}";
+               _rdj_djrq = _rdj_djrq.substring(0,4) + "-${_rdj_djrq.substring(4,6)}" +
+                   "-${_rdj_djrq.substring(6,8)}" + " ${_rdj_djrq.substring(8,10)}" +
+                   ":${_rdj_djrq.substring(10,12)}" + ":${_rdj_djrq.substring(12,14)}";
             }
             if(_nation.isNotEmpty){
               _nationCode = _nation.split("-")[0];
@@ -154,6 +170,24 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
                        children: [
                          _buildIDCardWidget(context),
                          _buildBaseInfoWidget("基本信息"),
+                         Padding(
+                             padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
+                             child: Offstage(
+                               offstage: _isVisiableFWZ,
+                               child: CustomChooseBottomSheet(
+                                   "服务站",
+                                   tableName: "TYPT_FWZGFGL_FWZJBXXDJB",
+                                   pcsbm: widget.rdj_sspcsbm,
+                                   callBack: (key){
+                                     setState(() {
+
+                                     });
+                                   }
+                               ),
+                             )
+                         ),
+                         //横线
+                         _buildLineWidget(),
                          CustomInputWidget(
                            "现住地址",
                            hint: "请输入现住地址",
@@ -173,10 +207,11 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
                               _phoneNumber = value;
                            },
                          ),
-                         CustomInputWidget(
+                         //横线
+                         _buildLineWidget(),
+                         CustomTextWidget(
                            "登记时间",
-                           hint: "",
-                           content: _phoneNumber,
+                           content: _rdj_djrq,
                            callBack: (value){
                              _phoneNumber = value;
                            },
