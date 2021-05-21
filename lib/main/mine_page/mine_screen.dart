@@ -107,8 +107,7 @@ class MineScreenState extends BaseWidgetState<MineScreen> {
               maxLines:null,
 
               keyboardType: TextInputType.multiline,
-
-              autofocus:true,
+              autofocus: false,
 
               decoration:InputDecoration.collapsed(
 

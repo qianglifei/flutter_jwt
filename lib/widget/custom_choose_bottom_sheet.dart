@@ -35,27 +35,41 @@ class CustomChooseBottomSheetState extends State<CustomChooseBottomSheet> {
     // TODO: implement build
     return  InkWell(
       child: Container(
-        height: ScreenUtil().setHeight(144),
+        constraints: BoxConstraints(
+           minHeight: ScreenUtil().setHeight(144),
+           maxHeight: ScreenUtil().setHeight(500),
+        ),
         width: ScreenUtil().uiSize.width,
         color: Colors.white,
-        child: Stack(
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Positioned(
-                top: ScreenUtil().setHeight(35),
-                left: ScreenUtil().setWidth(64),
+            Padding(
+                padding: EdgeInsets.only(left: ScreenUtil().setWidth(64)),
                 child: Text(widget._title,style: TextStyle(fontSize: ScreenUtil().setSp(48),color: Color.fromRGBO(100,100,100,1)))
             ),
-            Positioned(
-                top: ScreenUtil().setHeight(35),
-                right: ScreenUtil().setWidth(100),
-                child: Padding(
-                  padding: EdgeInsets.only(left: ScreenUtil().setWidth(120)),
-                  child: Text(_selectedContent ?? "请选择",style: TextStyle(fontSize: ScreenUtil().setSp(48),color: Color.fromRGBO(100,100,100,1)))
-                )
+            Expanded(child: Text("")),
+            Container(
+                constraints: BoxConstraints(
+                  minHeight: ScreenUtil().setHeight(144),
+                  maxHeight: ScreenUtil().setHeight(500),
+                  minWidth: ScreenUtil().setWidth(100),
+                  maxWidth: ScreenUtil().setWidth(750),
+                ),
+                padding:EdgeInsets.only(left:10.0, right:0.0, top:14.0, bottom:8.0),
+                margin: EdgeInsets.only(left: ScreenUtil().setWidth(24),right: ScreenUtil().setWidth(14)),
+                child: Text(
+                    _selectedContent ?? "请选择",
+                    maxLines: 20,
+                    style: TextStyle(
+                    fontSize: ScreenUtil().setSp(48),
+                    color: Color.fromRGBO(100,100,100,1),
+                    ))
             ),
-            Positioned(
-                top: ScreenUtil().setHeight(50),
-                right: ScreenUtil().setWidth(64),
+            Container(
+                margin: EdgeInsets.only(right: ScreenUtil().setWidth(24)),
                 child: Image.asset(
                   "images/icon_more.png",
                   width: ScreenUtil().setWidth(20),

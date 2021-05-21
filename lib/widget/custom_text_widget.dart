@@ -4,21 +4,21 @@ import 'package:flutter_screenutil/screenutil.dart';
 
 typedef CallBack = void Function(String value);
 // ignore: must_be_immutable
-class CustomInputWidget extends StatefulWidget{
+class CustomTextWidget extends StatefulWidget{
   String _title;
   String content= "";
   String hint;
   CallBack callBack;
   bool enables;
-  CustomInputWidget(this._title,{Key key,this.hint,this.content,this.callBack, this.enables = true});
+  CustomTextWidget(this._title,{Key key,this.hint,this.content,this.callBack, this.enables = true});
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return CustomInputWidgetState();
+    return CustomTextWidgetState();
   }
 }
 
-class CustomInputWidgetState extends State<CustomInputWidget> {
+class CustomTextWidgetState extends State<CustomTextWidget> {
   //输入框控制器
   TextEditingController inputController;
 
@@ -58,29 +58,11 @@ class CustomInputWidgetState extends State<CustomInputWidget> {
               constraints: BoxConstraints(
                 maxHeight: ScreenUtil().setHeight(500),
                 minHeight: ScreenUtil().setHeight(144),
-                maxWidth: ScreenUtil().setWidth(650)
+                maxWidth: ScreenUtil().setHeight(680)
               ),
               padding:EdgeInsets.only(left:20.0, right:10.0, top:15.0, bottom:4.0),
-              child: TextField(
-                enabled: widget.enables,
-                textAlign: TextAlign.right,
-                controller: inputController,
-                keyboardType: TextInputType.multiline,
-                autofocus: false,
-                decoration: InputDecoration.collapsed(
-                  hintText: widget.hint,
-                  hintStyle: TextStyle(color: Color.fromRGBO(188,188,188,1))
-                ),
-                maxLines: null,
-                //发生改变时赋值
-                onChanged: (val){
-                    widget.content = val;
-                    if(widget.content != null && "" != widget.content){
-                      widget.callBack(widget.content);
-                    }
-                },
-              ),
-          ),
+              child: Text(widget.content,style: TextStyle()),
+          )
         ],
       ),
     );
