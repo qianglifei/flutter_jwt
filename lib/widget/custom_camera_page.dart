@@ -43,6 +43,11 @@ class CustomCameraPageState extends State<CustomCameraPage> {
   @override
   void initState() {
     super.initState();
+    //强制页面竖屏
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
     _camera();
   }
 
@@ -258,7 +263,7 @@ class CustomCameraPageState extends State<CustomCameraPage> {
           offstage: _cameraPreviewLayoutIsVisible, // 设置是否可见：true:不可见 false:可见
           child: new Container(
             width:ScreenUtil().uiSize.width,
-            height: ScreenUtil().setWidth(1800),
+            height: ScreenUtil().uiSize.height * 1.02/3,
             color: Colors.black,
             alignment: Alignment.center,
             child: Image.file(File(_photoPath)),
