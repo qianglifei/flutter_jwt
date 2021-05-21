@@ -58,7 +58,7 @@ class CustomInputWidgetState extends State<CustomInputWidget> {
               constraints: BoxConstraints(
                 maxHeight: ScreenUtil().setHeight(500),
                 minHeight: ScreenUtil().setHeight(144),
-                maxWidth: ScreenUtil().setHeight(680)
+                maxWidth: ScreenUtil().setWidth(650)
               ),
               padding:EdgeInsets.only(left:20.0, right:10.0, top:15.0, bottom:4.0),
               child: TextField(

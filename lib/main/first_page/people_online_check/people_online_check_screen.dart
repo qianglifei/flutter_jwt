@@ -53,7 +53,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
   String _name = "";
   String _idCard = "";
   String _birthDate = "";
-  String _nation = "";
+  String _nation = "请选择民族";
   String _nationCode = "";
   String _headImagePath = "";
   String _isStandardAddress = "";
@@ -65,6 +65,8 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
   String _phoneNumber = "";
   String _registerTime = "";
   String _nowAddress = "";
+
+
   //姓名控制器
   TextEditingController nameController = TextEditingController();
   //户籍地址控制器
@@ -73,13 +75,12 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
   List<NationEntity> _list;
   String _title = "";
   String _selectedContent = "请选择";
-  String _content = "请选择民族";
   int position = 100000;
   SharedPreferences prefs;
   String _glybm = "";
   String _rdj_djrq = "";
   String _account_authority = "";
-  bool _isVisiableFWZ = false;
+  bool _isVisiableFWZ = true;
   @override
   CustomAppBar getAppBar() {
     // TODO: implement getAppBar
@@ -117,7 +118,13 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
         }
         if(_isRegister == "-10"){
           if(widget.returnBz != null){
-              Fluttertoast.showToast(msg: widget.returnBz);
+              Fluttertoast.showToast(
+                  msg: widget.returnBz,
+                  gravity: ToastGravity.CENTER,
+                  backgroundColor: Colors.black,
+                  fontSize: ScreenUtil().setSp(50,allowFontScalingSelf: false),
+              );
+              _bz = widget.returnBz;
           }
           _idCard = widget.shzhm ?? "";
           _name = widget.xm ?? "";
@@ -217,6 +224,11 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
                            },
                          ),
                          _buildBaseInfoWidget("信息备注"),
+                         widget.returnStandAdder == "1" ?
+                         CustomTextWidget(
+                           "核准程度",
+                           content: "该人员未录入",
+                         ):
                          CustomChooseWidget(
                              _hzcd,
                              callBack: (value,remark){
@@ -230,13 +242,16 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
                                      }
                                  });
                              }
-                         ),
+                         ) ,
                          //横线
                          _buildLineWidget(),
                          CustomInputWidget(
                              "备注信息",
                               enables: true,
                               content: _bz,
+                               callBack: (value){
+                                 _bz = value;
+                               },
                          ),
                        ],
                      ),
@@ -306,7 +321,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
           ),
         ],
       ),
-    ): Container(
+    ): standardAddress == "1" ? Container(
         height: ScreenUtil().setHeight(80),
         child: Stack(
           children: [
@@ -316,7 +331,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
             ),
           ],
       ),
-    );
+    ) : Container(child: Text(""));
   }
   
   Widget _buildBaseInfoWidget(String title) {
@@ -440,11 +455,11 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
              top: ScreenUtil().setHeight(200),
            ),
            Positioned(
-             child: _buildChooseTextWidget("民        族",_nation),
+             child: _buildChooseTextWidget("民        族"),
              top: ScreenUtil().setHeight(300),
            ),
            Positioned(
-             child: _buildInputTextWidget("户籍地址",residenceAddressController,"户籍地址",_residentAddress),
+             child: _buildInputTextWidgetResidence("户籍地址",residenceAddressController,"户籍地址",_residentAddress),
              top: ScreenUtil().setHeight(400),
            ),
            Positioned(
@@ -538,6 +553,66 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
     );
   }
 
+  //横排多个文本显示输入widget
+  Widget _buildInputTextWidgetResidence(String title,TextEditingController controller,String hintText,String content) {
+    controller.text = content;
+    return Container(
+      width: ScreenUtil().uiSize.width,
+      margin: EdgeInsets.only(top: ScreenUtil().setHeight(10),bottom: ScreenUtil().setHeight(10)),
+      color: Colors.transparent,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(
+              left: ScreenUtil().setWidth(64),
+              top: ScreenUtil().setHeight(10),
+            ),
+            child: Text(title,
+                style: TextStyle(
+                    color: Color.fromRGBO(42, 168, 245, 1),
+                    fontSize: ScreenUtil().setSp(40,allowFontScalingSelf: true)
+                )
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+                left: ScreenUtil().setWidth(64),
+                top: ScreenUtil().setHeight(15)
+            ),
+            child: Container(
+              constraints:  BoxConstraints(
+                maxHeight: 50.0,
+                minHeight: 10.0,
+              ),
+              width: ScreenUtil().setWidth(460),
+              child: TextField(
+                autofocus: false,
+                controller: controller,
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
+                style: TextStyle(fontSize: ScreenUtil().setSp(40,allowFontScalingSelf: true)),
+                decoration: InputDecoration(
+                  fillColor: Colors.cyan,
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(vertical: 8),
+                  hintText:"请输入"+ hintText,
+                ),
+                onChanged: (value){
+                  setState(() {
+                    print(value);
+                    _residentAddress = value;
+                  });
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
   //横排多个文本显示widget
   Widget _buildTextWidget(String title ,String content) {
     return Container(
@@ -580,8 +655,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
   }
 
   //横排文本选择widget
-  Widget _buildChooseTextWidget(String title,String content) {
-    _content = content ?? "";
+  Widget _buildChooseTextWidget(String title) {
     return Container(
       width: ScreenUtil().uiSize.width,
       height: ScreenUtil().setHeight(100),
@@ -605,7 +679,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
                 top: ScreenUtil().setHeight(10),
               ),
               child: GestureDetector(
-                child: Text(_content, style: TextStyle(color: Color.fromRGBO(34, 34, 34, 1), fontSize: ScreenUtil().setSp(40, allowFontScalingSelf: true))),
+                child: Text(_nation, style: TextStyle(color: Color.fromRGBO(34, 34, 34, 1), fontSize: ScreenUtil().setSp(40, allowFontScalingSelf: true))),
                 onTap: () {
                   print("选择民族");
                   SqlManager.queryNationData().then((list) {
@@ -652,8 +726,8 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
                                               child: Text("确认", style: TextStyle(fontSize: ScreenUtil().setSp(56), color: Color.fromRGBO(52, 135, 215, 1))),
                                               onTap: () {
                                                 setState(() {
-                                                  _content = _selectedContent;
-                                                  print("niha$_content");
+                                                  _nation = _selectedContent;
+                                                  _nation = _selectedContent;
                                                 });
                                                 Navigator.pop(context);
                                               },
@@ -704,6 +778,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
                                                   position = index;
                                                   _title = _list[position].value;
                                                   _selectedContent = _list[position].value;
+                                                  _nationCode = _list[position].key;
                                                 });
                                               },
                                             );
