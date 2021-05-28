@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:jwt/splash/splash_screen.dart';
+import 'package:lcfarm_flutter_umeng/lcfarm_flutter_umeng.dart';
 
 void main() {
 
@@ -24,10 +25,13 @@ void main() {
     SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
+
+
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     //ScreenUtil.init(constraints, designSize: Size(750, 1334), allowFontScaling: false);

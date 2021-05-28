@@ -187,6 +187,8 @@ class HouseCheckScreenState extends BaseWidgetState<HouseCheckScreen> {
                       "核查",
                           (){
                         print("核查");
+
+
                       }
                   ),
                 ],

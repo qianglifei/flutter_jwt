@@ -6,6 +6,7 @@ import 'package:jwt/login/login_bloc.dart';
 import 'package:jwt/login/login_screen.dart';
 import 'package:jwt/main/app.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
+import 'package:lcfarm_flutter_umeng/lcfarm_flutter_umeng.dart';
 
 // ignore: must_be_immutable
 class SplashScreen extends BaseWidget{
@@ -22,12 +23,12 @@ class SplashScreenState extends BaseWidgetState<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    //需要再改页面等该停留三秒
-//    Future.delayed(Duration(seconds: 3),(){
-//      Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context){
-//        return Main();
-//      }),(route) => route == null);
-//    });
+    LcfarmFlutterUmeng.init(
+        iOSAppKey: "60b0651add01c71b57c8c0ed",
+        androidAppKey: "60b064a56c421a3d97d05e3a",
+        channel: "cps_1.1.0",
+        logEnable: true
+    );
     Future.delayed(Duration(seconds: 2),(){
 
         Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context){

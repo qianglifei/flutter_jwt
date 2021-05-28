@@ -45,7 +45,10 @@ android {
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    dependencies {
+        api 'com.umeng.sdk:common:latest.integration'
+        api 'com.umeng.sdk:analytics:latest.integration'
+    }
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
