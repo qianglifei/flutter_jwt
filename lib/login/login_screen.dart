@@ -15,6 +15,7 @@ import 'package:jwt/http/dio_utils.dart';
 import 'package:jwt/login/test_view.dart';
 import 'package:jwt/main/app.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
+import 'package:jwt/widget/loading_dialog.dart';
 import 'package:jwt/widget/progress_dialog.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -77,7 +78,7 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
              print("登录成功");
              saveData(state.loginModel);
              print(state.loginModel.userGsdw);
-             Navigator.of(context).pop();
+             LoadingDialog.dialogDismiss(context);
              Future.delayed(Duration.zero, () {
                //跳转界面
                Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context){
@@ -99,37 +100,40 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
   }
 
 
-  buildShowDialog(BuildContext context) {
-    return showCupertinoDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return  Center(
-              child: Container(
-                padding:const EdgeInsets.all(20.0),
-                decoration: BoxDecoration(
-                  //黑色背景
-                    color: Colors.black87,
-                    //圆角边框
-                    borderRadius: BorderRadius.circular(10.0)),
-                child: Column(
-                  //控件里面内容主轴负轴剧中显示
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    //主轴高度最小
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      CircularProgressIndicator(),
-                      Padding(
-                        padding: EdgeInsets.only(top: 3),
-                        child: Text(
-                            '加载中...',
-                            style: TextStyle(fontSize:15,color: Colors.white,decoration: TextDecoration.none,)
-                        )
-                      )
-                    ]
-                )));
-        });
-  }
+  // buildShowDialog(BuildContext context) {
+  //   return showCupertinoDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return  Center(
+  //             child: Container(
+  //               padding:const EdgeInsets.all(20.0),
+  //               decoration: BoxDecoration(
+  //                   //黑色背景
+  //                   color: Colors.black87,
+  //                   //圆角边框
+  //                   borderRadius: BorderRadius.circular(10.0)),
+  //               child: Column(
+  //                 //控件里面内容主轴负轴剧中显示
+  //                   mainAxisAlignment: MainAxisAlignment.center,
+  //                   crossAxisAlignment: CrossAxisAlignment.center,
+  //                   //主轴高度最小
+  //                   mainAxisSize: MainAxisSize.min,
+  //                   children: <Widget>[
+  //                    // CircularProgressIndicator(),
+  //                     CupertinoActivityIndicator(
+  //                       radius: 10.0,
+  //                     ),
+  //                     Padding(
+  //                       padding: EdgeInsets.only(top: 3),
+  //                       child: Text(
+  //                           '加载中...',
+  //                           style: TextStyle(fontSize:15,color: Colors.white,decoration: TextDecoration.none,)
+  //                       )
+  //                     ),
+  //                   ]
+  //               )));
+  //       });
+  // }
 
   void _textFieldUserNameChanged(String value) {
 
@@ -322,7 +326,7 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
                   onPressed: () {
                     GrantedUtils s = new GrantedUtils();
                     s.initPermissionData();
-                    buildShowDialog(context);
+                    LoadingDialog().buildShowDialog(context);
                     Map<String,dynamic> requestBody = new Map();
                     requestBody.addAll({
                       "user_name":"1142100000-a1",

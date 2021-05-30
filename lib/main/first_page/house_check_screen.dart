@@ -3,11 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
+import 'package:jwt/config/url_config.dart';
+import 'package:jwt/db/sql_manager.dart';
+import 'package:jwt/http/dio_utils.dart';
+import 'package:jwt/main/first_page/people_online_check/people_online_check_response_entity.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/custom_button.dart';
 import 'package:jwt/widget/custom_choose_bottom_sheet.dart';
 import 'package:jwt/widget/custom_choose_widget.dart';
 import 'package:jwt/widget/custom_input_widget.dart';
+import 'package:jwt/widget/loading_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
@@ -22,10 +27,12 @@ class HouseCheckScreen extends BaseWidget{
 
 class HouseCheckScreenState extends BaseWidgetState<HouseCheckScreen> {
 
-  bool _isVisiableFWZ = true;
+  bool _isVisiableFWZ = false;
   String _pcsbm = "";
   String _pcsbh = "";
+  // ignore: non_constant_identifier_names
   String _rdj_sspcsbm = "";
+  // ignore: non_constant_identifier_names
   String _fwzjbxxdjb_fwzbh = "";
   SharedPreferences prefs;
   String _account_authority = "";
@@ -34,6 +41,7 @@ class HouseCheckScreenState extends BaseWidgetState<HouseCheckScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    SqlManager.copyDbFileToCacheDocument();
     getData();
   }
 
@@ -43,12 +51,12 @@ class HouseCheckScreenState extends BaseWidgetState<HouseCheckScreen> {
       _pcsbm = prefs.getString("pcsbm");
       _account_authority = prefs.getString("Account_authority");
       // 0 是分局
-      if(_account_authority == "0"){
-        _isVisiableFWZ = true;
-        // 1 是派出所
-      }else if(_account_authority == "1"){
-        _isVisiableFWZ = false;
-      }
+      // if(_account_authority == "0"){
+      //   _isVisiableFWZ = true;
+      //   // 1 是派出所
+      // }else if(_account_authority == "1"){
+      //   _isVisiableFWZ = true;
+      // }
       print(_pcsbm);
     });
   }
@@ -112,7 +120,7 @@ class HouseCheckScreenState extends BaseWidgetState<HouseCheckScreen> {
                   child: CustomChooseBottomSheet(
                       "服务站",
                       tableName: "TYPT_FWZGFGL_FWZJBXXDJB",
-                      pcsbm: _pcsbh,
+                      pcsbm: _rdj_sspcsbm,
                       callBack: (key){
                         setState(() {
                           _fwzjbxxdjb_fwzbh = key;
@@ -129,7 +137,12 @@ class HouseCheckScreenState extends BaseWidgetState<HouseCheckScreen> {
             Padding(
                 padding: EdgeInsets.only(top: ScreenUtil().setHeight(44)),
                 child: CustomInputWidget(
-                  "房主姓名",hint: "请输入房主姓名",
+                  "房主姓名",
+                  hint: "请输入房主姓名",
+                  content: "",
+                  callBack: (value){
+
+                  },
                 )
             ),
             //横线
@@ -144,7 +157,12 @@ class HouseCheckScreenState extends BaseWidgetState<HouseCheckScreen> {
             Padding(
                 padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
                 child: CustomInputWidget(
-                  "房屋登记表序号",hint: "请输入序号",
+                  "房屋登记表序号",
+                  content: "",
+                  hint: "请输入序号",
+                  callBack: (value){
+
+                  },
                 )
             ),
             //横线
@@ -159,7 +177,12 @@ class HouseCheckScreenState extends BaseWidgetState<HouseCheckScreen> {
             Padding(
                 padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
                 child:CustomInputWidget(
-                  "详细地址",hint: "请输入详细地址",
+                  "详细地址",
+                  hint: "请输入详细地址",
+                  content: "",
+                  callBack: (value){
+
+                  },
                 )
             ),
             Padding(
@@ -177,6 +200,9 @@ class HouseCheckScreenState extends BaseWidgetState<HouseCheckScreen> {
                       "重置",
                           (){
                         print("重置");
+                        setState(() {
+                          
+                        });
                       }
                   ),
                   CustomButton(
@@ -187,6 +213,30 @@ class HouseCheckScreenState extends BaseWidgetState<HouseCheckScreen> {
                       "核查",
                           (){
                         print("核查");
+                        LoadingDialog(
+                          title: "请求中...",
+                        ).buildShowDialog(context);
+                        Map<String, String> requestBody = new Map();
+
+                        requestBody.addAll({
+                          "rdj_sspcsbm":_rdj_sspcsbm,
+                          "fwzjbxxdjb_fwzbh": _fwzjbxxdjb_fwzbh,
+                          "howner_fzxm":"",
+                          "fdj_fwdjbxh":"",
+                          "bih_hlocus_add":"",
+                           "pageNum":"1",
+                        });
+                        DioUtils.instance.postHttps<PeopleOnlineCheckResponseReturnData>(
+                           url: URLConfig.fwhccx,
+                           method: DioUtils.POST,
+                           parameters: requestBody,
+                          onSuccess: (data){
+                             LoadingDialog.dialogDismiss(context);
+                          },
+                          onError: (error){
+                             LoadingDialog.dialogDismiss(context);
+                          }
+                        );
                       }
                   ),
                 ],

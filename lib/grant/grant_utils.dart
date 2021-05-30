@@ -25,7 +25,6 @@ class GrantedUtils {
 
   Future initPermissionData() async{
     statuses = await [
-      Permission.location,
       Permission.storage,
       Permission.camera,
     ].request();

@@ -41,18 +41,25 @@ abstract class BaseWidgetState <T extends BaseWidget> extends State<T>{
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: getBaseAppBar(),
-      body: Container(
-        //背景颜色，自己可以更具需求变更
-        color: Colors.white,
-        child: Stack(
-          children: <Widget>[
-            getContentWidget(context),
-            _getBaseErrorWidget(),
-            _getBaseEmptyWidget(),
-            _getBaseLoadingWidget()
-          ],
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: (){
+          //触摸外围收起软键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Container(
+          //背景颜色，自己可以更具需求变更
+          color: Colors.white,
+          child: Stack(
+            children: <Widget>[
+              getContentWidget(context),
+              _getBaseErrorWidget(),
+              _getBaseEmptyWidget(),
+              _getBaseLoadingWidget()
+            ],
+          ),
         ),
-      ),
+      )
     );
   }
 

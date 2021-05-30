@@ -46,6 +46,10 @@
     <string>The app tries to use your microphone</string>
     <key>NSAppTransportSecurity</key>
     <key>NSAllowsArbitraryLoads</key>
-    <true/>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>The app tries to use your location</string>
+    <key>NSContactsUsageDescription</key>
+    <string>可以读取你的通讯录吗</string>
+
 </dict>
 </plist>

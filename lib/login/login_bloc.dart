@@ -6,7 +6,6 @@ import 'package:jwt/entity/login_response_entity.dart';
 import 'package:jwt/http/dio_utils.dart';
 import 'package:jwt/login/login_repository.dart';
 import 'package:meta/meta.dart';
-
 part 'login_event.dart';
 part 'login_state.dart';
 ///bloc 组合事件和state
@@ -19,7 +18,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         LoginResponseEntity entity = await LoginRepository.loginRequest(event.map);
         print(entity.userName);
         print("请求完毕，返回数据");
-        yield LoginSuccessState(entity);
+        if(entity.userId == "1"){
+          yield LoginSuccessState(entity);
+        }else{
+          yield LoginFailureState("");
+        }
       }
   }
 }
