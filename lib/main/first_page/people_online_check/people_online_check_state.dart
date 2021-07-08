@@ -12,5 +12,13 @@ class PeopleOnlineCheckState {
   PeopleOnlineCheckState clone(){
     return PeopleOnlineCheckState()..map = map;
   }
+}
 
+class PeopleCheckSuccess{
+
+    PeopleCheckSuccess();
+}
+
+class PeopleCheckError{
+    PeopleCheckError();
 }

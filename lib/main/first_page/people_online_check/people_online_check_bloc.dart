@@ -22,7 +22,10 @@ class PeopleOnlineCheckBloc extends Bloc<PeopleOnlineCheckEvent, PeopleOnlineChe
     // TODO：它内部就会比较上一次的MainState对象，如果相同，就不build了
    if(event is PeopleCheckEvent){
      LoginResponseEntity entity = await PeopleCheckSubmitRepository.peopleCheckSubmitRequest(event.map);
-    }
+
+     //yield PeopleCheckSuccess(entity);
+   }
+
   }
 
 

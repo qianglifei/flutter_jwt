@@ -43,7 +43,11 @@ abstract class BaseWidgetState <T extends BaseWidget> extends State<T>{
       appBar: getBaseAppBar(),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
-        child:  Container(
+        onTap: (){
+          //触摸外围收起软键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Container(
           //背景颜色，自己可以更具需求变更
           color: Colors.white,
           child: Stack(
@@ -55,11 +59,7 @@ abstract class BaseWidgetState <T extends BaseWidget> extends State<T>{
             ],
           ),
         ),
-        onTap: (){
-          //触摸手起键盘
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-      ),
+      )
     );
   }
 

@@ -7,17 +7,18 @@ import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
 import 'package:jwt/config/string_constant.dart';
 import 'package:jwt/db/sql_manager.dart';
-import 'package:jwt/main/first_page/homepage_screen.dart';
 import 'package:jwt/main/first_page/people_online_check/people_online_check_bloc.dart';
 import 'package:jwt/main/first_page/people_online_check/people_online_check_response_entity.dart';
 import 'package:jwt/utils/age_utils.dart';
 import 'package:jwt/utils/idcard_utils.dart';
+import 'package:jwt/utils/time_utils.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 import 'package:jwt/widget/custom_button.dart';
 import 'package:jwt/widget/custom_choose_bottom_sheet.dart';
 import 'package:jwt/widget/custom_choose_widget.dart';
 import 'package:jwt/widget/custom_input_widget.dart';
 import 'package:jwt/widget/custom_text_widget.dart';
+import 'package:jwt/widget/loading_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'nation_entity.dart';
@@ -81,6 +82,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
   String _rdj_djrq = "";
   String _account_authority = "";
   bool _isVisiableFWZ = true;
+  String _checkTime = "";
   @override
   CustomAppBar getAppBar() {
     // TODO: implement getAppBar
@@ -163,103 +165,11 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
   Widget getContentWidget(BuildContext context) {
     return BlocBuilder<PeopleOnlineCheckBloc,PeopleOnlineCheckState>(
          builder: (context,state){
-             return Column(
-               children: [
-                 Expanded(
-                   flex: 2,
-                   child: SingleChildScrollView(
-                     //TODO 滚动特性，允许滚出边界，出边界后会弹会来
-                     physics: BouncingScrollPhysics(),
-                     child: Column(
-                       mainAxisSize: MainAxisSize.max,
-                       mainAxisAlignment: MainAxisAlignment.start,
-                       crossAxisAlignment: CrossAxisAlignment.center,
-                       children: [
-                         _buildIDCardWidget(context),
-                         _buildBaseInfoWidget("基本信息"),
-                         Padding(
-                             padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
-                             child: Offstage(
-                               offstage: _isVisiableFWZ,
-                               child: CustomChooseBottomSheet(
-                                   "服务站",
-                                   tableName: "TYPT_FWZGFGL_FWZJBXXDJB",
-                                   pcsbm: widget.rdj_sspcsbm,
-                                   callBack: (key){
-                                     setState(() {
+           if(state is PeopleCheckSuccess){
 
-                                     });
-                                   }
-                               ),
-                             )
-                         ),
-                         //横线
-                         _buildLineWidget(),
-                         CustomInputWidget(
-                           "现住地址",
-                           hint: "请输入现住地址",
-                           content: _nowAddress,
-                           callBack: (value){
-                             _nowAddress = value;
-                           },
-                         ),
-                         _buildStandardWidget(_isStandardAddress),
-                         //横线
-                         _buildLineWidget(),
-                         CustomInputWidget(
-                           "手机号码",
-                           hint: "请输入手机号码",
-                           content: _phoneNumber,
-                           callBack: (value){
-                              _phoneNumber = value;
-                           },
-                         ),
-                         //横线
-                         _buildLineWidget(),
-                         CustomTextWidget(
-                           "登记时间",
-                           content: _rdj_djrq,
-                           callBack: (value){
-                             _phoneNumber = value;
-                           },
-                         ),
-                         _buildBaseInfoWidget("信息备注"),
-                         widget.returnStandAdder == "1" ?
-                         CustomTextWidget(
-                           "核准程度",
-                           content: "该人员未录入",
-                         ):
-                         CustomChooseWidget(
-                             _hzcd,
-                             callBack: (value,remark){
-                                 setState(() {
-                                     _bz = remark;
-                                     _hzcdCode = value;
-                                     if(value == "2"){
-                                         _hzcd = StringConstant.INFO_PRECISE;
-                                     }else if(value == "3"){
-                                         _hzcd = StringConstant.INFO_INACCURATE;
-                                     }
-                                 });
-                             }
-                         ) ,
-                         //横线
-                         _buildLineWidget(),
-                         CustomInputWidget(
-                             "备注信息",
-                              enables: true,
-                              content: _bz,
-                               callBack: (value){
-                                 _bz = value;
-                               },
-                         ),
-                       ],
-                     ),
-                   ),
-                 ),
-                 _buildCustomButtonWidget(),
-               ],
-             );
+           }
+
+            return _buildLayout();
            }
        );
   }
@@ -366,6 +276,9 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
        "提交",
        (){
           print("线上核查");
+          LoadingDialog(
+            title: "核查中。。。",
+          ).buildShowDialog(context);
           Map<String,dynamic> requestMap = new Map();
           requestMap.addAll({
               "rdj_grbh": widget.grbh,
@@ -383,11 +296,11 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
               "user_name":prefs.getString("user_name"),
               "user_gsdw":prefs.getString("user_gsdw"),
               "user_dwbm":prefs.getString("user_dwbm"),
-              "rkhc_hcsj":"",
+              "rkhc_hcsj":TimeUtils.getNowTime(),
               "rkhc_hzcd":_hzcdCode,
               "_bz":_bz,
               "img":"",
-              "rdj_djrq": "",
+              "rdj_djrq": _rdj_djrq,
               "yj_lb": "1",
           });
           //登录请求
@@ -802,6 +715,105 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
       ),
     );
   }
+ /// 构建界面布局
+  Widget _buildLayout() {
+    return Column(
+      children: [
+        Expanded(
+          flex: 2,
+          child: SingleChildScrollView(
+            //TODO 滚动特性，允许滚出边界，出边界后会弹会来
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _buildIDCardWidget(context),
+                _buildBaseInfoWidget("基本信息"),
+                Padding(
+                    padding: EdgeInsets.only(top: ScreenUtil().setHeight(0)),
+                    child: Offstage(
+                      offstage: _isVisiableFWZ,
+                      child: CustomChooseBottomSheet(
+                          "服务站",
+                          tableName: "TYPT_FWZGFGL_FWZJBXXDJB",
+                          pcsbm: widget.rdj_sspcsbm,
+                          callBack: (key){
+                            setState(() {
 
-
+                            });
+                          }
+                      ),
+                    )
+                ),
+                //横线
+                _buildLineWidget(),
+                CustomInputWidget(
+                  "现住地址",
+                  hint: "请输入现住地址",
+                  content: _nowAddress,
+                  callBack: (value){
+                    _nowAddress = value;
+                  },
+                ),
+                _buildStandardWidget(_isStandardAddress),
+                //横线
+                _buildLineWidget(),
+                CustomInputWidget(
+                  "手机号码",
+                  hint: "请输入手机号码",
+                  content: _phoneNumber,
+                  callBack: (value){
+                    _phoneNumber = value;
+                  },
+                ),
+                //横线
+                _buildLineWidget(),
+                CustomTextWidget(
+                  "登记时间",
+                  content: _rdj_djrq,
+                  callBack: (value){
+                    _phoneNumber = value;
+                  },
+                ),
+                _buildBaseInfoWidget("信息备注"),
+                widget.returnStandAdder == "-1" ?
+                CustomTextWidget(
+                  "核准程度",
+                  content: "该人员未录入",
+                ):
+                CustomChooseWidget(
+                    _hzcd,
+                    callBack: (value,remark){
+                      setState(() {
+                        _bz = remark;
+                        _hzcdCode = value;
+                        if(value == "2"){
+                          _hzcd = StringConstant.INFO_PRECISE;
+                        }else if(value == "3"){
+                          _hzcd = StringConstant.INFO_INACCURATE;
+                        }
+                      });
+                    }
+                ) ,
+                //横线
+                _buildLineWidget(),
+                CustomInputWidget(
+                  "备注信息",
+                  enables: true,
+                  content: _bz,
+                  callBack: (value){
+                    _bz = value;
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+        _buildCustomButtonWidget(),
+      ],
+    );
+  }
 }
+

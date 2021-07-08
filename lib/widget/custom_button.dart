@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-typedef _callBack = void Function();
+typedef _CallBack = void Function();
 // ignore: must_be_immutable
 class CustomButton extends StatefulWidget{
   double width;
@@ -15,7 +15,7 @@ class CustomButton extends StatefulWidget{
 
   double marginBottom;
   double marginTop;
-  final _callBack callBack;
+  final _CallBack callBack;
 
   CustomButton(this.width,this.height, this.colors,this.textColor,this.contentText,this.callBack,{this.marginBottom = 0,this.marginTop = 0}) :
   assert(width != null),
