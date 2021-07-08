@@ -329,10 +329,10 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
                     LoadingDialog().buildShowDialog(context);
                     Map<String,dynamic> requestBody = new Map();
                     requestBody.addAll({
-                      "user_name":"1142100000-a1",
+                      "user_name":"1142103000-a1",
                       "user_password":"123456",
-                      "imsi":"e2dbd5d7b0dc3cfe",
-                      "version":"1.3.5"
+                      "imsi":"912eb9339a6a5af5",
+                      "version":"1.3.6"
                     });
                     BlocProvider.of<LoginBloc>(context).add(LoginPressEvent(map: requestBody));
                   },

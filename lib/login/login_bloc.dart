@@ -18,11 +18,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         LoginResponseEntity entity = await LoginRepository.loginRequest(event.map);
         print(entity.userName);
         print("请求完毕，返回数据");
-        if(entity.userId == "1"){
-          yield LoginSuccessState(entity);
-        }else{
-          yield LoginFailureState("");
-        }
+        yield LoginSuccessState(entity);
+        // if(entity. == "1"){
+        //
+        // }else{
+        //   yield LoginFailureState("");
+        // }
       }
   }
 }

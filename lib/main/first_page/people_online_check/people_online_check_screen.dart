@@ -135,7 +135,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
           _birthDate = AgeUtils().getBirthday(_idCard);
           _rdj_djrq = nowTime;
         }else if(_isRegister == "1"){
-             _name = widget.mEntity.bipXm ?? "";
+            _name = widget.mEntity.bipXm ?? "";
             _idCard = widget.mEntity.bipSfzhm ?? "";
             _birthDate = widget.mEntity.bipBirthday ?? "";
             _headImagePath = widget.mEntity.img ?? "";
@@ -347,7 +347,7 @@ class PeopleOnlineCheckScreenState  extends BaseWidgetState<PeopleOnlineCheckScr
        width: ScreenUtil().uiSize.width,
        height: ScreenUtil().setHeight(611),
        decoration: BoxDecoration(
-         //背景图片修饰
+           //背景图片修饰
            image: DecorationImage(
                image: AssetImage("images/icon_card_bj.png"),
                //覆盖

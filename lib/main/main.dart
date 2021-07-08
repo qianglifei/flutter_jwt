@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:jwt/splash/splash_screen.dart';
-import 'package:lcfarm_flutter_umeng/lcfarm_flutter_umeng.dart';
 
 void main() {
 

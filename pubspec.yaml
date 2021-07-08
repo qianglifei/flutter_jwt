@@ -134,5 +134,6 @@ flutter:
     - images/icon_cart_title.png
     - images/icon_select.png
     - images/icon_ban.png
+    - images/icon_dwgl.png
 flutter_intl:
   enabled: true

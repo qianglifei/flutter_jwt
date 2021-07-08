@@ -11,4 +11,6 @@ class ColorConstant{
     // 字体颜色
     static const Color TEXT_COLOR_GRAY = Color.fromRGBO(140,141,142,1);
 
+    //队伍选择，背景颜色-灰色
+    static const Color TEAM_BACKGROUND = Color.fromRGBO(247,248,250,1);
 }

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class URLConfig{
   static const  String IP = "jwb.beikongyun.com";
-  static const  String BASE_URL = "http://jwb.beikongyun.com/";
+  //static const  String BASE_URL = "http://jwb.beikongyun.com/";
   //static const  String BASE_URL = "http://130.10.7.94:8085/";
-  //static const  String BASE_URL = "http://130.10.8.38:4085/";
+  static const  String BASE_URL = "http://130.10.8.38:4085/";
   // 登陆
   static const  String LOGIN = BASE_URL + "jwb/yhdl/yhdlyz";
   // 修改密码接口

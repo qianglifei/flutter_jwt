@@ -54,18 +54,31 @@ class BaseTitleAppBar extends StatelessWidget{
               padding: EdgeInsets.only(right: 12),
               child: Offstage(
                 offstage: !isShowRightWidget,
-                child: Image.asset(
-                  rightIconUrl,
-                  width: ScreenUtil().setWidth(40),
-                  height: ScreenUtil().setHeight(40),
-                  fit: BoxFit.cover,
+                // child: Image.asset(
+                //   rightIconUrl,
+                //   width: ScreenUtil().setWidth(40),
+                //   height: ScreenUtil().setHeight(40),
+                //   fit: BoxFit.cover,
+                // ),
+                child: Container(
+                    width: ScreenUtil().setWidth(40),
+                    height: ScreenUtil().setHeight(60),
+                    color: Colors.white,
+                    child: IconButton(
+                      icon: Image.asset("images/dwgl.png"),
+                      tooltip: "队伍管理",
+                      onPressed: () {
+
+                      },
+                    ),
                 ),
+
+
               )
           ),
         ],
       ),
     );
   }
-
 }
 
