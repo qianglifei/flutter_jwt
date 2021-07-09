@@ -54,30 +54,39 @@ class BaseTitleAppBar extends StatelessWidget{
               padding: EdgeInsets.only(right: 12),
               child: Offstage(
                 offstage: !isShowRightWidget,
-                // child: Image.asset(
-                //   rightIconUrl,
-                //   width: ScreenUtil().setWidth(40),
-                //   height: ScreenUtil().setHeight(40),
-                //   fit: BoxFit.cover,
-                // ),
-                child: Container(
-                    width: ScreenUtil().setWidth(40),
-                    height: ScreenUtil().setHeight(60),
-                    color: Colors.white,
-                    child: IconButton(
-                      icon: Image.asset("images/dwgl.png"),
-                      tooltip: "队伍管理",
-                      onPressed: () {
-
-                      },
-                    ),
-                ),
-
-
+                child: _buildImageButton("images/icon_dwgl.png")
               )
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildImageButton(String urlIcon){
+    return GestureDetector(
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 0),
+            child: Image.asset(
+              urlIcon,
+              width: ScreenUtil().setWidth(40),
+              height: ScreenUtil().setHeight(40),
+              fit: BoxFit.cover,
+            ),
+          ),
+          Padding(
+              padding: EdgeInsets.only(top: 1),
+              child: Text("队伍选择",
+                  style: TextStyle(fontSize: ScreenUtil().setSp(30),color: Color.fromRGBO(255, 255, 255, 1)))
+          ),
+        ],
+      ),
+      onTap: (){
+        if(rightClick != null){
+            rightClick();
+        }
+      },
     );
   }
 }

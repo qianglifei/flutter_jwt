@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
 import 'package:jwt/main/team_management/team_choose_widget.dart';
@@ -25,7 +26,10 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
         child: BaseTitleAppBar(
           _title,
           isShowLeftBackIcon: false,
-          isShowRightWidget: true,
+          isShowRightWidget: _rightIcon,
+          rightClick: (){
+            Fluttertoast.showToast(msg: "图片按钮被点击");
+          },
         ),
     );
   }

@@ -1,4 +1,3 @@
-
 enum PageStatus{
   showLoading,
   showError,
