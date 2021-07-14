@@ -135,5 +135,8 @@ flutter:
     - images/icon_select.png
     - images/icon_ban.png
     - images/icon_dwgl.png
+    - images/icon_zzgly.png
+    - images/icon_gzl.png
+    - images/icon_fxqy.png
 flutter_intl:
   enabled: true

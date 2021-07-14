@@ -158,8 +158,10 @@ class LoginScreenState extends BaseWidgetState<LoginScreen> {
     if(data.userYhlx == "4" || data.userYhlx == "5"){
       //分局
       _preferences.setString("Account_authority", '0');
-    }else{
+    }else if(data.userYhlx == "3"){
       //派出所
+      _preferences.setString("Account_authority", '2');
+    }else{
       _preferences.setString("Account_authority", '1');
     }
     //派出所编码
