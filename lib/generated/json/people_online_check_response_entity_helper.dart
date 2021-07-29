@@ -2,19 +2,21 @@ import 'package:jwt/main/first_page/people_online_check/people_online_check_resp
 
 peopleOnlineCheckResponseEntityFromJson(PeopleOnlineCheckResponseEntity data, Map<String, dynamic> json) {
 	if (json['returnCode'] != null) {
-		data.returnCode = json['returnCode']?.toInt();
+		data.returnCode = json['returnCode'] is String
+				? int.tryParse(json['returnCode'])
+				: json['returnCode'].toInt();
 	}
 	if (json['returnMsg'] != null) {
-		data.returnMsg = json['returnMsg']?.toString();
+		data.returnMsg = json['returnMsg'].toString();
 	}
 	if (json['returnData'] != null) {
-		data.returnData = new PeopleOnlineCheckResponseReturnData().fromJson(json['returnData']);
+		data.returnData = PeopleOnlineCheckResponseReturnData().fromJson(json['returnData']);
 	}
 	if (json['returnStandAdder'] != null) {
-		data.returnStandAdder = json['returnStandAdder']?.toString();
+		data.returnStandAdder = json['returnStandAdder'].toString();
 	}
 	if (json['returnType'] != null) {
-		data.returnType = json['returnType']?.toString();
+		data.returnType = json['returnType'].toString();
 	}
 	return data;
 }
@@ -23,9 +25,7 @@ Map<String, dynamic> peopleOnlineCheckResponseEntityToJson(PeopleOnlineCheckResp
 	final Map<String, dynamic> data = new Map<String, dynamic>();
 	data['returnCode'] = entity.returnCode;
 	data['returnMsg'] = entity.returnMsg;
-	if (entity.returnData != null) {
-		data['returnData'] = entity.returnData.toJson();
-	}
+	data['returnData'] = entity.returnData?.toJson();
 	data['returnStandAdder'] = entity.returnStandAdder;
 	data['returnType'] = entity.returnType;
 	return data;
@@ -33,61 +33,61 @@ Map<String, dynamic> peopleOnlineCheckResponseEntityToJson(PeopleOnlineCheckResp
 
 peopleOnlineCheckResponseReturnDataFromJson(PeopleOnlineCheckResponseReturnData data, Map<String, dynamic> json) {
 	if (json['bip_birthday'] != null) {
-		data.bipBirthday = json['bip_birthday']?.toString();
+		data.bipBirthday = json['bip_birthday'].toString();
 	}
 	if (json['bip_con_telephone'] != null) {
-		data.bipConTelephone = json['bip_con_telephone']?.toString();
+		data.bipConTelephone = json['bip_con_telephone'].toString();
 	}
 	if (json['bip_nation'] != null) {
-		data.bipNation = json['bip_nation']?.toString();
+		data.bipNation = json['bip_nation'].toString();
 	}
 	if (json['bip_rpr_address'] != null) {
-		data.bipRprAddress = json['bip_rpr_address']?.toString();
+		data.bipRprAddress = json['bip_rpr_address'].toString();
 	}
 	if (json['bip_sfzhm'] != null) {
-		data.bipSfzhm = json['bip_sfzhm']?.toString();
+		data.bipSfzhm = json['bip_sfzhm'].toString();
 	}
 	if (json['bip_xb'] != null) {
-		data.bipXb = json['bip_xb']?.toString();
+		data.bipXb = json['bip_xb'].toString();
 	}
 	if (json['bip_xm'] != null) {
-		data.bipXm = json['bip_xm']?.toString();
+		data.bipXm = json['bip_xm'].toString();
 	}
 	if (json['fwzjbxxdjb_fwzbh'] != null) {
-		data.fwzjbxxdjbFwzbh = json['fwzjbxxdjb_fwzbh']?.toString();
+		data.fwzjbxxdjbFwzbh = json['fwzjbxxdjb_fwzbh'].toString();
 	}
 	if (json['fwzjbxxdjb_fwzmc'] != null) {
-		data.fwzjbxxdjbFwzmc = json['fwzjbxxdjb_fwzmc']?.toString();
+		data.fwzjbxxdjbFwzmc = json['fwzjbxxdjb_fwzmc'].toString();
 	}
 	if (json['img'] != null) {
-		data.img = json['img']?.toString();
+		data.img = json['img'].toString();
 	}
 	if (json['rdj_djrq'] != null) {
-		data.rdjDjrq = json['rdj_djrq']?.toString();
+		data.rdjDjrq = json['rdj_djrq'].toString();
 	}
 	if (json['rdj_grbh'] != null) {
-		data.rdjGrbh = json['rdj_grbh']?.toString();
+		data.rdjGrbh = json['rdj_grbh'].toString();
 	}
 	if (json['rdj_sspcsbm'] != null) {
-		data.rdjSspcsbm = json['rdj_sspcsbm']?.toString();
+		data.rdjSspcsbm = json['rdj_sspcsbm'].toString();
 	}
 	if (json['rdj_sspcsmc'] != null) {
-		data.rdjSspcsmc = json['rdj_sspcsmc']?.toString();
+		data.rdjSspcsmc = json['rdj_sspcsmc'].toString();
 	}
 	if (json['rld_glybm'] != null) {
-		data.rldGlybm = json['rld_glybm']?.toString();
+		data.rldGlybm = json['rld_glybm'].toString();
 	}
 	if (json['rld_glymc'] != null) {
-		data.rldGlymc = json['rld_glymc']?.toString();
+		data.rldGlymc = json['rld_glymc'].toString();
 	}
 	if (json['rzf_fwbh'] != null) {
-		data.rzfFwbh = json['rzf_fwbh']?.toString();
+		data.rzfFwbh = json['rzf_fwbh'].toString();
 	}
 	if (json['rzf_sfbzdz'] != null) {
-		data.rzfSfbzdz = json['rzf_sfbzdz']?.toString();
+		data.rzfSfbzdz = json['rzf_sfbzdz'].toString();
 	}
 	if (json['rzf_xzdxxdz'] != null) {
-		data.rzfXzdxxdz = json['rzf_xzdxxdz']?.toString();
+		data.rzfXzdxxdz = json['rzf_xzdxxdz'].toString();
 	}
 	return data;
 }

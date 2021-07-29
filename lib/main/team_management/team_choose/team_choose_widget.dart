@@ -5,10 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:jwt/config/color_constant.dart';
 import 'package:jwt/db/sql_manager.dart';
+import 'package:jwt/entity/policeman_entity.dart';
 import 'package:jwt/main/team_management/team_choose/team_choose_bloc.dart';
 import 'package:jwt/widget/custom_button.dart';
 import 'package:jwt/widget/custom_choose_bottom_sheet.dart';
 import 'package:jwt/widget/custom_choose_widget.dart';
+import 'package:jwt/widget/custom_net_choose_bottom_sheet.dart';
+import 'package:jwt/widget/loading_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TeamChooseWidget extends StatefulWidget{
@@ -24,6 +27,7 @@ class TeamChooseWidgetState extends State<TeamChooseWidget> {
   String _mjzh;
   String _account_authority;
   SharedPreferences prefs;
+  List<Policeman> _list = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -44,6 +48,9 @@ class TeamChooseWidgetState extends State<TeamChooseWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<TeamChooseBloc,TeamChooseState>(
         builder: (context,state){
+          if(state is PoliceSuccessState){
+
+          }
           return Container(
             width: ScreenUtil().screenWidth,
             height: ScreenUtil().screenHeight,
@@ -82,16 +89,20 @@ class TeamChooseWidgetState extends State<TeamChooseWidget> {
                         color: Color.fromRGBO(247,248,250,1)
                     )
                 ),
-                CustomChooseBottomSheet(
+                CustomNetChooseBottomSheet(
                     "民警",
-                    tableName: "PCSFWZDID_ONLY",
-                    pcsbm: _pcsbm,
-                    callBack: (key){
-                      setState(() {
-                        _pcsbm = key;
-                        print("派出所编号:$key");
+                    _list,
+                    callBack: (data){
+                        print(data.name);
+                    },
+                    onTab: (){
+                     // LoadingDialog().buildShowDialog(context);
+                      Map<String,dynamic> requestBody = new Map();
+                      requestBody.addAll({
+                        "pcsbh":_pcsbm,
                       });
-                    }
+                      BlocProvider.of<TeamChooseBloc>(context).add(PoliceEvent(map: requestBody));
+                    },
                 ),
                 Padding(
                     padding: EdgeInsets.only(top: ScreenUtil().setHeight(66)),

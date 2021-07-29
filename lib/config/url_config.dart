@@ -15,6 +15,8 @@ class URLConfig{
   static const String DATA_GL = BASE_URL + "jwb/sjgl/sjglcx";
   //1.派出所查询接口
   static const String pcscx = BASE_URL + "jwb/dmxx/pcscx";
+  // 民警查询
+  static const String POLICE_REQUEST = BASE_URL + "/jwb/gkll/mjcx";
   //2.服务站查询接口
   static const String fwzcx = BASE_URL + "jwb/dmxx/fwzcx";
   //核查详情查询接口

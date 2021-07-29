@@ -7,6 +7,8 @@ import 'package:jwt/entity/login_response_entity.dart';
 import 'package:jwt/generated/json/login_response_entity_helper.dart';
 import 'package:jwt/main/first_page/people_online_check/people_online_check_response_entity.dart';
 import 'package:jwt/generated/json/people_online_check_response_entity_helper.dart';
+import 'package:jwt/main/team_management/team_choose/police_response_entity.dart';
+import 'package:jwt/generated/json/police_response_entity_helper.dart';
 
 class JsonConvert<T> {
 	T fromJson(Map<String, dynamic> json) {
@@ -18,15 +20,19 @@ class JsonConvert<T> {
   }
 
   static _getFromJson<T>(Type type, data, json) {
-    switch (type) {
+		switch (type) {
 			case LoginResponseEntity:
 				return loginResponseEntityFromJson(data as LoginResponseEntity, json) as T;
 			case PeopleOnlineCheckResponseEntity:
 				return peopleOnlineCheckResponseEntityFromJson(data as PeopleOnlineCheckResponseEntity, json) as T;
 			case PeopleOnlineCheckResponseReturnData:
-				return peopleOnlineCheckResponseReturnDataFromJson(data as PeopleOnlineCheckResponseReturnData, json) as T;    }
-    return data as T;
-  }
+				return peopleOnlineCheckResponseReturnDataFromJson(data as PeopleOnlineCheckResponseReturnData, json) as T;
+			case PoliceResponseEntity:
+				return policeResponseEntityFromJson(data as PoliceResponseEntity, json) as T;
+			case PoliceResponseMjxx:
+				return policeResponseMjxxFromJson(data as PoliceResponseMjxx, json) as T;    }
+		return data as T;
+	}
 
   static _getToJson<T>(Type type, data) {
 		switch (type) {
@@ -36,6 +42,10 @@ class JsonConvert<T> {
 				return peopleOnlineCheckResponseEntityToJson(data as PeopleOnlineCheckResponseEntity);
 			case PeopleOnlineCheckResponseReturnData:
 				return peopleOnlineCheckResponseReturnDataToJson(data as PeopleOnlineCheckResponseReturnData);
+			case PoliceResponseEntity:
+				return policeResponseEntityToJson(data as PoliceResponseEntity);
+			case PoliceResponseMjxx:
+				return policeResponseMjxxToJson(data as PoliceResponseMjxx);
 			}
 			return data as T;
 		}
@@ -44,31 +54,49 @@ class JsonConvert<T> {
 		String type = M.toString();
 		if(type == (LoginResponseEntity).toString()){
 			return LoginResponseEntity().fromJson(json);
-		}	else if(type == (PeopleOnlineCheckResponseEntity).toString()){
+		}
+		if(type == (PeopleOnlineCheckResponseEntity).toString()){
 			return PeopleOnlineCheckResponseEntity().fromJson(json);
-		}	else if(type == (PeopleOnlineCheckResponseReturnData).toString()){
+		}
+		if(type == (PeopleOnlineCheckResponseReturnData).toString()){
 			return PeopleOnlineCheckResponseReturnData().fromJson(json);
-		}	
+		}
+		if(type == (PoliceResponseEntity).toString()){
+			return PoliceResponseEntity().fromJson(json);
+		}
+		if(type == (PoliceResponseMjxx).toString()){
+			return PoliceResponseMjxx().fromJson(json);
+		}
+
 		return null;
 	}
 
   //list is returned by type
-	static M _getListChildType<M>(List<Map> data) {
-		if(List<LoginResponseEntity>() is M){
-			return data.map((e) => LoginResponseEntity().fromJson(e)).toList() as M;
-		}	else if(List<PeopleOnlineCheckResponseEntity>() is M){
-			return data.map((e) => PeopleOnlineCheckResponseEntity().fromJson(e)).toList() as M;
-		}	else if(List<PeopleOnlineCheckResponseReturnData>() is M){
-			return data.map((e) => PeopleOnlineCheckResponseReturnData().fromJson(e)).toList() as M;
+	static M _getListChildType<M>(List data) {
+		if(<LoginResponseEntity>[] is M){
+			return data.map<LoginResponseEntity>((e) => LoginResponseEntity().fromJson(e)).toList() as M;
 		}
-		return null;
+		if(<PeopleOnlineCheckResponseEntity>[] is M){
+			return data.map<PeopleOnlineCheckResponseEntity>((e) => PeopleOnlineCheckResponseEntity().fromJson(e)).toList() as M;
+		}
+		if(<PeopleOnlineCheckResponseReturnData>[] is M){
+			return data.map<PeopleOnlineCheckResponseReturnData>((e) => PeopleOnlineCheckResponseReturnData().fromJson(e)).toList() as M;
+		}
+		if(<PoliceResponseEntity>[] is M){
+			return data.map<PoliceResponseEntity>((e) => PoliceResponseEntity().fromJson(e)).toList() as M;
+		}
+		if(<PoliceResponseMjxx>[] is M){
+			return data.map<PoliceResponseMjxx>((e) => PoliceResponseMjxx().fromJson(e)).toList() as M;
+		}
+
+		throw Exception("not found");
 	}
 
   static M fromJsonAsT<M>(json) {
-    if (json is List) {
-      return _getListChildType<M>(json);
-    } else {
-      return _fromJsonSingle<M>(json) as M;
-    }
-  }
+		if (json is List) {
+			return _getListChildType<M>(json);
+		} else {
+			return _fromJsonSingle<M>(json) as M;
+		}
+	}
 }
