@@ -7,6 +7,8 @@ import 'package:jwt/entity/login_response_entity.dart';
 import 'package:jwt/generated/json/login_response_entity_helper.dart';
 import 'package:jwt/main/first_page/people_online_check/people_online_check_response_entity.dart';
 import 'package:jwt/generated/json/people_online_check_response_entity_helper.dart';
+import 'package:jwt/main/team_management/team_choose/statistics_response_entity.dart';
+import 'package:jwt/generated/json/statistics_response_entity_helper.dart';
 import 'package:jwt/main/team_management/team_choose/police_response_entity.dart';
 import 'package:jwt/generated/json/police_response_entity_helper.dart';
 
@@ -27,6 +29,8 @@ class JsonConvert<T> {
 				return peopleOnlineCheckResponseEntityFromJson(data as PeopleOnlineCheckResponseEntity, json) as T;
 			case PeopleOnlineCheckResponseReturnData:
 				return peopleOnlineCheckResponseReturnDataFromJson(data as PeopleOnlineCheckResponseReturnData, json) as T;
+			case StatisticsResponseEntity:
+				return statisticsResponseEntityFromJson(data as StatisticsResponseEntity, json) as T;
 			case PoliceResponseEntity:
 				return policeResponseEntityFromJson(data as PoliceResponseEntity, json) as T;
 			case PoliceResponseMjxx:
@@ -42,6 +46,8 @@ class JsonConvert<T> {
 				return peopleOnlineCheckResponseEntityToJson(data as PeopleOnlineCheckResponseEntity);
 			case PeopleOnlineCheckResponseReturnData:
 				return peopleOnlineCheckResponseReturnDataToJson(data as PeopleOnlineCheckResponseReturnData);
+			case StatisticsResponseEntity:
+				return statisticsResponseEntityToJson(data as StatisticsResponseEntity);
 			case PoliceResponseEntity:
 				return policeResponseEntityToJson(data as PoliceResponseEntity);
 			case PoliceResponseMjxx:
@@ -60,6 +66,9 @@ class JsonConvert<T> {
 		}
 		if(type == (PeopleOnlineCheckResponseReturnData).toString()){
 			return PeopleOnlineCheckResponseReturnData().fromJson(json);
+		}
+		if(type == (StatisticsResponseEntity).toString()){
+			return StatisticsResponseEntity().fromJson(json);
 		}
 		if(type == (PoliceResponseEntity).toString()){
 			return PoliceResponseEntity().fromJson(json);
@@ -81,6 +90,9 @@ class JsonConvert<T> {
 		}
 		if(<PeopleOnlineCheckResponseReturnData>[] is M){
 			return data.map<PeopleOnlineCheckResponseReturnData>((e) => PeopleOnlineCheckResponseReturnData().fromJson(e)).toList() as M;
+		}
+		if(<StatisticsResponseEntity>[] is M){
+			return data.map<StatisticsResponseEntity>((e) => StatisticsResponseEntity().fromJson(e)).toList() as M;
 		}
 		if(<PoliceResponseEntity>[] is M){
 			return data.map<PoliceResponseEntity>((e) => PoliceResponseEntity().fromJson(e)).toList() as M;

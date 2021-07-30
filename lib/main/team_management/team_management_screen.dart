@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
+import 'package:jwt/main/team_management/team_choose/statistics_response_entity.dart';
 import 'package:jwt/main/team_management/team_choose/team_choose_bloc.dart';
 import 'package:jwt/main/team_management/team_choose/team_choose_widget.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
@@ -37,6 +38,7 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
   bool _isShowTextWidget = true;
   String _hjrk = "0",_ldrk = "0",_jwrk = "0";
   List<DataBean> dataList = [];
+  StatisticsResponseEntity _entity = new StatisticsResponseEntity();
   @override
   void initState() {
     // TODO: implement initState
@@ -86,7 +88,12 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
     // 根据权限，显示不同的数据
     return _isShowTeamManagement ? BlocProvider(
         create: (context)=> TeamChooseBloc(),
-        child:  TeamChooseWidget(),
+        child:  TeamChooseWidget(
+          callBack: (data){
+            _isShowTeamManagement = true;
+             _entity = data;
+          },
+        ),
     ): _buildStatisticsWidget();
 
   }

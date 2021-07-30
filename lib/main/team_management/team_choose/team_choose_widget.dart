@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:jwt/config/color_constant.dart';
 import 'package:jwt/db/sql_manager.dart';
 import 'package:jwt/entity/policeman_entity.dart';
+import 'package:jwt/main/team_management/team_choose/statistics_response_entity.dart';
 import 'package:jwt/main/team_management/team_choose/team_choose_bloc.dart';
 import 'package:jwt/widget/custom_button.dart';
 import 'package:jwt/widget/custom_choose_bottom_sheet.dart';
@@ -14,7 +15,11 @@ import 'package:jwt/widget/custom_net_choose_bottom_sheet.dart';
 import 'package:jwt/widget/loading_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+typedef CallBack  = void Function(StatisticsResponseEntity responseEntity);
 class TeamChooseWidget extends StatefulWidget{
+
+  CallBack callBack;
+  TeamChooseWidget({@required this.callBack});
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -48,8 +53,12 @@ class TeamChooseWidgetState extends State<TeamChooseWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<TeamChooseBloc,TeamChooseState>(
         builder: (context,state){
-          if(state is PoliceSuccessState){
-
+          if(state is StatisticsSuccessState){
+             print("统计请求成功");
+             LoadingDialog.dialogDismiss(context);
+             if(widget.callBack != null){
+               widget.callBack(state.statisticsModel);
+             }
           }
           return Container(
             width: ScreenUtil().screenWidth,
@@ -91,17 +100,10 @@ class TeamChooseWidgetState extends State<TeamChooseWidget> {
                 ),
                 CustomNetChooseBottomSheet(
                     "民警",
-                    _list,
+                    _pcsbm,
                     callBack: (data){
-                        print(data.name);
-                    },
-                    onTab: (){
-                     // LoadingDialog().buildShowDialog(context);
-                      Map<String,dynamic> requestBody = new Map();
-                      requestBody.addAll({
-                        "pcsbh":_pcsbm,
-                      });
-                      BlocProvider.of<TeamChooseBloc>(context).add(PoliceEvent(map: requestBody));
+                        print(data.mjxm);
+                        _mjzh = data.mjzh;
                     },
                 ),
                 Padding(
@@ -130,7 +132,15 @@ class TeamChooseWidgetState extends State<TeamChooseWidget> {
                               Colors.white,
                               "确定",
                                   (){
-                                print("确定");
+                                  print("确定");
+                                  LoadingDialog().buildShowDialog(context);
+                                  Map<String,dynamic> requestBody = new Map();
+                                  requestBody.addAll({
+                                     "pcsbh":_pcsbm,
+                                     "mjzh":_mjzh,
+                                  });
+                                  print(requestBody.toString());
+                                  BlocProvider.of<TeamChooseBloc>(context).add(PoliceEvent(map:requestBody));
                               }
                           ),
                         ]

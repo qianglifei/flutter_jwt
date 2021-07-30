@@ -17,3 +17,13 @@ class PoliceFailureState extends TeamChooseState{
   String errMsg;
   PoliceFailureState(this.errMsg);
 }
+
+class StatisticsSuccessState extends TeamChooseState{
+  StatisticsResponseEntity statisticsModel;
+  StatisticsSuccessState(this.statisticsModel);
+}
+
+// class StatisticsSuccessState extends TeamChooseState{
+//   PoliceResponseEntity policeModel;
+//   PoliceSuccessState(this.policeModel);
+// }

@@ -119,16 +119,11 @@ class CustomChooseBottomSheetState extends State<CustomChooseBottomSheet> {
                                   Navigator.pop(context);
                                 },
                               ),
-                              Text("选择派出所",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
-                              InkWell(
-                                child: Text("确认",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
-                                onTap: (){
-                                  setState(() {
-                                    // ignore: unnecessary_statements
-                                    _selectedContent;
-                                  });
-                                  Navigator.pop(context);
-                                },
+                              Expanded(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child:Text("选择派出所",style: TextStyle(fontSize: ScreenUtil().setSp(56),color: Color.fromRGBO(52,135,215,1))),
+                                  )
                               )
                             ],
                           ),
@@ -173,10 +168,9 @@ class CustomChooseBottomSheetState extends State<CustomChooseBottomSheet> {
                                   state(() {
                                     position = index;
                                     _title = _list[position].value;
-                                    print(_title);
-                                    print(_list[position].key);
                                     _selectedContent = _list[position].value;
                                     widget.callBack( _list[position].key +"");
+                                    Navigator.of(context).pop();
                                   });
                                 },
                               );
