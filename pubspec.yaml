@@ -138,5 +138,6 @@ flutter:
     - images/icon_zzgly.png
     - images/icon_gzl.png
     - images/icon_fxqy.png
+    - images/icon_sousuo.png
 flutter_intl:
   enabled: true

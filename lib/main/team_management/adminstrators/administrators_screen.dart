@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
@@ -33,7 +34,7 @@ class AdministratorsScreenState extends BaseWidgetState<AdministratorsScreen>{
   Widget getContentWidget(BuildContext context) {
     // TODO: implement getContentWidget
      return Container(
-       child: Text("实管员列表"),
+       child: _searchBar(),
      );
   }
 
@@ -51,24 +52,11 @@ class AdministratorsScreenState extends BaseWidgetState<AdministratorsScreen>{
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          // GestureDetector(
-          //   behavior: HitTestBehavior.opaque,
-          //   child: Image.asset(
-          //     "images/kefubai.png",
-          //     height: 33,
-          //     width: 31,
-          //     fit: BoxFit.cover,
-          //   ),
-          //   onTap: (){
-          //     Fluttertoast.showToast(msg: "智能机器人");
-          //   },
-          // ),
-
           GestureDetector(
             behavior: HitTestBehavior.deferToChild,
             child: Container(
-                width: MediaQuery.of(context).size.width - 100,
-                height: 35,
+                width: MediaQuery.of(context).size.width,
+                height: ScreenUtil().setHeight(48),
                 child: Stack(
                   alignment: AlignmentDirectional.center,
                   children: <Widget>[
@@ -81,7 +69,7 @@ class AdministratorsScreenState extends BaseWidgetState<AdministratorsScreen>{
                     Positioned(
                         left: 8,
                         child: Image.asset(
-                          "images/sousuo.png",
+                          "images/icon_sousuo.png",
                           height: 25,
                           width: 25,
                           fit: BoxFit.cover,
@@ -96,7 +84,7 @@ class AdministratorsScreenState extends BaseWidgetState<AdministratorsScreen>{
                         child: GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           child: Image.asset(
-                            "images/saoyisao.png",
+                            "images/icon_close.png",
                             height: 20,
                             width: 20,
                             fit: BoxFit.cover,
