@@ -7,6 +7,8 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
+import 'package:jwt/main/team_management/adminstrators/administrators_bloc.dart';
+import 'package:jwt/main/team_management/adminstrators/administrators_screen.dart';
 import 'package:jwt/main/team_management/team_choose/statistics_response_entity.dart';
 import 'package:jwt/main/team_management/team_choose/team_choose_bloc.dart';
 import 'package:jwt/main/team_management/team_choose/team_choose_widget.dart';
@@ -29,14 +31,15 @@ class TeamManagementScreen extends BaseWidget{
 class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
   String _title = "队伍管理";
   bool _rightIcon = false;
-  bool _isShowTeamManagement = false;
+  bool _isShowTeamManagement = true;
   String _authority = "";
   SharedPreferences prefs;
   String _policeCode = "";
   String _policemanCode = "";
   bool _isShowImageTextsWidget = false;
   bool _isShowTextWidget = true;
-  String _hjrk = "0",_ldrk = "0",_jwrk = "0";
+  String _zrks = "0",_czfws = "0",_zzglys = "0",_hjrk = "0",_ldrk = "0",_jwrk = "0",_gxqy = "",_jzsj = "";
+  String _gzlhj = "0",_rylr= "0",_ryqy = "0",_ryzx = "0",_rybg = "0",_fwlr = "0",_fwzx = "0",_fwbg = "0",_bzdzxz = "0",_rbzh = "0%",_fbzh = "0%";
   List<DataBean> dataList = [];
   StatisticsResponseEntity _entity = new StatisticsResponseEntity();
   @override
@@ -62,7 +65,6 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
         //2 派出所民警
         _isShowTeamManagement = false;
       }
-      _isShowTeamManagement = true;
       print(_policeCode);
       initData();
     });
@@ -77,7 +79,10 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
           isShowLeftBackIcon: false,
           isShowRightWidget: _rightIcon,
           rightClick: (){
-
+            setState(() {
+              _isShowTeamManagement = true;
+              _rightIcon = false;
+            });
           },
         ),
     );
@@ -86,16 +91,17 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
   @override
   Widget getContentWidget(BuildContext context) {
     // 根据权限，显示不同的数据
-    return _isShowTeamManagement ? BlocProvider(
-        create: (context)=> TeamChooseBloc(),
-        child:  TeamChooseWidget(
-          callBack: (data){
-            _isShowTeamManagement = true;
-             _entity = data;
-          },
-        ),
-    ): _buildStatisticsWidget();
-
+    return _isShowTeamManagement ? TeamChooseWidget(
+              callBack: (data){
+                print("统计接口回掉成功");
+                setState(() {
+                  _rightIcon = true;
+                  _entity = data;
+                  _isShowTeamManagement = false;
+                  updateStatisticsData(_entity);
+                });
+              },
+            ): _buildStatisticsWidget();
   }
 
   @override
@@ -126,19 +132,19 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
               Positioned(
                   top: ScreenUtil().setHeight(32),
                   right: ScreenUtil().setWidth(32),
-                  child: Text("截止 2020-08-01",style: TextStyle(fontSize: ScreenUtil().setSp(36),color: Color.fromRGBO(255, 255, 255, 0.7)))
+                  child: Text("截止 " + _jzsj,style: TextStyle(fontSize: ScreenUtil().setSp(36),color: Color.fromRGBO(255, 255, 255, 0.7)))
               ),
 
               Positioned(
                   top: ScreenUtil().setHeight(112),
                   left: ScreenUtil().setWidth(32),
-                  child: _buildImageTextWidget("images/icon_sum_people_count.png", "总人口/人")
+                  child: _buildImageTextWidget("images/icon_sum_people_count.png", "总人口/人",_zrks)
               ),
 
               Positioned(
                   top: ScreenUtil().setHeight(112),
                   right : ScreenUtil().setWidth(32),
-                  child: _buildImageTextWidget("images/icon_sum_house_count.png", "出租房屋/户")
+                  child: _buildImageTextWidget("images/icon_sum_house_count.png", "出租房屋/户",_czfws)
               ),
             ],
           ),
@@ -184,7 +190,7 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
   Widget _buildDataOverviewWidget(){
     return Container(
       width: ScreenUtil().uiSize.width,
-      height: ScreenUtil().setHeight(791),
+      height: ScreenUtil().setHeight(820),
       color: Color.fromRGBO(247,248,250,1),
       child: Column(
         children: <Widget>[
@@ -199,7 +205,7 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
                   ),
                   Positioned(
                     right: ScreenUtil().setWidth(38),
-                    child: Text("截止 2020-08-01",style: TextStyle(fontSize: ScreenUtil().setSp(36),color: Color.fromRGBO(140,141,142,1))),
+                    child: Text("截止 " + _jzsj,style: TextStyle(fontSize: ScreenUtil().setSp(36),color: Color.fromRGBO(140,141,142,1))),
                   ),
                 ],
               )
@@ -214,11 +220,11 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
                         //横轴元素个数
                         crossAxisCount: 3,
                         //主方向的Item间隔 竖直方向
-                        mainAxisSpacing: 12,
+                        mainAxisSpacing: 1,
                         //次方向的Item间隔
-                        crossAxisSpacing: 12,
+                        crossAxisSpacing: 1,
                         //子Item 的宽高比
-                        childAspectRatio: 1.5,
+                        childAspectRatio: 1.8,
                     ),
                     itemBuilder: (BuildContext context, int index) {
                       //Widget Function(BuildContext context, int index)
@@ -248,26 +254,37 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
                fit: BoxFit.fill,
              ),
           ),
+
            Container(
               height: ScreenUtil().setHeight(122),
               margin: EdgeInsets.only(left: ScreenUtil().setWidth(32)),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "专职管理员",
-                    style: TextStyle(fontSize: ScreenUtil().setSp(40,allowFontScalingSelf: true),color: Color.fromRGBO(34,34,34,1)),
-                  ),
-                  Expanded(
-                      child: Text(""),
-                  ),
-                  Text(
-                    "5人",
-                    style: TextStyle(fontSize: ScreenUtil().setSp(40,allowFontScalingSelf: true),color: Color.fromRGBO(34,34,34,1)),
-                  ),
-                ],
+              child: GestureDetector(
+                child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "专职管理员",
+                        style: TextStyle(fontSize: ScreenUtil().setSp(40,allowFontScalingSelf: true),color: Color.fromRGBO(34,34,34,1)),
+                      ),
+                      Expanded(
+                        child: Text(""),
+                      ),
+                      Text(
+                        _zzglys,
+                        style: TextStyle(fontSize: ScreenUtil().setSp(40,allowFontScalingSelf: true),color: Color.fromRGBO(34,34,34,1)),
+                      ),
+                    ],
+                 ),
+                 onTap: (){
+                   Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context){
+                     return BlocProvider(
+                         create: (context)=> AdministratorsBloc(),
+                         child: AdministratorsScreen()
+                     );
+                   }), (route) => route == null);
+                 },
               ),
            ),
           Padding(
@@ -319,7 +336,10 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
   Widget _buildNoticeWidget() {
     return Container(
       width: ScreenUtil().uiSize.width,
-      height: ScreenUtil().setHeight(120),
+      constraints: BoxConstraints(
+        minHeight: ScreenUtil().setHeight(120),
+        maxHeight: ScreenUtil().setHeight(400)
+      ),
       color: Color.fromRGBO(255, 255, 255,1),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -335,12 +355,12 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
                 fit: BoxFit.fill,
               ),
           ),
-          Padding(
+          Container(
+              width: ScreenUtil().screenWidth- ScreenUtil().setWidth(140),
               padding: EdgeInsets.only(left: ScreenUtil().setWidth(36),right: ScreenUtil().setWidth(38)),
-              child: Text("8月26日，中国人民警察警旗授旗仪式...",
+              child: Text(_gxqy,
                 style: TextStyle(fontSize: ScreenUtil().setSp(40),
                     color: Color.fromRGBO(140,141,142,1)),
-                overflow:TextOverflow.ellipsis,
               )
           ),
         ],
@@ -378,7 +398,7 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
     );
   }
 
-  Widget _buildImageTextWidget(String urlIcon,String title){
+  Widget _buildImageTextWidget(String urlIcon,String title,String content){
     return Container(
         width: ScreenUtil().setWidth(476),
         height: ScreenUtil().setHeight(227),
@@ -400,7 +420,7 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
             Positioned(
                 top: ScreenUtil().setHeight(118),
                 right: ScreenUtil().setWidth(20),
-                child: Text("806188",style: TextStyle(fontWeight: FontWeight.w700,fontSize: ScreenUtil().setSp(80),color: Color.fromRGBO(255, 255, 255, 0.7)))
+                child: Text(content,style: TextStyle(fontWeight: FontWeight.w700,fontSize: ScreenUtil().setSp(80),color: Color.fromRGBO(255, 255, 255, 0.7)))
             ),
           ],
         )
@@ -409,6 +429,7 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
 
   Widget getItemContainer(DataBean dataBean) {
     return Container(
+      color: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -425,13 +446,41 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
   }
 
   void initData() {
-      dataList.add(new DataBean("工作量合计"," 0",Color.fromRGBO(58,134,255,1)));
-      dataList.add(new DataBean("人员录入"," 0",Color.fromRGBO(144,190,109,1)));
-      dataList.add(new DataBean("人员迁移"," 0",Color.fromRGBO(249,132,74,1)));
-      dataList.add(new DataBean("人员注销"," 0",Color.fromRGBO(58,134,255,1)));
-      dataList.add(new DataBean("人员变更"," 0",Color.fromRGBO(144,190,109,1)));
-      dataList.add(new DataBean("房屋录入"," 0",Color.fromRGBO(249,132,74,1)));
-      dataList.add(new DataBean("房屋注销"," 0",Color.fromRGBO(58,134,255,1)));
-      dataList.add(new DataBean("房屋变更"," 0",Color.fromRGBO(144,190,109,1)));
+      dataList.add(new DataBean("工作量合计",_gzlhj,Color.fromRGBO(58,134,255,1)));
+      dataList.add(new DataBean("人员录入",_rylr,Color.fromRGBO(144,190,109,1)));
+      dataList.add(new DataBean("人员迁移",_ryqy,Color.fromRGBO(249,132,74,1)));
+      dataList.add(new DataBean("人员注销",_ryzx,Color.fromRGBO(58,134,255,1)));
+      dataList.add(new DataBean("人员变更",_rybg,Color.fromRGBO(144,190,109,1)));
+      dataList.add(new DataBean("房屋录入",_fwlr,Color.fromRGBO(249,132,74,1)));
+      dataList.add(new DataBean("房屋注销",_fwzx,Color.fromRGBO(58,134,255,1)));
+      dataList.add(new DataBean("房屋变更",_fwbg,Color.fromRGBO(144,190,109,1)));
+      dataList.add(new DataBean("标准地址新增",_bzdzxz,Color.fromRGBO(249,132,74,1)));
+      dataList.add(new DataBean("人标准化",_rbzh,Color.fromRGBO(58,134,255,1)));
+      dataList.add(new DataBean("房标准化",_fbzh,Color.fromRGBO(144,190,109,1)));
+  }
+
+  void updateStatisticsData(StatisticsResponseEntity entity) {
+     _zrks = entity.zrks;
+     _czfws = entity.czfws;
+     _zzglys = entity.qzsgys;
+     _hjrk = entity.hjrks;
+     _ldrk = entity.ldrks;
+     _jwrk = entity.jwrys;
+     _gxqy = entity.gxqy;
+     _jzsj = entity.userCzsj;
+
+     //本月数据概览
+      _gzlhj = entity.gzlhj;
+      _rylr= entity.rylr;
+      _ryqy = entity.ryqy;
+      _ryzx = entity.ryzx;
+      _rybg = entity.rybg;
+      _fwlr = entity.fwlr;
+      _fwzx = entity.fwzx;
+      _fwbg = entity.fwbg;
+      _bzdzxz = entity.bzdzhxzh;
+      _rbzh = entity.bzrk;
+      _fbzh = entity.bzfw;
+      dataList;
   }
 }

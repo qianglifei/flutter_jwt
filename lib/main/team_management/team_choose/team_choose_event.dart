@@ -15,3 +15,8 @@ class PoliceEvent extends TeamChooseEvent{
    Map<String,dynamic> map = new Map.from({});
    PoliceEvent({@required this.map});
 }
+
+class StatisticsEvent extends TeamChooseEvent{
+  Map<String,dynamic> map = new Map.from({});
+  StatisticsEvent({@required this.map});
+}

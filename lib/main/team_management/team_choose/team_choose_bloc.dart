@@ -21,10 +21,9 @@ class TeamChooseBloc extends Bloc<TeamChooseEvent, TeamChooseState> {
       PoliceResponseEntity entity = await PoliceRepository.policeRequest(event.map);
       print("请求完毕，返回数据");
       yield PoliceSuccessState(entity);
-    }else if(event is PoliceEvent){
+    }else if(event is StatisticsEvent){
        StatisticsResponseEntity entity = await PoliceRepository.teamStatisticsRequest(event.map);
        yield StatisticsSuccessState(entity);
     }
-
   }
 }
