@@ -7,8 +7,8 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
-import 'package:jwt/main/team_management/adminstrators/administrators_bloc.dart';
-import 'package:jwt/main/team_management/adminstrators/administrators_screen.dart';
+import 'package:jwt/main/team_management/administrators/administrators_bloc.dart';
+import 'package:jwt/main/team_management/administrators/administrators_screen.dart';
 import 'package:jwt/main/team_management/team_choose/statistics_response_entity.dart';
 import 'package:jwt/main/team_management/team_choose/team_choose_bloc.dart';
 import 'package:jwt/main/team_management/team_choose/team_choose_widget.dart';
@@ -254,38 +254,37 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
                fit: BoxFit.fill,
              ),
           ),
-
-           Container(
-              height: ScreenUtil().setHeight(122),
-              margin: EdgeInsets.only(left: ScreenUtil().setWidth(32)),
-              child: GestureDetector(
-                child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "专职管理员",
-                        style: TextStyle(fontSize: ScreenUtil().setSp(40,allowFontScalingSelf: true),color: Color.fromRGBO(34,34,34,1)),
-                      ),
-                      Expanded(
-                        child: Text(""),
-                      ),
-                      Text(
-                        _zzglys,
-                        style: TextStyle(fontSize: ScreenUtil().setSp(40,allowFontScalingSelf: true),color: Color.fromRGBO(34,34,34,1)),
-                      ),
-                    ],
+           GestureDetector(
+             child: Container(
+             height: ScreenUtil().setHeight(122),
+             margin: EdgeInsets.only(left: ScreenUtil().setWidth(32)),
+             child: Column(
+               mainAxisSize: MainAxisSize.max,
+               mainAxisAlignment: MainAxisAlignment.start,
+               crossAxisAlignment: CrossAxisAlignment.start,
+               children: [
+                 Text(
+                   "专职管理员",
+                   style: TextStyle(fontSize: ScreenUtil().setSp(40,allowFontScalingSelf: true),color: Color.fromRGBO(34,34,34,1)),
                  ),
-                 onTap: (){
-                   Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context){
-                     return BlocProvider(
-                         create: (context)=> AdministratorsBloc(),
-                         child: AdministratorsScreen()
-                     );
-                   }), (route) => route == null);
-                 },
-              ),
+                 Expanded(
+                   child: Text(""),
+                 ),
+                 Text(
+                   _zzglys,
+                   style: TextStyle(fontSize: ScreenUtil().setSp(40,allowFontScalingSelf: true),color: Color.fromRGBO(34,34,34,1)),
+                 ),
+               ],
+             ),
+             ),
+              onTap: (){
+                Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context){
+                  return BlocProvider(
+                      create: (context)=> AdministratorsBloc(),
+                      child: AdministratorsScreen()
+                  );
+                }), (route) => route == null);
+              },
            ),
           Padding(
                padding: EdgeInsets.only(left: ScreenUtil().setWidth(164)),
