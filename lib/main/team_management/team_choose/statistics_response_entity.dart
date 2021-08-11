@@ -24,4 +24,6 @@ class StatisticsResponseEntity with JsonConvert<StatisticsResponseEntity> {
 	String zfws;
 	String zrks;
 	String zzfws;
+	String pcdbh;
+	String mjzh;
 }

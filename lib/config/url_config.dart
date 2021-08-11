@@ -19,6 +19,8 @@ class URLConfig{
   static const String POLICE_REQUEST = BASE_URL + "/jwb/gkll/mjcx";
   //3.管辖区域概览查询接口
   static const gxqyglcxs = BASE_URL + "jwb/gkll/gxqyglcx";
+  //实管员列表查询接口
+  static const String sgylbcx = BASE_URL + "jwb/gkll/sgylbcx";
   //2.服务站查询接口
   static const String fwzcx = BASE_URL + "jwb/dmxx/fwzcx";
   //核查详情查询接口

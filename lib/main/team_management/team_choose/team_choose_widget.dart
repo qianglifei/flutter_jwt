@@ -142,6 +142,8 @@ class TeamChooseWidgetState extends State<TeamChooseWidget> {
                                   print(data.returnData);
                                   LoadingDialog.dialogDismiss(context);
                                   if(widget.callBack != null){
+                                    data.returnData.mjzh = _mjzh;
+                                    data.returnData.pcdbh = _pcsbm;
                                     widget.callBack(data.returnData);
                                   }
                                 },

@@ -11,6 +11,8 @@ import 'package:jwt/main/team_management/team_choose/statistics_response_entity.
 import 'package:jwt/generated/json/statistics_response_entity_helper.dart';
 import 'package:jwt/main/team_management/team_choose/police_response_entity.dart';
 import 'package:jwt/generated/json/police_response_entity_helper.dart';
+import 'package:jwt/main/team_management/administrators/administrators_response_entity.dart';
+import 'package:jwt/generated/json/administrators_response_entity_helper.dart';
 
 class JsonConvert<T> {
 	T fromJson(Map<String, dynamic> json) {
@@ -34,7 +36,11 @@ class JsonConvert<T> {
 			case PoliceResponseEntity:
 				return policeResponseEntityFromJson(data as PoliceResponseEntity, json) as T;
 			case PoliceResponseMjxx:
-				return policeResponseMjxxFromJson(data as PoliceResponseMjxx, json) as T;    }
+				return policeResponseMjxxFromJson(data as PoliceResponseMjxx, json) as T;
+			case AdministratorsResponseEntity:
+				return administratorsResponseEntityFromJson(data as AdministratorsResponseEntity, json) as T;
+			case AdministratorsResponseSgyxx:
+				return administratorsResponseSgyxxFromJson(data as AdministratorsResponseSgyxx, json) as T;    }
 		return data as T;
 	}
 
@@ -52,6 +58,10 @@ class JsonConvert<T> {
 				return policeResponseEntityToJson(data as PoliceResponseEntity);
 			case PoliceResponseMjxx:
 				return policeResponseMjxxToJson(data as PoliceResponseMjxx);
+			case AdministratorsResponseEntity:
+				return administratorsResponseEntityToJson(data as AdministratorsResponseEntity);
+			case AdministratorsResponseSgyxx:
+				return administratorsResponseSgyxxToJson(data as AdministratorsResponseSgyxx);
 			}
 			return data as T;
 		}
@@ -76,6 +86,12 @@ class JsonConvert<T> {
 		if(type == (PoliceResponseMjxx).toString()){
 			return PoliceResponseMjxx().fromJson(json);
 		}
+		if(type == (AdministratorsResponseEntity).toString()){
+			return AdministratorsResponseEntity().fromJson(json);
+		}
+		if(type == (AdministratorsResponseSgyxx).toString()){
+			return AdministratorsResponseSgyxx().fromJson(json);
+		}
 
 		return null;
 	}
@@ -99,6 +115,12 @@ class JsonConvert<T> {
 		}
 		if(<PoliceResponseMjxx>[] is M){
 			return data.map<PoliceResponseMjxx>((e) => PoliceResponseMjxx().fromJson(e)).toList() as M;
+		}
+		if(<AdministratorsResponseEntity>[] is M){
+			return data.map<AdministratorsResponseEntity>((e) => AdministratorsResponseEntity().fromJson(e)).toList() as M;
+		}
+		if(<AdministratorsResponseSgyxx>[] is M){
+			return data.map<AdministratorsResponseSgyxx>((e) => AdministratorsResponseSgyxx().fromJson(e)).toList() as M;
 		}
 
 		throw Exception("not found");

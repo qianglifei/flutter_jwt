@@ -2,7 +2,7 @@ part of 'administrators_bloc.dart';
 
 
 abstract class AdministratorsEvent {
-
+   AdministratorsEvent();
 }
 
 class AdministratorsRequestEvent extends AdministratorsEvent{

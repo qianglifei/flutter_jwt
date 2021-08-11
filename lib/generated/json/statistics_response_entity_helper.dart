@@ -64,6 +64,12 @@ statisticsResponseEntityFromJson(StatisticsResponseEntity data, Map<String, dyna
 	if (json['zzfws'] != null) {
 		data.zzfws = json['zzfws'].toString();
 	}
+	if (json['pcdbh'] != null) {
+		data.pcdbh = json['pcdbh'].toString();
+	}
+	if (json['mjzh'] != null) {
+		data.mjzh = json['mjzh'].toString();
+	}
 	return data;
 }
 
@@ -90,5 +96,7 @@ Map<String, dynamic> statisticsResponseEntityToJson(StatisticsResponseEntity ent
 	data['zfws'] = entity.zfws;
 	data['zrks'] = entity.zrks;
 	data['zzfws'] = entity.zzfws;
+	data['pcdbh'] = entity.pcdbh;
+	data['mjzh'] = entity.mjzh;
 	return data;
 }

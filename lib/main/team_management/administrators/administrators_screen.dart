@@ -8,9 +8,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jwt/base/base_app_bar.dart';
 import 'package:jwt/base/base_widget.dart';
 import 'package:jwt/main/team_management/administrators/administrators_bloc.dart';
+import 'package:jwt/main/team_management/administrators/administrators_response_entity.dart';
 import 'package:jwt/widget/custom_app_bar.dart';
 
 class AdministratorsScreen extends BaseWidget{
+
+  String pcsbh = "";
+  String mjzh = "";
+  List<AdministratorsResponseSgyxx> _list;
+  AdministratorsScreen(this.pcsbh,this.mjzh);
   @override
   BaseWidgetState<BaseWidget> getState() {
     // TODO: implement getState
@@ -24,6 +30,7 @@ class AdministratorsScreenState extends BaseWidgetState<AdministratorsScreen>{
   String _searchContent = "";
   String _policeCode = "";
   String _policemanCode = "";
+  String _pageNumber = "1";
   // EasyRefreshController _controller;
   @override
   CustomAppBar getAppBar() {
@@ -42,6 +49,8 @@ class AdministratorsScreenState extends BaseWidgetState<AdministratorsScreen>{
     // TODO: implement initState
     super.initState();
     // _controller = EasyRefreshController();
+
+    initData();
     requestAdministrators();
   }
 
@@ -50,7 +59,8 @@ class AdministratorsScreenState extends BaseWidgetState<AdministratorsScreen>{
     requestBody.addAll({
       "pcsbh":_policeCode,
       "mjzh":_policemanCode,
-      "data":_searchContent
+      "data":_searchContent,
+      "pageNum":_pageNumber
     });
     BlocProvider.of<AdministratorsBloc>(context).add(AdministratorsRequestEvent(requestBody: requestBody));
   }
@@ -60,6 +70,9 @@ class AdministratorsScreenState extends BaseWidgetState<AdministratorsScreen>{
     // TODO: implement getContentWidget
      return BlocBuilder<AdministratorsBloc,AdministratorsState>(
          builder: (context,state){
+           if(state is AdministratorsSuccessState){
+              widget._list = state.dataModel.sgyxx;
+           }
            return Column(
              mainAxisSize: MainAxisSize.max,
              mainAxisAlignment: MainAxisAlignment.center,
@@ -87,6 +100,7 @@ class AdministratorsScreenState extends BaseWidgetState<AdministratorsScreen>{
           footer: TaurusFooter(),    //底部刷新
           onRefresh: () async{
             //下拉请求新数据
+            requestAdministrators();
           },
           onLoad: () async {
             //下拉增加新数据
@@ -104,7 +118,7 @@ class AdministratorsScreenState extends BaseWidgetState<AdministratorsScreen>{
                           left: ScreenUtil().setWidth(64),
                           top: ScreenUtil().setHeight(37),
                           child: Text(
-                            "王明明",
+                            widget._list[index].glyjbxxdjbGlyxm ?? "",
                             style: TextStyle(
                               color: Color.fromRGBO(34,34,34,1),
                               fontSize: ScreenUtil().setSp(48,allowFontScalingSelf: true),
@@ -137,7 +151,7 @@ class AdministratorsScreenState extends BaseWidgetState<AdministratorsScreen>{
                           left: ScreenUtil().setWidth(288),
                           bottom: ScreenUtil().setHeight(33),
                           child: Text(
-                            "130725199201121614",
+                            widget._list[index].glyjbxxdjbSfzhm ?? "",
                             style: TextStyle(
                               color: Color.fromRGBO(100,100,100,1),
                               fontSize: ScreenUtil().setSp(42,allowFontScalingSelf: true),
@@ -243,5 +257,10 @@ class AdministratorsScreenState extends BaseWidgetState<AdministratorsScreen>{
         ],
       ),
     );
+  }
+
+  void initData() {
+    _policeCode = widget.pcsbh;
+    _policemanCode = widget.mjzh;
   }
 }

@@ -98,6 +98,8 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
                   _rightIcon = true;
                   _entity = data;
                   _isShowTeamManagement = false;
+                  _policemanCode = data.mjzh;
+                  _policeCode = data.pcdbh;
                   updateStatisticsData(_entity);
                 });
               },
@@ -140,7 +142,6 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
                   left: ScreenUtil().setWidth(32),
                   child: _buildImageTextWidget("images/icon_sum_people_count.png", "总人口/人",_zrks)
               ),
-
               Positioned(
                   top: ScreenUtil().setHeight(112),
                   right : ScreenUtil().setWidth(32),
@@ -278,12 +279,12 @@ class TeamManagementScreenState extends BaseWidgetState<TeamManagementScreen> {
              ),
              ),
               onTap: (){
-                Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context){
+                Navigator.of(context).push(new MaterialPageRoute(builder: (context){
                   return BlocProvider(
                       create: (context)=> AdministratorsBloc(),
-                      child: AdministratorsScreen()
+                      child: AdministratorsScreen(_policeCode,_policemanCode),
                   );
-                }), (route) => route == null);
+                }));
               },
            ),
           Padding(
